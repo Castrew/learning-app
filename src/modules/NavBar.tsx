@@ -1,5 +1,11 @@
+import { Box } from "@mui/material";
+
 const NavBar = () => {
-  return <div>Navbar</div>;
+  return (
+    <Box>
+      <img src="./headerPhoto.jpeg" />
+    </Box>
+  );
 };
 
 export default NavBar;
