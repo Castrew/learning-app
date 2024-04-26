@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1714051989943,
+      "tag": "0000_light_titanium_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1714055269774,
+      "tag": "0001_yellow_kang",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1714062736670,
+      "tag": "0002_rainy_kylun",
+      "breakpoints": true
+    }
+  ]
+}
