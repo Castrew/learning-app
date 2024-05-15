@@ -12,7 +12,7 @@ import {
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
 });
