@@ -18,14 +18,10 @@ const updateTest = () => {
   const params = useParams();
   // const userId = Number(params.testId);
   const treatmentId = Number(params.testId);
-  console.log(treatmentId);
 
   // const { data, isLoading } = useGetOneUser({ userId });
   const { data, isLoading } = useGetOneTreatment({ treatmentId });
-  console.log(data);
-  // console.log(isLoading);
   const treatment = data?.data[0];
-  console.log(treatment);
 
   // const defaultValues = { name: user?.name, email: user?.email };
   // const updateUser = useUpdateUser();
@@ -34,14 +30,11 @@ const updateTest = () => {
   //   defaultValues,
   // });
   // const onSubmit: SubmitHandler<Test> = (data) => {
-  //   console.log(user?.id, "swyrshwa tuka");
-  //   console.log(data);
   //   updateUser.mutate({ id: user?.id, ...data });
   // };
 
   // useEffect(() => {
   //   reset({ name: user?.name, email: user?.email });
-  //   console.log(user);
   // }, [user?.name]);
 
   if (isLoading) {

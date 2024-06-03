@@ -16,8 +16,6 @@ export const treatmentsKeys = createQueryKeys("treatments", {
     };
   },
   oneTreatment: ({ treatmentId }) => {
-    console.log(treatmentId, "tukaassss");
-
     return {
       queryKey: [treatmentId],
       queryFn: async () => {
@@ -34,8 +32,6 @@ export const treatmentsMutationsKeys = createMutationKeys("treatments", {
   deleteTreatment: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["deleteTreatment"]) => {
-      console.log(payload.treatmentId);
-
       const { data } = await APIAxiosInstance.delete(
         `/treatments/${payload.treatmentId}`
       );
@@ -52,7 +48,6 @@ export const treatmentsMutationsKeys = createMutationKeys("treatments", {
         `/treatments/${treatmentId}`,
         rest
       );
-      console.log(treatmentId, "id tuka", rest);
 
       return data;
     },
@@ -60,8 +55,6 @@ export const treatmentsMutationsKeys = createMutationKeys("treatments", {
   createTreatment: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["createTreatment"]) => {
-      console.log(payload, "payload");
-
       const { data } = await APIAxiosInstance.post(`/treatments`, payload);
       return data;
     },

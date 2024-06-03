@@ -17,7 +17,6 @@ export const TreatmentsList = () => {
   const { data, isLoading } = useGetAllTreatments();
   const deleteTreatments = useDeleteTreatment();
   const treatments = data?.data.items;
-  console.log(treatments);
 
   if (isLoading) {
     return <h1>Loading...</h1>;

@@ -17,7 +17,6 @@ const TestComponent = () => {
   const createUser = useCreateUser();
   const { register, handleSubmit } = useForm<Test>();
   const onSubmit: SubmitHandler<Test> = (data) => {
-    console.log(data);
     createUser.mutate(data);
   };
 

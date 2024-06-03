@@ -18,12 +18,9 @@ const updateTest = () => {
   const router = useRouter();
   const params = useParams();
   const treatmentId = Number(params.treatmentId);
-  console.log(treatmentId, "treatments");
 
   const { data, isLoading } = useGetOneTreatment({ treatmentId });
-  console.log(data);
   const treatment = data?.data[0];
-  console.log(treatment);
 
   const defaultValues = {
     title: treatment?.title,
@@ -36,8 +33,6 @@ const updateTest = () => {
     defaultValues,
   });
   const onSubmit: SubmitHandler<Test> = (data) => {
-    // console.log(user?.id, "swyrshwa tuka");
-    console.log(data);
     updateTreatment.mutate({ treatmentId: treatment?.id, ...data });
   };
 
@@ -47,7 +42,6 @@ const updateTest = () => {
       duration: treatment?.duration,
       price: treatment?.price,
     });
-    console.log(treatment);
   }, [treatment?.treatment, treatment?.email, treatment?.price]);
 
   return (
@@ -61,16 +55,8 @@ const updateTest = () => {
           sx={{ p: "15px" }}
         >
           <TextField label="title" inputProps={register("title")} />
-          <TextField
-            // sx={{ mb: "15px" }}
-            label="Duration"
-            inputProps={register("duration")}
-          />
-          <TextField
-            // sx={{ mb: "15px" }}
-            label="Price"
-            inputProps={register("price")}
-          />
+          <TextField label="Duration" inputProps={register("duration")} />
+          <TextField label="Price" inputProps={register("price")} />
           <Button type="submit" onClick={() => router.push("/")}>
             Update
           </Button>

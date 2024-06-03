@@ -80,7 +80,6 @@ export const DELETE = async (
   _: NextRequest,
   { params }: { params: { userId: number } }
 ) => {
-  console.log(params.userId, "params");
   const userId = params.userId;
   try {
     const connection = await mysql.createConnection({
@@ -114,7 +113,6 @@ export const DELETE = async (
 export const PUT = async (request: NextRequest, { params }: any) => {
   const { name, email } = await request.json();
   const userId = params.userId;
-  console.log(name, email, params.userId);
 
   try {
     const connection = await mysql.createConnection({
