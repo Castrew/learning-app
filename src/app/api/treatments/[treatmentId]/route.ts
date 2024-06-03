@@ -62,7 +62,6 @@ export const GET = async (
   { params }: { params: { treatmentId: number } }
 ) => {
   const treatmentId = params.treatmentId;
-  console.log(params.treatmentId, "tuka");
 
   try {
     const connection = await mysql.createConnection({
@@ -85,7 +84,6 @@ export const DELETE = async (
   _: NextRequest,
   { params }: { params: { treatmentId: number } }
 ) => {
-  console.log(params.treatmentId, "params");
   const treatmentId = params.treatmentId;
   try {
     const connection = await mysql.createConnection({
@@ -113,7 +111,6 @@ export const DELETE = async (
 export const PUT = async (request: NextRequest, { params }: any) => {
   const { title, duration, price } = await request.json();
   const treatmentId = params.treatmentId;
-  console.log(title, duration, price, treatmentId, "towa e koeto imam");
 
   try {
     const connection = await mysql.createConnection({
