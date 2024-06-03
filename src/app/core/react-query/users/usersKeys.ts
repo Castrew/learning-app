@@ -30,9 +30,9 @@ export const usersMutationsKeys = createMutationKeys("users", {
   deleteUser: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["deleteUser"]) => {
-      console.log(payload);
+      console.log(payload.id);
 
-      const { data } = await APIAxiosInstance.delete(`/users/${payload}`);
+      const { data } = await APIAxiosInstance.delete(`/users/${payload.id}`);
       return data;
     },
   },

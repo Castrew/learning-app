@@ -8,6 +8,41 @@
       "when": 1715699831970,
       "tag": "0000_salty_green_goblin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1715951301019,
+      "tag": "0001_thankful_ulik",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1716470011552,
+      "tag": "0002_cheerful_tiger_shark",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1717417551310,
+      "tag": "0003_chubby_colonel_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1717417560721,
+      "tag": "0004_dizzy_ricochet",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1717417740270,
+      "tag": "0005_motionless_white_tiger",
+      "breakpoints": true
     }
   ]
 }

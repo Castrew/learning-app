@@ -7,7 +7,7 @@ import { useCreateUser } from "../core/react-query/users/hooks/useCreateUser";
 import { useRouter } from "next/navigation";
 
 interface Test {
-  id: string;
+  id: number;
   name: string;
   email: string;
 }

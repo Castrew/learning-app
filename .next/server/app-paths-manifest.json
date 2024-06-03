@@ -1,7 +1,5 @@
 {
   "/page": "app/page.js",
-  "/test/page": "app/test/page.js",
-  "/test/[testId]/page": "app/test/[testId]/page.js",
-  "/api/users/[userId]/route": "app/api/users/[userId]/route.js",
-  "/api/users/route": "app/api/users/route.js"
+  "/admin/treatments/page": "app/admin/treatments/page.js",
+  "/admin/treatments/[treatmentId]/page": "app/admin/treatments/[treatmentId]/page.js"
 }

@@ -1,0 +1,1 @@
+ALTER TABLE `treatment` MODIFY COLUMN `treatment` varchar(255);
