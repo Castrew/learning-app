@@ -1,19 +1,24 @@
 export interface RequestTypes {
   getAllUsers: {
-    id: string;
+    id: number;
     name: string;
     email: string;
   };
+  getOneUser: {
+    userId: number;
+    name?: string;
+    email?: string;
+  };
   deleteUser: {
-    id: string;
+    id: number;
   };
   updateUser: {
-    id: string;
+    id: number;
     name?: string;
     email?: string;
   };
   createUser: {
-    id: string;
+    id: number;
     name?: string;
     email?: string;
   };
