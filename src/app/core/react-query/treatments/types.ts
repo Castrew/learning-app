@@ -1,6 +1,6 @@
 export type Treatment = {
-  id: number;
-  treatment: string;
+  id: string;
+  title: string;
   duration: string;
   price: string;
 };

@@ -1,1 +1,0 @@
-ALTER TABLE `treatment` RENAME COLUMN `treatment` TO `title`;

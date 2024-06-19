@@ -1,6 +1,10 @@
-// import { drizzle } from "drizzle-orm/mysql2";
-// import * as schema from "./schema";
-// import mysql from "mysql2";
+import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
+import { userTable } from "./schema";
 
-// const client = mysql.createConnection(process.env.DATABASE_URL as string);
-// export const db = drizzle(client, { schema, logger: true });
+const poolConnection = mysql.createPool(process.env.DATABASE_URL as string);
+
+export const db = drizzle(poolConnection, {
+  schema: { userTable },
+  mode: "default",
+});

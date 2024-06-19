@@ -3,11 +3,11 @@ import { RequestTypes } from "../requestTypes";
 import { usersKeys, usersMutationsKeys } from "../usersKeys";
 import { User } from "../types";
 
-export const useCreateUser = () => {
+export const useSignUpUser = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<User, string, RequestTypes["createUser"]>({
-    ...usersMutationsKeys.createUser,
+  return useMutation<User, string, RequestTypes["signUpUser"]>({
+    ...usersMutationsKeys.signUpUser,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: usersKeys.allUsers._def,

@@ -24,11 +24,11 @@ export default function RootLayout({
   });
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "pink" }}>
+      <body style={{ backgroundColor: "pink", overflow: "hidden" }}>
         <QueryClientProvider client={queryClient}>
-          {/* <Box>
-          <NavBar />
-        </Box> */}
+          <Box>
+            <NavBar />
+          </Box>
           {children}
           {/* <div style={{ height: "75px", backgroundColor: "white" }}>Footer</div> */}
           <ReactQueryDevtools />

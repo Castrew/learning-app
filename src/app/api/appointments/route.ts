@@ -1,7 +1,11 @@
 import { NextRequest } from "next/server";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
-import { user, appointment, treatment } from "../../../../db/schema";
+import {
+  userTable,
+  appointmentTable,
+  treatmentTable,
+} from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import * as schema from "../../../../db/schema";
 
@@ -59,19 +63,19 @@ const notFoundError = () => {
 };
 
 const queryAppointment = {
-  id: appointment.id,
-  start: appointment.start,
-  end: appointment.end,
+  id: appointmentTable.id,
+  start: appointmentTable.start,
+  end: appointmentTable.end,
   user: {
-    id: user.id,
-    name: user.name,
-    email: user.email,
+    id: userTable.id,
+    name: userTable.username,
+    // email: userTable.email,
   },
   treatment: {
-    id: treatment.id,
-    title: treatment.title,
-    duration: treatment.duration,
-    price: treatment.price,
+    id: treatmentTable.id,
+    title: treatmentTable.title,
+    duration: treatmentTable.duration,
+    price: treatmentTable.price,
   },
 };
 
@@ -88,11 +92,11 @@ export const GET = async (request: NextRequest) => {
 
     const appointments = await db
       .select(queryAppointment)
-      .from(schema.appointment)
-      .leftJoin(user, eq(schema.appointment.user_id, user.id))
+      .from(appointmentTable)
+      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
       .leftJoin(
-        schema.treatment,
-        eq(schema.appointment.treatment_id, schema.treatment.id)
+        treatmentTable,
+        eq(appointmentTable.treatmentId, treatmentTable.id)
       );
 
     // const allAppointments = await db
@@ -121,16 +125,16 @@ export const POST = async (request: NextRequest) => {
     // Parse the request body to get the new appointment data
     // const { userId, treatmentId, start, end } = await request.json();
 
-    const userId = 40;
-    const treatmentId = 1;
+    const userId = "40";
+    const treatmentId = "1";
     const start = "2021-09-01 10:00:00";
     const end = "2021-09-01 11:00:00";
 
     // Ensure the user exists
     const existingUser = await db
       .select()
-      .from(user)
-      .where(eq(user.id, userId));
+      .from(userTable)
+      .where(eq(userTable.id, userId));
 
     if (!existingUser.length) {
       return new Response("User not found", { status: 404 });
@@ -139,17 +143,17 @@ export const POST = async (request: NextRequest) => {
     // Ensure the treatment exists
     const existingTreatment = await db
       .select()
-      .from(treatment)
-      .where(eq(treatment.id, treatmentId));
+      .from(treatmentTable)
+      .where(eq(treatmentTable.id, treatmentId));
 
     if (!existingTreatment.length) {
       return new Response("Treatment not found", { status: 404 });
     }
 
     // Insert the new appointment
-    const [insertedAppointment] = await db.insert(appointment).values({
-      user_id: BigInt(userId),
-      treatment_id: BigInt(treatmentId),
+    const [insertedAppointment] = await db.insert(appointmentTable).values({
+      userId,
+      treatmentId,
       start,
       end,
     });

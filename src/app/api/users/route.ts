@@ -1,9 +1,14 @@
 import { NextRequest } from "next/server";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
-import { user } from "../../../../db/schema";
+import { userTable } from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import * as schema from "../../../../db/schema";
+import { Argon2id } from "oslo/password";
+import { generateId } from "lucia";
+import { v4 as uuidv4 } from "uuid";
+import { lucia } from "../../../../lib/auth";
+import { cookies } from "next/headers";
 
 const dbServer = {
   host: "127.0.0.1",
@@ -58,38 +63,63 @@ const notFoundError = () => {
   );
 };
 
+// export const GET = async (request: NextRequest) => {
+//   try {
+//     const connection = await mysql.createConnection({
+//       ...dbServer,
+//     });
+//     const db = drizzle(connection);
+
+//     const allUsers = await db.select().from(userTable);
+//     return successResponseList(allUsers);
+//   } catch (error) {
+//     return serverError(error);
+//   }
+// };
+
 export const GET = async (request: NextRequest) => {
-  try {
-    const connection = await mysql.createConnection({
-      ...dbServer,
-    });
-    const db = drizzle(connection);
-
-    const allUsers = await db.select().from(user);
-    return successResponseList(allUsers);
-  } catch (error) {
-    return serverError(error);
-  }
-};
-
-export const POST = async (request: NextRequest) => {
-  const { email, name } = await request.json();
-  console.log(email, name);
+  const { username, password } = await request.json();
+  console.log(username, password);
 
   try {
     const connection = await mysql.createConnection({
       ...dbServer,
     });
-    const db = drizzle(connection, { schema, mode: "default" });
-    const createUserDBResponse = await db.insert(user).values({ name, email });
+    const db = drizzle(connection, { schema: { userTable }, mode: "default" });
 
-    const createdUserId = createUserDBResponse[0].insertId;
-    const createdUser = await db.query.user.findMany({
-      where: eq(user.id, createdUserId),
-    });
+    // const existingUser = await db.query.userTable.findFirst({
+    //   where: (table) => eq(table.username, username),
+    // });
 
-    return successResponseOneObject(createdUser[0]);
+    return successResponseList({ as: "assa" });
   } catch (error) {
     return serverError(error);
   }
 };
+
+// export const POST = async (request: NextRequest) => {
+//   const { username, password } = await request.json();
+//   console.log(username, password);
+
+//   const hashedPassword = await new Argon2id().hash(password);
+//   const userId = generateId(15);
+//   try {
+//     const connection = await mysql.createConnection({
+//       ...dbServer,
+//     });
+//     const db = drizzle(connection, { schema, mode: "default" });
+//     const createUserDBResponse = await db
+//       .insert(userTable)
+//       .values({ id: userId, username, hashedPassword });
+
+//     const createdUserId = createUserDBResponse[0].insertId;
+//     const createdUser = await db
+//       .select()
+//       .from(userTable)
+//       .where(eq(userTable.id, createdUserId));
+
+//     return successResponseOneObject(createdUser[0]);
+//   } catch (error) {
+//     return serverError(error);
+//   }
+// };

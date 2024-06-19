@@ -1,28 +1,28 @@
 export interface RequestTypes {
   getAllTreatments: {
-    treatmentId: number;
+    treatmentId: string;
     title: string;
     duration: string;
     price: string;
   };
 
   getOneTreatment: {
-    treatmentId: number;
+    treatmentId: string;
   };
 
   deleteTreatment: {
-    treatmentId: number;
+    treatmentId: string;
   };
 
   updateTreatment: {
-    treatmentId: number;
+    treatmentId: string;
     title?: string;
     duration?: string;
     price?: string;
   };
 
   createTreatment: {
-    treatmentId: number;
+    treatmentId: string;
     title?: string;
     duration?: string;
     price?: string;

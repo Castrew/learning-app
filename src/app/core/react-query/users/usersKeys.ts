@@ -24,28 +24,48 @@ export const usersKeys = createQueryKeys("users", {
       },
     };
   },
+  validateUser: ({ payload }) => {
+    // console.log(payload);
+
+    return {
+      queryKey: ["validateUser"],
+      queryFn: async () => {
+        const { data } = await APIAxiosInstance.get("/users", payload);
+        return data;
+      },
+    };
+  },
 });
 
 export const usersMutationsKeys = createMutationKeys("users", {
   deleteUser: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["deleteUser"]) => {
-      const { data } = await APIAxiosInstance.delete(`/users/${payload.id}`);
+      const { data } = await APIAxiosInstance.delete(
+        `/users/${payload.userId}`
+      );
       return data;
     },
   },
   updateUser: {
     mutationKey: null,
-    mutationFn: async ({ id, ...rest }: RequestTypes["updateUser"]) => {
-      const { data } = await APIAxiosInstance.put(`/users/${id}`, rest);
+    mutationFn: async ({ userId, ...rest }: RequestTypes["updateUser"]) => {
+      const { data } = await APIAxiosInstance.put(`/users/${userId}`, rest);
 
       return data;
     },
   },
-  createUser: {
+  signUpUser: {
     mutationKey: null,
-    mutationFn: async (payload: RequestTypes["createUser"]) => {
-      const { data } = await APIAxiosInstance.post(`/users`, payload);
+    mutationFn: async (payload: RequestTypes["signUpUser"]) => {
+      const { data } = await APIAxiosInstance.post(`/users/sign-up`, payload);
+      return data;
+    },
+  },
+  signInUser: {
+    mutationKey: null,
+    mutationFn: async (payload: RequestTypes["signInUser"]) => {
+      const { data } = await APIAxiosInstance.post(`/users/sign-in`, payload);
       return data;
     },
   },

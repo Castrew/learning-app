@@ -1,10 +1,14 @@
-import { Box } from "@mui/material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 
 const NavBar = () => {
   return (
-    <Box>
-      <img src="./headerPhoto.jpeg" />
-    </Box>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit">Home</Button>
+        <Button color="inherit">Appointment</Button>
+        <Button color="inherit">Treatments</Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 

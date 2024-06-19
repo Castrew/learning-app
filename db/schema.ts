@@ -10,45 +10,64 @@ import {
   serial,
   timestamp,
   varchar,
+  datetime,
 } from "drizzle-orm/mysql-core";
 
-export const user = mysqlTable("user", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
+// User Table
+export const userTable = mysqlTable("user", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  username: varchar("username", { length: 255 }).notNull(),
+  hashedPassword: varchar("hashed_password", { length: 255 }).notNull(),
 });
 
-export const usersRelations = relations(user, ({ many }) => ({
-  appointment: many(appointment),
+// User Relations
+export const usersRelations = relations(userTable, ({ many }) => ({
+  appointments: many(appointmentTable),
 }));
 
-export const treatment = mysqlTable("treatment", {
-  id: serial("id").primaryKey(),
+// Treatment Table
+export const treatmentTable = mysqlTable("treatment", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
   title: varchar("title", { length: 255 }),
   duration: varchar("duration", { length: 255 }),
   price: varchar("price", { length: 255 }),
 });
 
-export const treatmentRelations = relations(treatment, ({ many }) => ({
-  appointment: many(appointment),
+// Treatment Relations
+export const treatmentRelations = relations(treatmentTable, ({ many }) => ({
+  appointments: many(appointmentTable),
 }));
 
-export const appointment = mysqlTable("appointment", {
-  id: serial("id").primaryKey(),
+// Appointment Table
+export const appointmentTable = mysqlTable("appointment", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
   start: timestamp("start", { mode: "string" }),
   end: timestamp("end", { mode: "string" }),
-  user_id: bigint("user_id", { mode: "bigint", unsigned: true })
+  userId: varchar("user_id", { length: 255 })
     .notNull()
-    .references(() => user.id),
-  treatment_id: bigint("treatment_id", { mode: "bigint", unsigned: true })
+    .references(() => userTable.id),
+  treatmentId: varchar("treatment_id", { length: 255 })
     .notNull()
-    .references(() => treatment.id),
+    .references(() => treatmentTable.id),
 });
 
-export const appointmentRelations = relations(appointment, ({ one, many }) => ({
-  user: one(user, {
-    fields: [appointment.user_id],
-    references: [user.id],
+// Appointment Relations
+export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [appointmentTable.userId],
+    references: [userTable.id],
   }),
-  treatment: many(treatment),
+  treatment: one(treatmentTable, {
+    fields: [appointmentTable.treatmentId],
+    references: [treatmentTable.id],
+  }),
 }));
+
+// Session Table
+export const sessionTable = mysqlTable("session", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => userTable.id),
+  expiresAt: datetime("expires_at").notNull(),
+});

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
-import { treatment } from "../../../../db/schema";
+import { treatmentTable } from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import * as schema from "../../../../db/schema";
 
@@ -65,7 +65,7 @@ export const GET = async (request: NextRequest) => {
     });
     const db = drizzle(connection);
 
-    const allTreatments = await db.select().from(treatment);
+    const allTreatments = await db.select().from(treatmentTable);
     return successResponseList(allTreatments);
   } catch (error) {
     return serverError(error);
@@ -74,6 +74,7 @@ export const GET = async (request: NextRequest) => {
 
 export const POST = async (request: NextRequest) => {
   const { title, duration, price } = await request.json();
+  const id = "12";
 
   try {
     const connection = await mysql.createConnection({
@@ -81,15 +82,15 @@ export const POST = async (request: NextRequest) => {
     });
     const db = drizzle(connection, { schema, mode: "default" });
     const createTreatment = await db
-      .insert(treatment)
-      .values({ title, duration, price });
+      .insert(treatmentTable)
+      .values({ id, title, duration, price });
 
     const createdTreatmentId = createTreatment[0].insertId;
 
     const newTreatment = await db
       .select()
-      .from(treatment)
-      .where(eq(treatment.id, createdTreatmentId));
+      .from(treatmentTable)
+      .where(eq(treatmentTable.id, createdTreatmentId));
 
     return successResponseOneObject(newTreatment[0]);
   } catch (error) {

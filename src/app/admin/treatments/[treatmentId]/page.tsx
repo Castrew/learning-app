@@ -18,6 +18,7 @@ const updateTest = () => {
   const router = useRouter();
   const params = useParams();
   const treatmentId = Number(params.treatmentId);
+  const updateTreatment = useUpdateTreatment();
 
   const { data, isLoading } = useGetOneTreatment({ treatmentId });
   const treatment = data?.data[0];
@@ -27,7 +28,6 @@ const updateTest = () => {
     duration: treatment?.duration,
     price: treatment?.price,
   };
-  const updateTreatment = useUpdateTreatment();
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues,
