@@ -7,13 +7,14 @@ import { useCreateTreatment } from "@/app/core/react-query/treatments/hooks/useC
 import { useRouter } from "next/navigation";
 
 interface Test {
-  treatmentId: number;
+  treatmentId: string;
+  description: string;
   title: string;
   duration: string;
   price: string;
 }
 
-export const TestComponent = () => {
+const TestComponent = () => {
   const router = useRouter();
   const createTreatment = useCreateTreatment();
   const { register, handleSubmit } = useForm<Test>();

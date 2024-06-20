@@ -29,6 +29,8 @@ export const usersRelations = relations(userTable, ({ many }) => ({
 export const treatmentTable = mysqlTable("treatment", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   title: varchar("title", { length: 255 }),
+  description: varchar("description", { length: 255 }).notNull(),
+
   duration: varchar("duration", { length: 255 }),
   price: varchar("price", { length: 255 }),
 });
@@ -45,10 +47,10 @@ export const appointmentTable = mysqlTable("appointment", {
   end: timestamp("end", { mode: "string" }),
   userId: varchar("user_id", { length: 255 })
     .notNull()
-    .references(() => userTable.id),
+    .references(() => userTable.id, { onDelete: "cascade" }),
   treatmentId: varchar("treatment_id", { length: 255 })
     .notNull()
-    .references(() => treatmentTable.id),
+    .references(() => treatmentTable.id, { onDelete: "cascade" }),
 });
 
 // Appointment Relations
@@ -68,6 +70,6 @@ export const sessionTable = mysqlTable("session", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   userId: varchar("user_id", { length: 255 })
     .notNull()
-    .references(() => userTable.id),
+    .references(() => userTable.id, { onDelete: "cascade" }),
   expiresAt: datetime("expires_at").notNull(),
 });
