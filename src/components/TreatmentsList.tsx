@@ -2,7 +2,15 @@
 
 import { useDeleteTreatment } from "@/app/core/react-query/treatments/hooks/useDeleteTreatment";
 import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/useGetAllTreatmets";
-import { Box, Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 
 type treatmentProps = {
@@ -19,30 +27,36 @@ export const TreatmentsList = () => {
   const treatments = data?.data.items;
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <Typography>Loading...</Typography>;
   }
   return (
     <Box display="flex" flexDirection="column">
-      Treatmets List
+      <Typography sx={{ fontSize: 24 }}>Treatmets List</Typography>
       {treatments?.map((treatment: treatmentProps) => {
         return (
-          <Box key={treatment?.id}>
-            <h1>Procedura {treatment?.title}</h1>
-            <h4>Vremetraene {treatment?.duration}</h4>
-            <h4>Cena {treatment?.price}</h4>
-            <Button
-              onClick={() => router.push(`/admin/treatments/${treatment.id}`)}
-            >
-              Update
-            </Button>
-            <Button
-              onClick={() =>
-                deleteTreatments.mutate({ treatmentId: treatment.id })
-              }
-            >
-              Delete
-            </Button>
-          </Box>
+          <Card variant="outlined" sx={{ mb: 2 }}>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                Procedura: {treatment.title}
+              </Typography>
+              <Typography sx={{ mb: 1 }} color="text.secondary">
+                Vremetraene: {treatment.duration}
+              </Typography>
+              <Typography sx={{ mb: 1 }} color="text.secondary">
+                Cena: {treatment.price}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{ borderRadius: "20px" }}
+              >
+                Update
+              </Button>
+              <Button size="small">Delete</Button>
+            </CardActions>
+          </Card>
         );
       })}
     </Box>

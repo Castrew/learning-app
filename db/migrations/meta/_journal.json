@@ -15,6 +15,27 @@
       "when": 1718628088672,
       "tag": "0001_tiny_tempest",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1718882962351,
+      "tag": "0002_rapid_typhoid_mary",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1718883050663,
+      "tag": "0003_busy_mercury",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1718883118309,
+      "tag": "0004_public_shooting_star",
+      "breakpoints": true
     }
   ]
 }
