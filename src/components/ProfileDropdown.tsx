@@ -24,7 +24,7 @@ const ProfileDropdown = () => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <Avatar alt="Profile" src="/profile.jpg" />
+        <Avatar alt="Profile" />
       </IconButton>
       <Menu
         id="profile-menu"

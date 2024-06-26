@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
-import { treatment } from "../../../../../db/schema";
+import { treatmentTable } from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { NextApiResponse } from "next";
 
@@ -59,7 +59,7 @@ const successResponseList = (data: {}) => {
 
 export const GET = async (
   request: NextRequest,
-  { params }: { params: { treatmentId: number } }
+  { params }: { params: { treatmentId: string } }
 ) => {
   const treatmentId = params.treatmentId;
 
@@ -71,8 +71,8 @@ export const GET = async (
 
     const oneTreatment = await db
       .select()
-      .from(treatment)
-      .where(eq(treatment.id, treatmentId));
+      .from(treatmentTable)
+      .where(eq(treatmentTable.id, treatmentId));
 
     return successResponseOneObject(oneTreatment);
   } catch (error) {
@@ -82,7 +82,7 @@ export const GET = async (
 
 export const DELETE = async (
   _: NextRequest,
-  { params }: { params: { treatmentId: number } }
+  { params }: { params: { treatmentId: string } }
 ) => {
   const treatmentId = params.treatmentId;
   try {
@@ -93,14 +93,14 @@ export const DELETE = async (
 
     const existingTreatment = await db
       .select()
-      .from(treatment)
-      .where(eq(treatment.id, treatmentId));
+      .from(treatmentTable)
+      .where(eq(treatmentTable.id, treatmentId));
 
     if (!existingTreatment.length) {
       return notFoundError();
     }
 
-    await db.delete(treatment).where(eq(treatment.id, treatmentId));
+    await db.delete(treatmentTable).where(eq(treatmentTable.id, treatmentId));
 
     return successResponseOneObject(existingTreatment[0]);
   } catch (error) {
@@ -109,7 +109,7 @@ export const DELETE = async (
 };
 
 export const PUT = async (request: NextRequest, { params }: any) => {
-  const { title, duration, price } = await request.json();
+  const { title, duration, price, description } = await request.json();
   const treatmentId = params.treatmentId;
 
   try {
@@ -119,14 +119,14 @@ export const PUT = async (request: NextRequest, { params }: any) => {
     const db = drizzle(connection);
 
     const updateTreatment = await db
-      .update(treatment)
-      .set({ title, price, duration })
-      .where(eq(treatment.id, treatmentId));
+      .update(treatmentTable)
+      .set({ title, price, duration, description })
+      .where(eq(treatmentTable.id, treatmentId));
 
     const uodatedTreatment = await db
       .select()
-      .from(treatment)
-      .where(eq(treatment.id, treatmentId));
+      .from(treatmentTable)
+      .where(eq(treatmentTable.id, treatmentId));
 
     return successResponseOneObject(uodatedTreatment[0]);
   } catch (error) {

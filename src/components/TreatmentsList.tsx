@@ -12,18 +12,24 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import parse from "html-react-parser";
 
 type treatmentProps = {
-  id: number;
+  id: string;
   title: string;
   duration: string;
   price: string;
+  description: string;
 };
 
-export const TreatmentsList = () => {
+type isAdminProps = {
+  isAdmin?: boolean;
+};
+
+export const TreatmentsList = ({ isAdmin }: isAdminProps) => {
   const router = useRouter();
   const { data, isLoading } = useGetAllTreatments();
-  const deleteTreatments = useDeleteTreatment();
+  const deleteTreatment = useDeleteTreatment();
   const treatments = data?.data.items;
 
   if (isLoading) {
@@ -34,7 +40,7 @@ export const TreatmentsList = () => {
       <Typography sx={{ fontSize: 24 }}>Treatmets List</Typography>
       {treatments?.map((treatment: treatmentProps) => {
         return (
-          <Card variant="outlined" sx={{ mb: 2 }}>
+          <Card key={treatment.id} variant="outlined" sx={{ mb: 2 }}>
             <CardContent>
               <Typography variant="h5" component="div">
                 Procedura: {treatment.title}
@@ -45,17 +51,36 @@ export const TreatmentsList = () => {
               <Typography sx={{ mb: 1 }} color="text.secondary">
                 Cena: {treatment.price}
               </Typography>
+              <Typography sx={{ mb: 1 }} color="text.secondary">
+                Description: {parse(treatment.description)}
+              </Typography>
             </CardContent>
-            <CardActions>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{ borderRadius: "20px" }}
-              >
-                Update
-              </Button>
-              <Button size="small">Delete</Button>
-            </CardActions>
+            {isAdmin && (
+              <CardActions>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  sx={{ borderRadius: "20px" }}
+                  onClick={() =>
+                    router.push(`/admin/treatments/${treatment.id}`)
+                  }
+                >
+                  Update
+                </Button>
+                <Button
+                  size="medium"
+                  color="error"
+                  variant="outlined"
+                  onClick={() =>
+                    deleteTreatment.mutate({
+                      treatmentId: treatment.id,
+                    })
+                  }
+                >
+                  Delete
+                </Button>
+              </CardActions>
+            )}
           </Card>
         );
       })}

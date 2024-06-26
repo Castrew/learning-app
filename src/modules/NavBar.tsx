@@ -2,7 +2,6 @@ import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
 
-
 const NavBar = () => {
   const router = useRouter();
 
