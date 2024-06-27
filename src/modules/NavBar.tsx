@@ -1,10 +1,17 @@
+"use client";
+
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { useRouter } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
+import {useContext} from "react";
+import {AuthContext} from "@/providers/AuthProvider";
 
 const NavBar = () => {
   const router = useRouter();
+  const user = useContext(AuthContext)
 
+  console.log(user, "NavBar");
+  
   return (
     <AppBar position="static" color="info">
       <Toolbar>
