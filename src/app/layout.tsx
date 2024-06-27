@@ -20,7 +20,6 @@ export default async function RootLayout({
           </Box>
           {children}
           {/* <div style={{ height: "75px", backgroundColor: "white" }}>Footer</div> */}
-          <ReactQueryDevtools />
         </Providers>
       </body>
     </html>

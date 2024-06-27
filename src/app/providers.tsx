@@ -5,7 +5,8 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
-import {AuthProvider} from "@/providers/AuthProvider";
+import {AuthContext} from "@/providers/AuthProvider";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
 function makeQueryClient() {
     return new QueryClient({
@@ -45,9 +46,10 @@ export default function Providers({ children, user }) {
     const queryClient = getQueryClient()
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthProvider user={user}>
+            <AuthContext.Provider value={user}>
                 {children}
-            </AuthProvider>
+            </AuthContext.Provider>
+            <ReactQueryDevtools />
         </QueryClientProvider>
     )
 }

@@ -1,5 +1,3 @@
-"use-client"
-
 import { useState } from "react";
 import { Menu, MenuItem, IconButton, Avatar, Typography } from "@mui/material";
 import { signOut } from "../../actions/auth.actions";
