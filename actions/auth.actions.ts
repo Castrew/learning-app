@@ -59,7 +59,7 @@ export const signUp = async (data: SignUpFormProps) => {
 
     cookies().set(
       sessionCookie.name,
-      sessionCookie.value,
+      sessionCookie.value + `?userId=${userId}`,
       sessionCookie.attributes
     );
 
@@ -68,15 +68,11 @@ export const signUp = async (data: SignUpFormProps) => {
       .from(userTable)
       .where(eq(userTable.id, userId));
 
-    console.log(createdUser);
-
     const response: SuccessResponse = {
       status: 200,
       id: createdUser[0].id,
       username: createdUser[0].username,
     };
-
-    console.log(response);
 
     return response;
   } catch (error) {
@@ -128,7 +124,7 @@ export const signIn = async (data: SignInFormProps) => {
 
     cookies().set(
       sessionCookie.name,
-      sessionCookie.value,
+      sessionCookie.value + `?userId=${existingUser[0].id}`,
       sessionCookie.attributes
     );
 
