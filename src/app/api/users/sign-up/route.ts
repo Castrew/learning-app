@@ -68,9 +68,12 @@ const notFoundError = () => {
 
 export const POST = async (request: NextRequest) => {
   const { username, password } = await request.json();
+  // console.log(username, password);
 
   const hashedPassword = await new Argon2id().hash(password);
   const userId = uuidv4();
+
+  // console.log(userId);
 
   try {
     const connection = await mysql.createConnection(dbServer);
@@ -94,6 +97,8 @@ export const POST = async (request: NextRequest) => {
       .select()
       .from(userTable)
       .where(eq(userTable.id, userId));
+
+    console.log(createdUser);
 
     return successResponseOneObject(createdUser[0]);
   } catch (error) {

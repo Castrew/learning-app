@@ -79,6 +79,7 @@ const notFoundError = () => {
 
 export const GET = async (request: NextRequest) => {
   const { username, password } = await request.json();
+  console.log(username, password);
 
   try {
     const connection = await mysql.createConnection({
@@ -122,38 +123,3 @@ export const GET = async (request: NextRequest) => {
 //     return serverError(error);
 //   }
 // };
-
-export const POST = async (request: NextRequest) => {
-  const { username, password } = await request.json();
-
-  const hashedPassword = await new Argon2id().hash(password);
-  const userId = uuidv4();
-
-  try {
-    const connection = await mysql.createConnection(dbServer);
-    const db = drizzle(connection, { schema: { userTable }, mode: "default" });
-
-    await db.insert(userTable).values({ id: userId, username, hashedPassword });
-
-    const session = await lucia.createSession(userId, {
-      expiresIn: 60 * 60 * 24 * 30,
-    });
-
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
-
-    const createdUser = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.id, userId));
-
-    return successResponseOneObject(createdUser[0]);
-  } catch (error) {
-    return serverError(error);
-  }
-};

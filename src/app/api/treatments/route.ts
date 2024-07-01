@@ -4,7 +4,6 @@ import mysql from "mysql2/promise";
 import { treatmentTable } from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import * as schema from "../../../../db/schema";
-import { v4 as uuidv4 } from "uuid";
 
 const dbServer = {
   host: "127.0.0.1",
@@ -74,9 +73,8 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-
   const { title, duration, price, description } = await request.json();
-  const id = uuidv4();
+  const id = "12";
 
   try {
     const connection = await mysql.createConnection({
