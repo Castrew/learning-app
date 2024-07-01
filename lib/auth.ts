@@ -20,14 +20,17 @@ export const lucia = new Lucia(adapter, {
 
 export const validateRequest = cache(async () => {
   try {
-    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    const cookieValue = cookies().get(lucia.sessionCookieName)?.value;
 
-    if (!sessionId) {
+
+    if (!cookieValue) {
       return {
         user: null,
         session: null,
       };
     }
+    const sessionId = cookieValue.split("?userId=")[0] ?? null;
+
     const { user, session } = await lucia.validateSession(sessionId);
 
     return { user, session };

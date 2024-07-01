@@ -18,7 +18,6 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
   const router = useRouter();
   const updateTreatment = useUpdateTreatment();
   const createTreatment = useCreateTreatment();
-  console.log(isAdmin, "isAdmin");
 
   const defaultValues = {
     title: treatment?.title || "",
@@ -46,7 +45,6 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
   ]);
 
   const onSubmit: SubmitHandler<Treatment> = (data) => {
-    console.log(data);
 
     if (treatment?.id) {
       updateTreatment.mutate({ treatmentId: treatment?.id, ...data });
@@ -58,13 +56,27 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
     !isLoading && (
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
+
+          sx={{ mt: 2 }}
           gap="10px"
           display="flex"
           flexDirection="column"
-          maxWidth="250px"
-          sx={{ p: "15px" }}
+          justifyContent="center"
+          maxWidth="800px"
+          mx="auto"
+          p="15px"
+          bgcolor="background.paper"
+          boxShadow={3}
+          borderRadius={2}
         >
-          <TextField label="title" inputProps={register("title")} />
+          <TextField
+            label="Title"
+            variant="outlined"
+            {...register("title")}
+            fullWidth
+            margin="normal"
+          />
+
           <Controller
             control={control}
             name="description"
@@ -81,11 +93,14 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
                   onChange={field.onChange}
                   placeholder="Enter your description ..."
                   error={!!error}
+
+                  // style={{ minHeight: '150px', border: error ? '1px solid red' : '1px solid #ccc' }}
                 />
                 {error && (
                   <Typography
-                    marginLeft="14px"
-                    marginTop="3px"
+                    ml="14px"
+                    mt="3px"
+
                     fontSize="0.75rem"
                     color="error"
                   >
@@ -95,14 +110,43 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
               </>
             )}
           />
-          <TextField label="Duration" inputProps={register("duration")} />
-          <TextField label="Price" inputProps={register("price")} />
-          <Button
-            type="submit"
-            onClick={() => router.push("/admin/treatments")}
-          >
-            {treatment ? "Update" : "Create"}
-          </Button>
+
+          <TextField
+            label="Duration"
+            variant="outlined"
+            {...register("duration")}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Price"
+            variant="outlined"
+            {...register("price")}
+            fullWidth
+            margin="normal"
+          />
+          <Box display="flex" justifyContent="space-between" mt={2}>
+            <Button
+              sx={{ m: 1 }}
+              variant="contained"
+              color="error"
+              fullWidth
+              onClick={() => router.back()}
+            >
+              Cancel
+            </Button>
+            <Button
+              sx={{ m: 1 }}
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={() => router.push("/admin/treatments")}
+            >
+              {treatment ? "Update" : "Create"}
+            </Button>
+          </Box>
+
         </Box>
       </form>
     )
