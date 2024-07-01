@@ -8,6 +8,7 @@ import { useUpdateTreatment } from "@/app/core/react-query/treatments/hooks/useU
 import { useRouter, useParams } from "next/navigation";
 import { useGetOneTreatment } from "@/app/core/react-query/treatments/hooks/useGetOneTreatment";
 
+<<<<<<< Updated upstream
 type Test = {
   title: string;
   duration: string;
@@ -43,6 +44,12 @@ const updateTest = () => {
       price: treatment?.price,
     });
   }, [treatment?.treatment, treatment?.email, treatment?.price]);
+=======
+  if (!user) {
+    return redirect("/sign-in");
+  }
+  const isAdmin = user?.id === "16aafx78kvkvgt2";
+>>>>>>> Stashed changes
 
   return (
     !isLoading && (
