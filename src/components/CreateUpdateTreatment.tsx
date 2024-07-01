@@ -45,6 +45,7 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
   ]);
 
   const onSubmit: SubmitHandler<Treatment> = (data) => {
+
     if (treatment?.id) {
       updateTreatment.mutate({ treatmentId: treatment?.id, ...data });
     } else {
@@ -55,6 +56,7 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
     !isLoading && (
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
+
           sx={{ mt: 2 }}
           gap="10px"
           display="flex"
@@ -74,6 +76,7 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
             fullWidth
             margin="normal"
           />
+
           <Controller
             control={control}
             name="description"
@@ -90,12 +93,14 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
                   onChange={field.onChange}
                   placeholder="Enter your description ..."
                   error={!!error}
+
                   // style={{ minHeight: '150px', border: error ? '1px solid red' : '1px solid #ccc' }}
                 />
                 {error && (
                   <Typography
                     ml="14px"
                     mt="3px"
+
                     fontSize="0.75rem"
                     color="error"
                   >
@@ -105,6 +110,7 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
               </>
             )}
           />
+
           <TextField
             label="Duration"
             variant="outlined"
@@ -140,6 +146,7 @@ const UpdateCreateTreatment: React.FC = (isAdmin) => {
               {treatment ? "Update" : "Create"}
             </Button>
           </Box>
+
         </Box>
       </form>
     )

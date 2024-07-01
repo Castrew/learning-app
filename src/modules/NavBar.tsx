@@ -1,12 +1,8 @@
+"use client";
+
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
 import ProfileDropdown from "@/components/ProfileDropdown";
-<<<<<<< Updated upstream
-
-
-const NavBar = () => {
-  const router = useRouter();
-=======
 import { useContext } from "react";
 import { AuthContext } from "@/providers/AuthProvider";
 
@@ -17,8 +13,8 @@ const NavBar = () => {
 
   const isAdmin = user?.id === "16aafx78kvkvgt2";
   const isAccessAllowed = isAdmin && pathname.includes("/admin");
->>>>>>> Stashed changes
 
+  
   return (
     <AppBar position="static" color="info">
       <Toolbar>

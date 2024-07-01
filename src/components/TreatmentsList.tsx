@@ -12,24 +12,26 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import parse from "html-react-parser";
 
 type treatmentProps = {
-  id: number;
+  id: string;
   title: string;
   duration: string;
   price: string;
+  description: string;
 };
 
-export const TreatmentsList = () => {
+type isAdminProps = {
+  isAdmin?: boolean;
+};
+
+export const TreatmentsList = ({ isAdmin }: isAdminProps) => {
   const router = useRouter();
   const { data, isLoading } = useGetAllTreatments();
-<<<<<<< Updated upstream
-  const deleteTreatments = useDeleteTreatment();
-  const treatments = data?.data.items;
-=======
   const deleteTreatment = useDeleteTreatment();
   const treatments = data?.data?.items;
->>>>>>> Stashed changes
+
 
   if (isLoading) {
     return <Typography>Loading...</Typography>;
@@ -37,35 +39,7 @@ export const TreatmentsList = () => {
   return (
     <Box>
       <Typography sx={{ fontSize: 24 }}>Treatmets List</Typography>
-<<<<<<< Updated upstream
-      {treatments?.map((treatment: treatmentProps) => {
-        return (
-          <Card variant="outlined" sx={{ mb: 2 }}>
-            <CardContent>
-              <Typography variant="h5" component="div">
-                Procedura: {treatment.title}
-              </Typography>
-              <Typography sx={{ mb: 1 }} color="text.secondary">
-                Vremetraene: {treatment.duration}
-              </Typography>
-              <Typography sx={{ mb: 1 }} color="text.secondary">
-                Cena: {treatment.price}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{ borderRadius: "20px" }}
-              >
-                Update
-              </Button>
-              <Button size="small">Delete</Button>
-            </CardActions>
-          </Card>
-        );
-      })}
-=======
+
       {isAdmin && (
         <Button
           variant="contained"
@@ -132,7 +106,6 @@ export const TreatmentsList = () => {
           );
         })}
       </Box>
->>>>>>> Stashed changes
     </Box>
   );
 };

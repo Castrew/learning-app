@@ -74,13 +74,9 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-<<<<<<< Updated upstream
-  const { title, duration, price } = await request.json();
-  const id = "12";
-=======
+
   const { title, duration, price, description } = await request.json();
   const id = uuidv4();
->>>>>>> Stashed changes
 
   try {
     const connection = await mysql.createConnection({
@@ -89,14 +85,14 @@ export const POST = async (request: NextRequest) => {
     const db = drizzle(connection, { schema, mode: "default" });
     const createTreatment = await db
       .insert(treatmentTable)
-      .values({ id, title, duration, price });
+      .values({ id, title, duration, price, description });
 
     const createdTreatmentId = createTreatment[0].insertId;
 
     const newTreatment = await db
       .select()
       .from(treatmentTable)
-      .where(eq(treatmentTable.id, createdTreatmentId));
+      .where(eq(treatmentTable.id, String(createdTreatmentId)));
 
     return successResponseOneObject(newTreatment[0]);
   } catch (error) {

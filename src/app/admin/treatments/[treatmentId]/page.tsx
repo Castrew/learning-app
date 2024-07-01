@@ -1,13 +1,13 @@
-"use client";
+import React from "react";
+import { Box } from "@mui/material";
+import { redirect } from "next/navigation";
+import { validateRequest } from "../../../../../lib/auth";
+import UpdateCreateTreatment from "@/components/CreateUpdateTreatment";
 
-import { Box, Button, TextField } from "@mui/material";
-import { useGetOneUser } from "@/app/core/react-query/users/hooks/useGetOneUser";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect } from "react";
-import { useUpdateTreatment } from "@/app/core/react-query/treatments/hooks/useUpdateTreatment";
-import { useRouter, useParams } from "next/navigation";
-import { useGetOneTreatment } from "@/app/core/react-query/treatments/hooks/useGetOneTreatment";
+const UpdateTreatment = async () => {
+  const { user } = await validateRequest();
 
+<<<<<<< LEA-12
 <<<<<<< Updated upstream
 type Test = {
   title: string;
@@ -45,32 +45,23 @@ const updateTest = () => {
     });
   }, [treatment?.treatment, treatment?.email, treatment?.price]);
 =======
+=======
+>>>>>>> main
   if (!user) {
     return redirect("/sign-in");
   }
   const isAdmin = user?.id === "16aafx78kvkvgt2";
+<<<<<<< LEA-12
 >>>>>>> Stashed changes
+=======
+  console.log(isAdmin);
+>>>>>>> main
 
   return (
-    !isLoading && (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          gap="10px"
-          display="flex"
-          flexDirection="column"
-          maxWidth="250px"
-          sx={{ p: "15px" }}
-        >
-          <TextField label="title" inputProps={register("title")} />
-          <TextField label="Duration" inputProps={register("duration")} />
-          <TextField label="Price" inputProps={register("price")} />
-          <Button type="submit" onClick={() => router.push("/")}>
-            Update
-          </Button>
-        </Box>
-      </form>
-    )
+    <Box>
+      <UpdateCreateTreatment />
+    </Box>
   );
 };
 
-export default updateTest;
+export default UpdateTreatment;

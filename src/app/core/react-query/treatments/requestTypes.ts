@@ -4,6 +4,7 @@ export interface RequestTypes {
     title: string;
     duration: string;
     price: string;
+    description: string;
   };
 
   getOneTreatment: {
@@ -19,12 +20,13 @@ export interface RequestTypes {
     title?: string;
     duration?: string;
     price?: string;
+    description?: string;
   };
 
   createTreatment: {
-    treatmentId: string;
     title?: string;
     duration?: string;
     price?: string;
+    description?: string;
   };
 }
