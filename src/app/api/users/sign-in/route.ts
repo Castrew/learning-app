@@ -69,9 +69,6 @@ export const POST = async (request: NextRequest) => {
       sessionCookie.value,
       sessionCookie.attributes
     );
-    console.log(test, "test");
-
-    console.log(response, "response");
 
     return successResponseOneObject(response);
   } catch (error) {
