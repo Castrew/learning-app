@@ -11,23 +11,21 @@ export const lucia = new Lucia(adapter, {
       // maxAge: 60 * 60 * 24 * 7, // 1 week
     },
   },
-  getUserAttributes: (attr) => {
-    console.log(attr);
-
-    return "asd";
-  },
 });
 
 export const validateRequest = cache(async () => {
   try {
-    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    const cookieValue = cookies().get(lucia.sessionCookieName)?.value;
 
-    if (!sessionId) {
+    if (!cookieValue) {
       return {
         user: null,
         session: null,
       };
     }
+
+    const sessionId = cookieValue.split("?userId")[0];
+
     const { user, session } = await lucia.validateSession(sessionId);
 
     return { user, session };

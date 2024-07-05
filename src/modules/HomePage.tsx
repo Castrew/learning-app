@@ -7,9 +7,6 @@ export const HomePage = () => {
   return (
     <Box display="flex" flexDirection="column">
       <TreatmentsList />
-      <form action={signOut}>
-        <Button type="submit">Sign Out</Button>
-      </form>
     </Box>
   );
 };

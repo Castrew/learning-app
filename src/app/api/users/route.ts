@@ -79,7 +79,6 @@ const notFoundError = () => {
 
 export const GET = async (request: NextRequest) => {
   const { username, password } = await request.json();
-  console.log(username, password);
 
   try {
     const connection = await mysql.createConnection({

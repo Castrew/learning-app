@@ -4,7 +4,7 @@ import { redirect, useParams } from "next/navigation";
 import { validateRequest } from "../../../../../lib/auth";
 import UpdateCreateTreatment from "@/components/CreateUpdateTreatment";
 
-const CreateTreatment = async () => {
+const AdminCreateTreatmentPage = async () => {
   const { user } = await validateRequest();
 
   if (!user) {
@@ -19,4 +19,4 @@ const CreateTreatment = async () => {
   );
 };
 
-export default CreateTreatment;
+export default AdminCreateTreatmentPage;

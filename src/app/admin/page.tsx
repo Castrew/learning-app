@@ -1,8 +1,6 @@
-"use client";
-
 import { HomePage } from "@/modules/HomePage";
 
-const AdminTreatmentsPage: React.FC = () => {
+const AdminHomePage: React.FC = () => {
   return (
     <>
       <HomePage />
@@ -10,4 +8,4 @@ const AdminTreatmentsPage: React.FC = () => {
   );
 };
 
-export default AdminTreatmentsPage;
+export default AdminHomePage;

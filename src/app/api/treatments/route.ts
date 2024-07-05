@@ -4,6 +4,7 @@ import mysql from "mysql2/promise";
 import { treatmentTable } from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import * as schema from "../../../../db/schema";
+import { v4 as uuidv4 } from "uuid";
 
 const dbServer = {
   host: "127.0.0.1",
@@ -74,7 +75,7 @@ export const GET = async (request: NextRequest) => {
 
 export const POST = async (request: NextRequest) => {
   const { title, duration, price, description } = await request.json();
-  const id = "12";
+  const id = uuidv4();
 
   try {
     const connection = await mysql.createConnection({
@@ -85,12 +86,12 @@ export const POST = async (request: NextRequest) => {
       .insert(treatmentTable)
       .values({ id, title, duration, price, description });
 
-    const createdTreatmentId = createTreatment[0].insertId;
+    const createdTreatmentId = String(createTreatment[0].insertId);
 
     const newTreatment = await db
       .select()
       .from(treatmentTable)
-      .where(eq(treatmentTable.id, String(createdTreatmentId)));
+      .where(eq(treatmentTable.id, createdTreatmentId));
 
     return successResponseOneObject(newTreatment[0]);
   } catch (error) {

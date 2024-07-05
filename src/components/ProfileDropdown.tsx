@@ -1,5 +1,14 @@
+"use client";
+
 import { useState } from "react";
-import { Menu, MenuItem, IconButton, Avatar, Typography } from "@mui/material";
+import {
+  Menu,
+  MenuItem,
+  IconButton,
+  Avatar,
+  Typography,
+  Box,
+} from "@mui/material";
 import { signOut } from "../../actions/auth.actions";
 import { useRouter } from "next/navigation";
 
@@ -16,7 +25,7 @@ const ProfileDropdown = () => {
   };
 
   return (
-    <div>
+    <Box>
       <IconButton
         edge="end"
         aria-label="profile"
@@ -42,7 +51,7 @@ const ProfileDropdown = () => {
           <Typography color="error">Sign out</Typography>
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 
