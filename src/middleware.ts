@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const cookieValue = req.cookies.get("auth_session")?.value;
+  console.log(cookieValue, "auth session");
 
   if (!cookieValue) {
     // Allow access to sign-in and sign-up pages
@@ -15,9 +16,10 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  const userId = cookieValue?.split("?userId=")[1];
+  const userId = cookieValue.split("?userId=")[1];
   const isAdmin = userId === "16aafx78kvkvgt2";
 
+  // Check if the requested URL is "/admin"
   if (req.nextUrl.pathname.startsWith("/admin")) {
     if (!isAdmin) {
       return NextResponse.redirect(new URL("/not-authorized", req.url));
@@ -28,8 +30,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next).*)"], // Define the routes you want to protect
+  matcher: ["/((?!_next|sign-in|sign-up).*)"], // Protect "/", "/admin", and other routes, excluding "/_next", "/sign-in", and "/sign-up"
 };
-
-// "/((?!_next).*)" for all routes starting with
-// /((?!_next|sign-in|sign-up).*) same but it is not protectiong sign-in and sign-up

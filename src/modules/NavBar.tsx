@@ -14,7 +14,6 @@ const NavBar = () => {
   const isAdmin = user?.id === "16aafx78kvkvgt2";
   const isAccessAllowed = isAdmin && pathname.includes("/admin");
 
-  
   return (
     <AppBar position="static" color="info">
       <Toolbar>
@@ -23,7 +22,9 @@ const NavBar = () => {
           color="error"
           size="large"
           sx={{ mr: 2, borderRadius: "20px" }}
-          onClick={() => router.push("/")}
+          onClick={() =>
+            isAccessAllowed ? router.push("/admin") : router.push("/")
+          }
         >
           Home
         </Button>

@@ -44,8 +44,6 @@ export const treatmentsMutationsKeys = createMutationKeys("treatments", {
       treatmentId,
       ...rest
     }: RequestTypes["updateTreatment"]) => {
-      console.log(rest);
-
       const { data } = await APIAxiosInstance.put(
         `/treatments/${treatmentId}`,
         rest

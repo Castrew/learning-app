@@ -2,6 +2,7 @@
 
 import { useDeleteTreatment } from "@/app/core/react-query/treatments/hooks/useDeleteTreatment";
 import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/useGetAllTreatmets";
+import { AuthContext } from "@/providers/AuthProvider";
 import {
   Box,
   Button,
@@ -11,7 +12,8 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useContext } from "react";
 import parse from "html-react-parser";
 
 type treatmentProps = {
@@ -22,16 +24,15 @@ type treatmentProps = {
   description: string;
 };
 
-type isAdminProps = {
-  isAdmin?: boolean;
-};
-
-export const TreatmentsList = ({ isAdmin }: isAdminProps) => {
+export const TreatmentsList = () => {
+  const pathname = usePathname();
   const router = useRouter();
   const { data, isLoading } = useGetAllTreatments();
   const deleteTreatment = useDeleteTreatment();
   const treatments = data?.data?.items;
-
+  const user = useContext(AuthContext);
+  const isActionAllowed =
+    user?.id === "16aafx78kvkvgt2" && pathname.includes("/admin");
 
   if (isLoading) {
     return <Typography>Loading...</Typography>;
@@ -39,8 +40,7 @@ export const TreatmentsList = ({ isAdmin }: isAdminProps) => {
   return (
     <Box>
       <Typography sx={{ fontSize: 24 }}>Treatmets List</Typography>
-
-      {isAdmin && (
+      {isActionAllowed && (
         <Button
           variant="contained"
           size="medium"
@@ -76,7 +76,7 @@ export const TreatmentsList = ({ isAdmin }: isAdminProps) => {
                   Description: {parse(treatment.description)}
                 </Typography>
               </CardContent>
-              {isAdmin && (
+              {isActionAllowed && (
                 <CardActions>
                   <Button
                     variant="contained"

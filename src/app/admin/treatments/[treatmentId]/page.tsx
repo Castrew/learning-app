@@ -1,67 +1,63 @@
-import React from "react";
-import { Box } from "@mui/material";
-import { redirect } from "next/navigation";
-import { validateRequest } from "../../../../../lib/auth";
-import UpdateCreateTreatment from "@/components/CreateUpdateTreatment";
+"use client";
 
-const UpdateTreatment = async () => {
-  const { user } = await validateRequest();
+import { Box, Button, TextField } from "@mui/material";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect } from "react";
+import { useUpdateTreatment } from "@/app/core/react-query/treatments/hooks/useUpdateTreatment";
+import { useRouter, useParams } from "next/navigation";
+import { useGetOneTreatment } from "@/app/core/react-query/treatments/hooks/useGetOneTreatment";
+import CreateUpdateTreatment from "@/components/CreateUpdateTreatment";
 
-<<<<<<< LEA-12
-<<<<<<< Updated upstream
-type Test = {
+type AdminUpdateTreatmentPageProps = {
+  treatmentId: string;
   title: string;
   duration: string;
   price: string;
+  description: string;
 };
 
-const updateTest = () => {
-  const router = useRouter();
-  const params = useParams();
-  const treatmentId = Number(params.treatmentId);
-  const updateTreatment = useUpdateTreatment();
+const AdminUpdateTreatmentPage = () => {
+  // const router = useRouter();
+  // const params = useParams();
+  // const treatmentId = String(params.treatmentId);
+  // const updateTreatment = useUpdateTreatment();
 
-  const { data, isLoading } = useGetOneTreatment({ treatmentId });
-  const treatment = data?.data[0];
+  // const { data, isLoading } = useGetOneTreatment({ treatmentId });
+  // const treatment = data?.data[0];
 
-  const defaultValues = {
-    title: treatment?.title,
-    duration: treatment?.duration,
-    price: treatment?.price,
-  };
+  // const defaultValues = {
+  //   title: treatment?.title,
+  //   duration: treatment?.duration,
+  //   price: treatment?.price,
+  //   description: treatment?.description,
+  // };
 
-  const { register, handleSubmit, reset } = useForm({
-    defaultValues,
-  });
-  const onSubmit: SubmitHandler<Test> = (data) => {
-    updateTreatment.mutate({ treatmentId: treatment?.id, ...data });
-  };
+  // const { register, handleSubmit, reset } = useForm({
+  //   defaultValues,
+  // });
+  // const onSubmit: SubmitHandler<AdminUpdateTreatmentPageProps> = (data) => {
+  //   updateTreatment.mutate({ treatmentId: treatment?.id, ...data });
+  // };
 
-  useEffect(() => {
-    reset({
-      title: treatment?.title,
-      duration: treatment?.duration,
-      price: treatment?.price,
-    });
-  }, [treatment?.treatment, treatment?.email, treatment?.price]);
-=======
-=======
->>>>>>> main
-  if (!user) {
-    return redirect("/sign-in");
-  }
-  const isAdmin = user?.id === "16aafx78kvkvgt2";
-<<<<<<< LEA-12
->>>>>>> Stashed changes
-=======
-  console.log(isAdmin);
->>>>>>> main
+  // useEffect(() => {
+  //   reset({
+  //     title: treatment?.title,
+  //     duration: treatment?.duration,
+  //     price: treatment?.price,
+  //     description: treatment?.description,
+  //   });
+  // }, [
+  //   treatment?.treatment,
+  //   treatment?.email,
+  //   treatment?.price,
+  //   treatment?.description,
+  // ]);
 
   return (
     <Box>
-      <UpdateCreateTreatment />
+      <CreateUpdateTreatment />
     </Box>
   );
 };
 
-export default UpdateTreatment;
+export default AdminUpdateTreatmentPage;

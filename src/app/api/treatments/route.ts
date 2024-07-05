@@ -74,7 +74,6 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-
   const { title, duration, price, description } = await request.json();
   const id = uuidv4();
 
@@ -87,12 +86,12 @@ export const POST = async (request: NextRequest) => {
       .insert(treatmentTable)
       .values({ id, title, duration, price, description });
 
-    const createdTreatmentId = createTreatment[0].insertId;
+    const createdTreatmentId = String(createTreatment[0].insertId);
 
     const newTreatment = await db
       .select()
       .from(treatmentTable)
-      .where(eq(treatmentTable.id, String(createdTreatmentId)));
+      .where(eq(treatmentTable.id, createdTreatmentId));
 
     return successResponseOneObject(newTreatment[0]);
   } catch (error) {

@@ -1,22 +1,13 @@
-import React from "react";
-import { Box, Button } from "@mui/material";
-import { redirect } from "next/navigation";
-import { validateRequest } from "../../../../lib/auth";
-import { TreatmentsList } from "@/components/TreatmentsList";
+"use client";
 
-const TestComponent = async () => {
-  const { user } = await validateRequest();
+import { HomePage } from "@/modules/HomePage";
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
-  const isAdmin = user?.id === "16aafx78kvkvgt2";
-
+const AdminTreatmentsPage: React.FC = () => {
   return (
-    <Box>
-      <TreatmentsList isAdmin={isAdmin} />
-    </Box>
+    <>
+      <HomePage />
+    </>
   );
 };
 
-export default TestComponent;
+export default AdminTreatmentsPage;

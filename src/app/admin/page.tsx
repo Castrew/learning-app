@@ -1,6 +1,6 @@
 import { HomePage } from "@/modules/HomePage";
 
-const Home: React.FC = () => {
+const AdminHomePage: React.FC = () => {
   return (
     <>
       <HomePage />
@@ -8,4 +8,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default AdminHomePage;
