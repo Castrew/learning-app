@@ -25,8 +25,6 @@ export const usersKeys = createQueryKeys("users", {
     };
   },
   validateUser: ({ payload }) => {
-    // console.log(payload);
-
     return {
       queryKey: ["validateUser"],
       queryFn: async () => {

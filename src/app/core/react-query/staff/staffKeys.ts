@@ -16,8 +16,6 @@ export const staffKeys = createQueryKeys("staff", {
     };
   },
   oneStaff: ({ name }) => {
-    console.log(name);
-
     return {
       queryKey: [name],
       queryFn: async () => {
