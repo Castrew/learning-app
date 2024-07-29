@@ -36,6 +36,27 @@
       "when": 1718883118309,
       "tag": "0004_public_shooting_star",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1721733171701,
+      "tag": "0005_mysterious_dark_beast",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1721734004314,
+      "tag": "0006_large_pandemic",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1721999687700,
+      "tag": "0007_regular_rhino",
+      "breakpoints": true
     }
   ]
 }

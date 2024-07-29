@@ -2,7 +2,6 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const cookieValue = req.cookies.get("auth_session")?.value;
-  console.log(cookieValue, "auth session");
 
   if (!cookieValue) {
     // Allow access to sign-in and sign-up pages

@@ -1,6 +1,6 @@
 import { HomePage } from "@/modules/HomePage";
 
-const AdminHomePage: React.FC = () => {
+const AdminHomePage = () => {
   return (
     <>
       <HomePage />

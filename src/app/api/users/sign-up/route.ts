@@ -5,19 +5,11 @@ import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 import { userTable } from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
-import * as schema from "../../../../../db/schema";
 import { Argon2id } from "oslo/password";
-import { generateId } from "lucia";
 import { v4 as uuidv4 } from "uuid";
 import { lucia } from "../../../../../lib/auth";
-import { cookies } from "next/headers";
 import { setCookie } from "cookies-next";
-
-const dbServer = {
-  host: "127.0.0.1",
-  user: "root",
-  database: "learning_app",
-};
+import { db } from "../../../../../db/db";
 
 const successResponseOneObject = (data: {}) => {
   return Response.json(
@@ -73,9 +65,6 @@ export const POST = async (request: NextRequest) => {
   const userId = uuidv4();
 
   try {
-    const connection = await mysql.createConnection(dbServer);
-    const db = drizzle(connection, { schema: { userTable }, mode: "default" });
-
     await db.insert(userTable).values({ id: userId, username, hashedPassword });
 
     const session = await lucia.createSession(userId, {

@@ -1,157 +1,94 @@
 import { NextRequest } from "next/server";
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
-import { user, appointment, treatment } from "../../../../../db/schema";
+import {
+  userTable,
+  appointmentTable,
+  treatmentTable,
+} from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
-import * as schema from "../../../../../db/schema";
-
-const dbServer = {
-  host: "127.0.0.1",
-  user: "root",
-  database: "learning_app",
-};
-
-const successResponseOneObject = (data: {}) => {
-  return Response.json(
-    { apiVersion: "1.0", code: 200, message: "Success", data: data },
-    { status: 200 }
-  );
-};
-
-const successResponseList = (data: {}) => {
-  return Response.json(
-    {
-      apiVersion: "1.0",
-      code: 200,
-      message: "Success",
-      data: {
-        object: "List",
-        items: data,
-      },
-    },
-    { status: 200 }
-  );
-};
-
-const serverError = (error: any) => {
-  return Response.json(
-    {
-      apiVersion: "1.0",
-      message: "Internal Server Error",
-      code: "500",
-      reason: { error },
-    },
-    { status: 500 }
-  );
-};
-
-const notFoundError = () => {
-  return Response.json(
-    {
-      apiVersion: "1.0",
-      error: {
-        message: "Record Not Found",
-        status: "404",
-      },
-    },
-    { status: 404 }
-  );
-};
+import { db } from "../../../../../db/db";
+import { responses } from "../../responses";
 
 const queryAppointment = {
-  id: appointment.id,
-  start: appointment.start,
-  end: appointment.end,
+  id: appointmentTable.id,
+  start: appointmentTable.start,
+  end: appointmentTable.end,
   user: {
-    id: user.id,
-    name: user.name,
-    email: user.email,
+    id: userTable.id,
+    name: userTable.username,
   },
   treatment: {
-    id: treatment.id,
-    treatment: treatment.treatment,
-    duration: treatment.duration,
-    price: treatment.price,
+    id: treatmentTable.id,
+    treatment: treatmentTable.title,
+    duration: treatmentTable.duration,
+    price: treatmentTable.price,
   },
 };
 
 export const GET = async (request: NextRequest) => {
   try {
-    const connection = await mysql.createConnection({
-      ...dbServer,
-    });
-    // Making a connection to the server
-    const db = drizzle(connection, { schema, mode: "default" });
-
-    // Fettching all the data from table user
-
     const appointmentInfo = await db
       .select(queryAppointment)
-      .from(appointment)
-      .where(eq(appointment.id, 8))
-      .leftJoin(user, eq(appointment.user_id, user.id))
-      .leftJoin(treatment, eq(appointment.treatment_id, treatment.id));
+      .from(appointmentTable)
+      .where(eq(appointmentTable.id, "8"))
+      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
+      .leftJoin(
+        treatmentTable,
+        eq(appointmentTable.treatmentId, treatmentTable.id)
+      );
 
     if (!appointmentInfo || appointmentInfo.length === 0) {
-      return notFoundError();
+      return responses.notFoundError();
     }
 
-    // Returning the data
-    return successResponseOneObject(appointmentInfo);
+    return responses.successResponseOneObject(appointmentInfo);
   } catch (error) {
-    // Returning error if there is something wrong
-    return serverError(error);
+    return responses.serverError(error);
   }
 };
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    const connection = await mysql.createConnection({
-      ...dbServer,
-    });
-    // Making a connection to the server
-    const db = drizzle(connection, { schema, mode: "default" });
-
     const existingAppointment = await db
       .select(queryAppointment)
-      .from(appointment)
-      .where(eq(appointment.id, 16))
-      .leftJoin(user, eq(appointment.user_id, user.id))
-      .leftJoin(treatment, eq(appointment.treatment_id, treatment.id));
+      .from(appointmentTable)
+      .where(eq(appointmentTable.id, "16"))
+      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
+      .leftJoin(
+        treatmentTable,
+        eq(appointmentTable.treatmentId, treatmentTable.id)
+      );
 
     if (!existingAppointment) {
-      return notFoundError();
+      return responses.notFoundError();
     }
 
-    await db.delete(appointment).where(eq(appointment.id, 16));
+    await db.delete(appointmentTable).where(eq(appointmentTable.id, "16"));
 
-    return successResponseOneObject(existingAppointment);
+    return responses.successResponseOneObject(existingAppointment);
   } catch (error) {
-    return serverError(error);
+    return responses.serverError(error);
   }
 };
 
 export const PUT = async (request: NextRequest, { params }: any) => {
   try {
-    const connection = await mysql.createConnection({
-      ...dbServer,
-    });
-    const db = drizzle(connection);
-
     const updateAppointment = await db
-      .update(appointment)
-      .set({ user_id: BigInt(40) })
-      .where(eq(appointment.id, 1));
+      .update(appointmentTable)
+      .set({ userId: "40" })
+      .where(eq(appointmentTable.id, "1"));
 
     const updatedAppointment = await db
       .select(queryAppointment)
-      .from(appointment)
-      .where(eq(appointment.id, 1))
-      .leftJoin(user, eq(appointment.user_id, user.id))
-      .leftJoin(treatment, eq(appointment.treatment_id, treatment.id));
+      .from(appointmentTable)
+      .where(eq(appointmentTable.id, "1"))
+      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
+      .leftJoin(
+        treatmentTable,
+        eq(appointmentTable.treatmentId, treatmentTable.id)
+      );
 
-    return successResponseOneObject(updatedAppointment);
+    return responses.successResponseOneObject(updatedAppointment);
   } catch (error) {
-    return serverError(error);
+    return responses.serverError(error);
   }
 };

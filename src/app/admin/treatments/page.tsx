@@ -2,7 +2,7 @@
 
 import { HomePage } from "@/modules/HomePage";
 
-const AdminTreatmentsPage: React.FC = () => {
+const AdminTreatmentsPage = () => {
   return (
     <>
       <HomePage />

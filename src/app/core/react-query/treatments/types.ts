@@ -1,5 +1,5 @@
 export type Treatment = {
-  id?: string;
+  id: string;
   title?: string;
   duration?: string;
   price?: string;

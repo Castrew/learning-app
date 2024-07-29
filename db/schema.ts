@@ -28,11 +28,11 @@ export const usersRelations = relations(userTable, ({ many }) => ({
 // Treatment Table
 export const treatmentTable = mysqlTable("treatment", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  title: varchar("title", { length: 255 }),
+  title: varchar("title", { length: 255 }).notNull(),
   description: varchar("description", { length: 255 }).notNull(),
 
-  duration: varchar("duration", { length: 255 }),
-  price: varchar("price", { length: 255 }),
+  duration: varchar("duration", { length: 255 }).notNull(),
+  price: varchar("price", { length: 255 }).notNull(),
 });
 
 // Treatment Relations
@@ -43,8 +43,8 @@ export const treatmentRelations = relations(treatmentTable, ({ many }) => ({
 // Appointment Table
 export const appointmentTable = mysqlTable("appointment", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  start: timestamp("start", { mode: "string" }),
-  end: timestamp("end", { mode: "string" }),
+  start: timestamp("start", { mode: "string" }).notNull(),
+  end: timestamp("end", { mode: "string" }).notNull(),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
@@ -72,4 +72,10 @@ export const sessionTable = mysqlTable("session", {
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
   expiresAt: datetime("expires_at").notNull(),
+});
+
+export const staffTable = mysqlTable("staff", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  treatmentId: varchar("treatment_id", { length: 255 }).notNull(),
 });

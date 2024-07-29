@@ -9,7 +9,6 @@ import {
   Card,
   CardActions,
   CardContent,
-  Grid,
   Typography,
 } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,7 +23,7 @@ type treatmentProps = {
   description: string;
 };
 
-export const TreatmentsList = () => {
+export const TreatmentCard = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { data, isLoading } = useGetAllTreatments();
@@ -72,9 +71,9 @@ export const TreatmentsList = () => {
                 <Typography sx={{ mb: 1 }} color="text.secondary">
                   Cena: {treatment.price}
                 </Typography>
-                <Typography sx={{ mb: 1 }} color="text.secondary">
+                <Box sx={{ mb: 1 }} color="text.secondary">
                   Description: {parse(treatment.description)}
-                </Typography>
+                </Box>
               </CardContent>
               {isActionAllowed && (
                 <CardActions>
