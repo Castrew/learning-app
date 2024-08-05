@@ -16,11 +16,12 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
         display: "flex",
         flexDirection: "column",
         width: "200px",
+        maxWidth: "200px",
         marginLeft: "8px",
       }}
     >
       <FormGroup>
-        {treatments.map((treatment: any) => (
+        {treatments?.map((treatment: any) => (
           <Controller
             key={treatment.id}
             name="treatmentId"

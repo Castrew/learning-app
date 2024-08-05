@@ -1,79 +1,87 @@
-import { Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import moment from "moment";
 import { useState } from "react";
+import { WORKING_DAYS, WORKING_HOURS } from "@/app/schedule";
+import { UseFormRegister } from "react-hook-form";
 
 interface CalendarProps {
-  selectedTreatments?: string[];
+  register: UseFormRegister<any>;
 }
 
-const Calendar: React.FC<CalendarProps> = () => {
-  const [availableSlots, setAvailableSlots] = useState<string[]>([]);
-  // const { mutate: fetchSlots } = useMutation(
-  //   () => fetchAvailableSlots(selectedTreatments),
-  //   {
-  //     onSuccess: (data) => {
-  //       setAvailableSlots(data);
-  //     },
-  //   }
+interface Appointment {
+  id: string;
+  date: string;
+  time: string;
+  duration: string;
+}
+
+const Calendar = () => {
+  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+  const [currentWeek, setCurrentWeek] = useState(moment().startOf("week"));
+
+  // console.log(
+  //   selectedDay,
+  //   selectedTime,
+  //   currentWeek.day(selectedDay).format("DD/MM/YYYY")
   // );
 
-  // useEffect(() => {
-  //   if (selectedTreatments.length > 0) {
-  //     fetchSlots();
-  //   }
-  // }, [selectedTreatments, fetchSlots]);
+  // const workingHours = Array.from({ length: 18 }, (_, i) =>
+  //   moment({ hour: 9 })
+  //     .add(30 * i, "minutes")
+  //     .format("HH:mm")
+  // );
 
-  const startHour = 10;
-  const endHour = 18;
-  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
-  const generateTimeSlots = () => {
-    const slots = [];
-    for (let hour = startHour; hour < endHour; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        slots.push(moment({ hour, minute }).format("HH:mm"));
-      }
-    }
-    return slots;
+  const handleDayChange = (day: string) => {
+    setSelectedDay(day);
+    setSelectedTime("");
   };
 
-  const timeSlots = generateTimeSlots();
+  const handleNextWeek = () => {
+    setCurrentWeek(currentWeek.clone().add(1, "week").startOf("week"));
+    setSelectedDay("");
+    setSelectedTime("");
+  };
 
-  const today = moment();
-  const startOfWeek = today.clone().startOf("isoWeek");
-  const days = [];
-  for (let i = 0; i < 5; i++) {
-    days.push(startOfWeek.clone().add(i, "days"));
-  }
+  // console.log(workingHours);
 
   return (
-    <Grid container spacing={2}>
-      {days.map((day, dayIndex) => (
-        <Grid item xs={2} key={dayIndex}>
-          <Typography variant="h6">{day.format("dddd")}</Typography>
-          <Typography variant="body1">{day.format("MM/DD/YYYY")}</Typography>
-          {timeSlots.map((slot, index) => {
-            const slotTime = moment(`${day.format("YYYY-MM-DD")} ${slot}`);
-            const isPast = slotTime.isBefore(moment());
-            const isAvailable = availableSlots.includes(slot);
-            return (
-              <Paper
-                key={index}
-                style={{
-                  height: "50px",
-                  backgroundColor: isAvailable && !isPast ? "green" : "white",
-                  color: isPast ? "grey" : "black",
-                  textAlign: "center",
-                  lineHeight: "50px",
-                }}
+    <Box>
+      <Box flexWrap="wrap" display="flex" gap={2}>
+        {WORKING_DAYS.map((day) => {
+          const isSelected = selectedDay === day ? "contained" : "outlined";
+
+          return (
+            <Box>
+              {/* <input hidden {...register("date")} /> */}
+              <Button
+                key={day}
+                variant={isSelected}
+                onClick={() => handleDayChange(day)}
               >
-                {slot}
-              </Paper>
-            );
-          })}
-        </Grid>
-      ))}
-    </Grid>
+                <Typography>
+                  {day}: {currentWeek.day(day).format("DD-MM-YYYY")}
+                </Typography>
+              </Button>
+            </Box>
+          );
+        })}
+        <Button onClick={() => handleNextWeek()}>Next week</Button>
+      </Box>
+      {selectedDay !== "" &&
+        WORKING_HOURS.map((time) => {
+          return (
+            <Box m={1} bgcolor="lightgreen">
+              <Button
+                sx={{ fontSize: 24 }}
+                onClick={() => setSelectedTime(time)}
+              >
+                {time}
+              </Button>
+            </Box>
+          );
+        })}
+    </Box>
   );
 };
 

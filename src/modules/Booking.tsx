@@ -7,6 +7,7 @@ import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/use
 import { useForm } from "react-hook-form";
 import StaffList from "@/components/StaffList";
 import TreatmentsList from "@/components/TreatmentList";
+import Calendar from "@/components/Calentar";
 
 export interface MemberProps {
   id: string;
@@ -72,6 +73,7 @@ const Booking = () => {
           {memberTreatmentsIds.length !== 0 && (
             <TreatmentsList treatments={filteredTreatments} control={control} />
           )}
+          <Calendar />
         </Box>
       </form>
     </Box>
