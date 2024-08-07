@@ -15,41 +15,57 @@ export interface MemberProps {
   treatmentId: string[];
 }
 
-interface FormValues {
-  member: string;
-  treatmentId: string[];
+export interface FormValues {
+  selectedMember: string;
+  selectedTreatmentsIds: string[];
+  selectedDate: string;
+  selectedTime: string;
 }
 
 const Booking = () => {
   const { data: allStaff, isLoading: isLoadingAllStaff } = useGetAllStaff();
   const { data: allTreatments, isLoading: isLoadingAllTreatments } =
     useGetAllTreatments();
+
   const [memberTreatmentsIds, setMemberTreatmentsIds] = useState<string[]>([]);
+
   const staffMembers = allStaff?.data?.items;
   const filteredTreatments = allTreatments?.data?.items.filter(
     (treatment: any) => memberTreatmentsIds.includes(treatment.id)
   );
 
   const defaultValues = {
-    member: "",
-    treatmentsIds: [],
+    selectedMember: "",
+    selectedTreatmentsIds: [],
+    selectedDate: "",
+    selectedTime: "",
   };
 
-  const { register, handleSubmit, reset, setValue, control, watch } =
+  const { register, handleSubmit, reset, setValue, control, watch, getValues } =
     useForm<FormValues>({
       defaultValues,
     });
 
   const handleMemberChange = (member: MemberProps) => {
-    setMemberTreatmentsIds([]);
-    setValue("treatmentId", []);
+    // setMemberTreatmentsIds([]);
+    // setValue("selectedTreatmentsIds", []);
+    reset();
     setMemberTreatmentsIds(member.treatmentId);
-    setValue("member", member.name);
+    setValue("selectedMember", member.name);
   };
+
+  const handleCalendarChange = (date: string, time: string) => {
+    setValue("selectedDate", date);
+    setValue("selectedTime", time);
+  };
+
+  const isSelectedMember = getValues("selectedMember") !== "" ? true : false;
 
   if (isLoadingAllStaff || isLoadingAllTreatments) {
     return "Loading...";
   }
+
+  console.log(watch());
 
   return (
     <Box
@@ -66,14 +82,18 @@ const Booking = () => {
         <Box sx={{ display: "flex", width: "100vh" }}>
           <StaffList
             staffMembers={staffMembers}
-            register={register}
             handleMemberChange={handleMemberChange}
           />
           <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+
           {memberTreatmentsIds.length !== 0 && (
             <TreatmentsList treatments={filteredTreatments} control={control} />
           )}
-          <Calendar />
+          <Calendar
+            control={control}
+            handleCalendarChange={handleCalendarChange}
+            isSelectedMember={isSelectedMember}
+          />
         </Box>
       </form>
     </Box>

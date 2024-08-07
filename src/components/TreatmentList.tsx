@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Typography,
+} from "@mui/material";
 import { Controller, Control } from "react-hook-form";
 import { Treatment } from "@/app/core/react-query/treatments/types";
 
@@ -18,13 +24,14 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
         width: "200px",
         maxWidth: "200px",
         marginLeft: "8px",
+        marginRight: "16px",
       }}
     >
       <FormGroup>
         {treatments?.map((treatment: any) => (
           <Controller
             key={treatment.id}
-            name="treatmentId"
+            name="selectedTreatmentsIds"
             control={control}
             render={({ field }) => (
               <FormControlLabel
@@ -41,7 +48,11 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
                     }}
                   />
                 }
-                label={treatment.title}
+                label={
+                  <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+                    {treatment.title}
+                  </Typography>
+                }
               />
             )}
           />

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, alpha } from "@mui/material";
+import { Box, Button, Typography, alpha } from "@mui/material";
 import { MemberProps } from "@/modules/Booking";
 import { UseFormRegister } from "react-hook-form";
 import { useState } from "react";
@@ -8,15 +8,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 interface StaffListProps {
   staffMembers: MemberProps[];
-  register: UseFormRegister<any>;
   handleMemberChange: (member: MemberProps) => void;
 }
 
-const StaffList = ({
-  staffMembers,
-  register,
-  handleMemberChange,
-}: StaffListProps) => {
+const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
 
   const handleButtonClick = (member: MemberProps) => {
@@ -30,10 +25,12 @@ const StaffList = ({
   };
 
   return (
-    <Box width="200px">
+    <Box width="200px" minWidth="200px">
       {staffMembers?.map((member) => (
-        <Box key={member.id} sx={{ marginBottom: "8px", position: "relative" }}>
-          <input hidden {...register("member")} />
+        <Box
+          key={member.id}
+          sx={{ marginBottom: "16px", position: "relative" }}
+        >
           <Button
             fullWidth
             onClick={() => handleButtonClick(member)}
@@ -55,7 +52,7 @@ const StaffList = ({
                     p: "5px",
                     width: "34px",
                     height: "34px",
-                    "&:hover": { bgcolor: alpha("#000", 0.04) },
+                    "&:hover": { bgcolor: alpha("#000", 0.01) },
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -65,7 +62,9 @@ const StaffList = ({
               )
             }
           >
-            {member.name}
+            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+              {member.name}
+            </Typography>
           </Button>
         </Box>
       ))}
