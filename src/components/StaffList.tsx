@@ -21,7 +21,7 @@ const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
 
   const handleRemoveSelectedMember = () => {
     setSelectedMemberId(null);
-    handleMemberChange({ id: "", name: "", treatmentId: [] });
+    handleMemberChange({ id: "", name: "", treatments: [] });
   };
 
   return (
@@ -62,7 +62,7 @@ const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
               )
             }
           >
-            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+            <Typography sx={{ fontSize: 20, fontWeight: "bold" }}>
               {member.name}
             </Typography>
           </Button>

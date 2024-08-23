@@ -2,33 +2,53 @@ import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { WORKING_DAYS, WORKING_HOURS } from "@/app/schedule";
-import { Control, Controller, UseFormGetValues } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import { useGetAllAppointments } from "@/app/core/react-query/appointments/hooks/useGetAllAppointments";
+
+interface Appointment {
+  appointmentId: string;
+  userId: string;
+  username: string;
+  treatmentId: string;
+  treatmentTitle: string;
+  treatmentDescription: string;
+  treatmentDuration: string;
+  staffId: string;
+  staffName: string;
+  date: string;
+  start: string;
+  groupId: string;
+}
 
 interface CalendarProps {
   control: Control<any>;
   handleCalendarChange: (date: string, time: string) => void;
-  isSelectedMember: boolean;
-}
-
-interface Appointment {
-  id: string;
-  date: string;
-  time: string;
-  duration: string;
+  selectedMemberId: string;
+  totalDuration: () => number;
 }
 
 const Calendar = ({
   control,
   handleCalendarChange,
-  isSelectedMember,
+  selectedMemberId,
+  totalDuration,
 }: CalendarProps) => {
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
   const [currentWeek, setCurrentWeek] = useState(moment().startOf("week"));
 
+  const treatmentsDuration = totalDuration();
+  const { data, isLoading } = useGetAllAppointments();
+
+  const memberAppointments = data?.data?.items.filter((appt: Appointment) => {
+    return appt.staffId === selectedMemberId;
+  });
+
   const resetSelections = () => {
-    setSelectedDate("");
+    setSelectedSlot("");
+    setSelectedDay("");
     handleCalendarChange("", "");
   };
 
@@ -39,86 +59,168 @@ const Calendar = ({
   };
 
   const handleDayChange = (day: string) => {
-    setSelectedDate(day);
-    handleCalendarChange(currentWeek.day(day).format("DD-MM-YYYY"), "");
+    setSelectedDay(day);
+    setSelectedSlot("");
+    handleCalendarChange(currentWeek.day(day).format("MM-DD-YYYY"), "");
   };
 
   const handleTimeSelect = (time: string) => {
+    setSelectedSlot(time);
     handleCalendarChange(
-      currentWeek.day(selectedDate).format("DD-MM-YYYY"),
+      currentWeek.day(selectedDay).format("MM-DD-YYYY"),
       time
     );
   };
 
   useEffect(() => {
-    isSelectedMember === false ? setSelectedDate("") : null;
-  }, [isSelectedMember]);
+    !!selectedMemberId === false ? resetSelections() : null;
+    setSelectedSlot("");
+  }, [selectedMemberId]);
+
+  const getDateTime = (date: string, start: string) =>
+    moment(date)
+      .hour(Number(start.split(":")[0]))
+      .minute(Number(start.split(":")[1]));
+
+  const checkIfFits = (slotStartTime: string) => {
+    const slotStart = currentWeek
+      .day(selectedDay)
+      .hour(Number(slotStartTime.split(":")[0]))
+      .minute(Number(slotStartTime.split(":")[1]));
+
+    const afterDurationSlotEnd = slotStart
+      .clone()
+      .add(treatmentsDuration, "minute");
+
+    return !memberAppointments?.find((appt: Appointment) => {
+      const existingStart = getDateTime(appt.date, appt.start);
+      const existingEnd = existingStart
+        .clone()
+        .add(appt.treatmentDuration, "minute");
+      return (
+        slotStart.isBetween(existingStart, existingEnd) ||
+        afterDurationSlotEnd.isBetween(existingStart, existingEnd) ||
+        existingStart.isBetween(slotStart, afterDurationSlotEnd)
+      );
+    });
+  };
+
+  const isSlotBooked = (time: string) =>
+    !!memberAppointments.find((appt: Appointment) => {
+      const startDateTime = getDateTime(appt.date, appt.start);
+      const endDateTime = startDateTime
+        .clone()
+        .add(appt.treatmentDuration, "minute");
+      const slotDateTime = getDateTime(
+        currentWeek.day(selectedDay).format("MM-DD-YYYY"),
+        time
+      );
+
+      return (
+        slotDateTime.isBetween(startDateTime, endDateTime) ||
+        startDateTime.isSame(slotDateTime)
+      );
+    });
+
+  useEffect(() => {
+    if (!checkIfFits(selectedSlot)) {
+      setSelectedSlot("");
+      handleCalendarChange(
+        currentWeek.day(selectedDay).format("MM-DD-YYYY"),
+        ""
+      );
+    }
+  }, [treatmentsDuration]);
+
+  if (isLoading) {
+    return "Loading...";
+  }
 
   return (
     <Box>
-      <Box flexWrap="wrap" display="flex" gap={2}>
+      <Box justifyContent="center" width="800px" display="flex" gap={2}>
         <Tooltip title="Previous week">
-          <IconButton
-            sx={{ width: "50px" }}
-            disabled={currentWeek.isSame(moment().startOf("week"), "week")}
-            onClick={() => changeWeek(-1)}
-          >
-            <ArrowCircleLeftOutlinedIcon fontSize="large" />
-          </IconButton>
+          <Box>
+            <IconButton
+              sx={{ width: "50px" }}
+              disabled={currentWeek.isSame(moment().startOf("week"), "week")}
+              onClick={() => changeWeek(-1)}
+            >
+              <ArrowCircleLeftOutlinedIcon fontSize="large" />
+            </IconButton>
+          </Box>
         </Tooltip>
 
         {WORKING_DAYS.map((day) => {
-          const isDateSelected =
-            selectedDate === day ? "contained" : "outlined";
+          const isDateSelected = selectedDay === day ? "contained" : "outlined";
 
           return (
-            <Box key={day}>
-              <Controller
-                name="selectedDate"
-                control={control}
-                render={({ field }) => (
-                  <Box>
-                    <Button
-                      variant={isDateSelected}
-                      onClick={() => handleDayChange(day)}
-                    >
-                      <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-                        {day}
-                        <br />
-                        {currentWeek.day(day).format("DD-MM-YYYY")}
-                      </Typography>
-                    </Button>
-                  </Box>
-                )}
-              ></Controller>
-            </Box>
+            <Controller
+              key={day}
+              name="date"
+              control={control}
+              render={({ field }) => (
+                <Box>
+                  <Button
+                    disabled={!selectedMemberId}
+                    variant={isDateSelected}
+                    onClick={() => handleDayChange(day)}
+                  >
+                    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+                      {day}
+                      <br />
+                      {currentWeek.day(day).format("MM-DD-YYYY")}
+                    </Typography>
+                  </Button>
+                </Box>
+              )}
+            ></Controller>
           );
         })}
-        <Tooltip title="Previous week">
+        <Tooltip title="Next week">
           <IconButton sx={{ width: "50px" }} onClick={() => changeWeek(1)}>
             <ArrowCircleRightOutlinedIcon fontSize="large" />
           </IconButton>
         </Tooltip>
       </Box>
-      {selectedDate !== "" &&
+      {selectedDay !== "" &&
         WORKING_HOURS.map((time) => {
+          const isBooked = isSlotBooked(time);
+          const ifFits = checkIfFits(time);
+          let bgcolor = "whitesmoke";
+          if (selectedSlot === time) {
+            bgcolor = "lightgreen";
+          }
+          if (isBooked) {
+            bgcolor = "red";
+          }
+
           return (
-            <Box key={time} m={1} bgcolor="lightgreen">
-              <Controller
-                name="selectedTime"
-                control={control}
-                render={({ field }) => (
-                  <Box>
-                    <Button
-                      sx={{ fontSize: 24 }}
-                      onClick={() => handleTimeSelect(time)}
-                    >
-                      <Typography>{time}</Typography>
-                    </Button>
-                  </Box>
-                )}
-              ></Controller>
-            </Box>
+            <Controller
+              name="start"
+              control={control}
+              key={time}
+              render={() => (
+                <Box
+                  display="flex"
+                  key={time}
+                  m={1}
+                  bgcolor={bgcolor}
+                  sx={{ borderRadius: "16px" }}
+                >
+                  <Button
+                    fullWidth
+                    disabled={isBooked || !ifFits}
+                    sx={{ fontSize: 24, borderRadius: "16px" }}
+                    onClick={() => {
+                      handleTimeSelect(time);
+                    }}
+                  >
+                    <Typography>{time}</Typography>
+                  </Button>
+                </Box>
+              )}
+            ></Controller>
           );
         })}
     </Box>

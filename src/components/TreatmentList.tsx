@@ -31,30 +31,32 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
         {treatments?.map((treatment: any) => (
           <Controller
             key={treatment.id}
-            name="selectedTreatmentsIds"
+            name="treatmentIds"
             control={control}
-            render={({ field }) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={field.value.includes(treatment.id)}
-                    onChange={() => {
-                      const newValue = field.value.includes(treatment.id)
-                        ? field.value.filter(
-                            (id: string) => id !== treatment.id
-                          )
-                        : [...field.value, treatment.id];
-                      field.onChange(newValue);
-                    }}
-                  />
-                }
-                label={
-                  <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-                    {treatment.title}
-                  </Typography>
-                }
-              />
-            )}
+            render={({ field }) => {
+              return (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={field.value.includes(treatment.id)}
+                      onChange={() => {
+                        const newValue = field.value.includes(treatment.id)
+                          ? field.value.filter(
+                              (id: string) => id !== treatment.id
+                            )
+                          : [...field.value, treatment.id];
+                        field.onChange(newValue);
+                      }}
+                    />
+                  }
+                  label={
+                    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+                      {treatment.title}
+                    </Typography>
+                  }
+                />
+              );
+            }}
           />
         ))}
       </FormGroup>

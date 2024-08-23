@@ -8,86 +8,83 @@ import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
 import { responses } from "../../responses";
 
-const queryAppointment = {
-  id: appointmentTable.id,
-  start: appointmentTable.start,
-  end: appointmentTable.end,
-  user: {
-    id: userTable.id,
-    name: userTable.username,
-  },
-  treatment: {
-    id: treatmentTable.id,
-    treatment: treatmentTable.title,
-    duration: treatmentTable.duration,
-    price: treatmentTable.price,
-  },
-};
+const queryAppointment = {};
 
 export const GET = async (request: NextRequest) => {
-  try {
-    const appointmentInfo = await db
-      .select(queryAppointment)
-      .from(appointmentTable)
-      .where(eq(appointmentTable.id, "8"))
-      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
-      .leftJoin(
-        treatmentTable,
-        eq(appointmentTable.treatmentId, treatmentTable.id)
-      );
+  const { groupId } = await request.json();
 
-    if (!appointmentInfo || appointmentInfo.length === 0) {
+  try {
+    // Fetch all appointments with the given groupId
+    const appointments = await db
+      .select()
+      .from(appointmentTable)
+      .where(eq(appointmentTable.groupId, groupId));
+
+    if (appointments.length === 0) {
       return responses.notFoundError();
     }
 
-    return responses.successResponseOneObject(appointmentInfo);
+    return responses.successResponseList(appointments);
   } catch (error) {
     return responses.serverError(error);
   }
 };
 
 export const DELETE = async (request: NextRequest) => {
+  const { groupId } = await request.json();
+
   try {
-    const existingAppointment = await db
-      .select(queryAppointment)
+    const appointment = await db
+      .select()
       .from(appointmentTable)
-      .where(eq(appointmentTable.id, "16"))
-      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
-      .leftJoin(
-        treatmentTable,
-        eq(appointmentTable.treatmentId, treatmentTable.id)
-      );
+      .where(eq(appointmentTable.groupId, groupId));
+    await db.transaction(async (tx) => {
+      await tx
+        .delete(appointmentTable)
+        .where(eq(appointmentTable.groupId, groupId));
+    });
 
-    if (!existingAppointment) {
-      return responses.notFoundError();
-    }
-
-    await db.delete(appointmentTable).where(eq(appointmentTable.id, "16"));
-
-    return responses.successResponseOneObject(existingAppointment);
+    return responses.successResponseOneObject(appointment);
   } catch (error) {
     return responses.serverError(error);
   }
 };
 
-export const PUT = async (request: NextRequest, { params }: any) => {
+export const PUT = async (request: NextRequest) => {
+  const { groupId, appointments } = await request.json();
+
   try {
-    const updateAppointment = await db
-      .update(appointmentTable)
-      .set({ userId: "40" })
-      .where(eq(appointmentTable.id, "1"));
+    // Start a transaction to ensure all updates are performed together
+    await db.transaction(async (tx) => {
+      // First, delete existing appointments in the group to avoid duplications
+      await tx
+        .delete(appointmentTable)
+        .where(eq(appointmentTable.groupId, groupId));
 
-    const updatedAppointment = await db
-      .select(queryAppointment)
+      // Then, reinsert the updated appointments with the same groupId
+      for (const appointment of appointments) {
+        const { id, userId, treatmentId, staffId, date, start, duration } =
+          appointment;
+
+        await tx.insert(appointmentTable).values({
+          id: id,
+          userId,
+          treatmentId,
+          staffId,
+          date,
+          start,
+          groupId, // Ensure the group ID remains consistent
+        });
+      }
+    });
+
+    // Fetch and return the updated appointments
+    const updatedAppointments = await db
+      .select()
       .from(appointmentTable)
-      .where(eq(appointmentTable.id, "1"))
-      .leftJoin(userTable, eq(appointmentTable.userId, userTable.id))
-      .leftJoin(
-        treatmentTable,
-        eq(appointmentTable.treatmentId, treatmentTable.id)
-      );
+      .where(eq(appointmentTable.groupId, groupId));
 
-    return responses.successResponseOneObject(updatedAppointment);
+    return responses.successResponseList(updatedAppointments);
   } catch (error) {
     return responses.serverError(error);
   }

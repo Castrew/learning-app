@@ -31,7 +31,7 @@ export const TreatmentCard = () => {
   const treatments = data?.data?.items;
   const user = useContext(AuthContext);
   const isActionAllowed =
-    user?.id === "16aafx78kvkvgt2" && pathname.includes("/admin");
+    user?.id === "yvli5wewb2blxy5" && pathname.includes("/admin");
 
   if (isLoading) {
     return <Typography>Loading...</Typography>;

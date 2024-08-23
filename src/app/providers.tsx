@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { AuthContext } from "@/providers/AuthProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ModalContainer } from "react-modal-global";
 
 function makeQueryClient() {
   return new QueryClient({

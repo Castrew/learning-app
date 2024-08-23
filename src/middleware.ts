@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   }
 
   const userId = cookieValue.split("?userId=")[1];
-  const isAdmin = userId === "16aafx78kvkvgt2";
+  const isAdmin = userId === "yvli5wewb2blxy5";
 
   // Check if the requested URL is "/admin"
   if (req.nextUrl.pathname.startsWith("/admin")) {
