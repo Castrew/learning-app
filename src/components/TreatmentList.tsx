@@ -3,6 +3,7 @@
 import {
   Box,
   Checkbox,
+  Divider,
   FormControlLabel,
   FormGroup,
   Typography,
@@ -16,50 +17,109 @@ interface TreatmentsListProps {
 }
 
 const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
+  const midIndex = Math.ceil(treatments.length / 2);
+  const firstColumn = treatments.slice(0, midIndex);
+  const secondColumn = treatments.slice(midIndex);
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "200px",
-        maxWidth: "200px",
-        marginLeft: "8px",
-        marginRight: "16px",
+        width: "1024px",
+        padding: "16px",
       }}
     >
-      <FormGroup>
-        {treatments?.map((treatment: any) => (
-          <Controller
-            key={treatment.id}
-            name="treatmentIds"
-            control={control}
-            render={({ field }) => {
-              return (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={field.value.includes(treatment.id)}
-                      onChange={() => {
-                        const newValue = field.value.includes(treatment.id)
-                          ? field.value.filter(
-                              (id: string) => id !== treatment.id
-                            )
-                          : [...field.value, treatment.id];
-                        field.onChange(newValue);
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-                      {treatment.title}
-                    </Typography>
-                  }
-                />
-              );
-            }}
-          />
-        ))}
-      </FormGroup>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+        }}
+      >
+        <Box sx={{ width: 200, padding: "8px" }}>
+          <FormGroup>
+            {firstColumn.map((treatment: any) => (
+              <Controller
+                key={treatment.id}
+                name="treatmentIds"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={field.value.includes(treatment.id)}
+                        sx={{
+                          "&.Mui-checked": {
+                            color: "#f06292",
+                          },
+                          "&:hover": {
+                            bgcolor: "#f8bbd0",
+                          },
+                        }}
+                        onChange={() => {
+                          const newValue = field.value.includes(treatment.id)
+                            ? field.value.filter(
+                                (id: string) => id !== treatment.id
+                              )
+                            : [...field.value, treatment.id];
+                          field.onChange(newValue);
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+                        {treatment.title} dsadsa dsaada das d
+                      </Typography>
+                    }
+                  />
+                )}
+              />
+            ))}
+          </FormGroup>
+        </Box>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Box sx={{ width: 200, padding: "8px" }}>
+          <FormGroup>
+            {secondColumn.map((treatment: any) => (
+              <Controller
+                key={treatment.id}
+                name="treatmentIds"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={field.value.includes(treatment.id)}
+                        sx={{
+                          "&.Mui-checked": {
+                            color: "#f06292",
+                          },
+                          "&:hover": {
+                            bgcolor: "#f8bbd0",
+                          },
+                        }}
+                        onChange={() => {
+                          const newValue = field.value.includes(treatment.id)
+                            ? field.value.filter(
+                                (id: string) => id !== treatment.id
+                              )
+                            : [...field.value, treatment.id];
+                          field.onChange(newValue);
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
+                        {treatment.title}
+                      </Typography>
+                    }
+                  />
+                )}
+              />
+            ))}
+          </FormGroup>
+        </Box>
+      </Box>
     </Box>
   );
 };

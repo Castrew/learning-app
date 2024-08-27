@@ -55,6 +55,12 @@ const Booking = () => {
         ?.map((item: any) => item.treatmentId)
         .includes(treatment.id)
   );
+  const defaultValues = {
+    staffId: "",
+    treatmentIds: [],
+    date: "",
+    start: "",
+  };
 
   const {
     handleSubmit,
@@ -65,12 +71,7 @@ const Booking = () => {
     getValues,
     formState: { dirtyFields },
   } = useForm<FormValues>({
-    defaultValues: {
-      staffId: "",
-      treatmentIds: [],
-      date: "",
-      start: "",
-    },
+    defaultValues,
   });
 
   const handleMemberChange = (member: MemberProps) => {
@@ -107,7 +108,6 @@ const Booking = () => {
       onSuccess: () => {
         toasts.Success("Your appointment has been set!");
         setOpen(!open);
-        // handleMemberChange({ id: "", name: "", treatments: [] });
       },
       onError: () => {
         toasts.Error("Something went wrong");
@@ -125,7 +125,8 @@ const Booking = () => {
       sx={{
         flexGrow: 1,
         display: "flex",
-        overflow: "auto",
+        justifyContent: "center",
+
         mt: 2,
         mb: 2,
         height: "100%",
@@ -133,7 +134,12 @@ const Booking = () => {
       }}
     >
       <form onSubmit={onSubmit}>
-        <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <StaffList
             staffMembers={staffMembers}
             handleMemberChange={handleMemberChange}
@@ -143,14 +149,27 @@ const Booking = () => {
           {memberTreatments.length !== 0 && (
             <TreatmentsList treatments={filteredTreatments} control={control} />
           )}
-          <Calendar
-            totalDuration={totalDuration}
-            control={control}
-            handleCalendarChange={handleCalendarChange}
-            selectedMemberId={appt.staffId}
-          />
+          {appt.staffId && (
+            <Calendar
+              totalDuration={totalDuration}
+              control={control}
+              handleCalendarChange={handleCalendarChange}
+              selectedMemberId={appt.staffId}
+            />
+          )}
           <Button
-            sx={{ height: "50px", mr: 2 }}
+            sx={{
+              height: "50px",
+              px: 4,
+              mr: 2,
+              borderRadius: "20px",
+              bgcolor: "#f06292",
+              color: "white",
+              "&:hover": {
+                bgcolor: "primary.dark",
+              },
+            }}
+            disabled={!(appt.treatmentIds.length !== 0 && appt.start !== "")}
             onClick={() => {
               setOpen(true);
             }}
@@ -190,9 +209,9 @@ const Booking = () => {
               <DialogContent>
                 <Typography>{`Set appointment with ${memberName}, for ${appt.date} at ${appt.start}?`}</Typography>
                 <Typography mt={1} mb={1}>
-                  Selected treatments:{" "}
+                  Selected treatments:
                 </Typography>
-                {selectedTreatments.map((treatment: Treatment) => {
+                {selectedTreatments?.map((treatment: Treatment) => {
                   return (
                     <Box
                       key={treatment.id}

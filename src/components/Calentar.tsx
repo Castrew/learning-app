@@ -1,16 +1,16 @@
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { WORKING_DAYS, WORKING_HOURS } from "@/app/schedule";
 import { Control, Controller } from "react-hook-form";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import { useGetAllAppointments } from "@/app/core/react-query/appointments/hooks/useGetAllAppointments";
+import { AuthContext } from "@/providers/AuthProvider";
 
 interface Appointment {
   appointmentId: string;
   userId: string;
-  username: string;
   treatmentId: string;
   treatmentTitle: string;
   treatmentDescription: string;
@@ -35,6 +35,8 @@ const Calendar = ({
   selectedMemberId,
   totalDuration,
 }: CalendarProps) => {
+  const user = useContext(AuthContext);
+
   const [selectedSlot, setSelectedSlot] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [currentWeek, setCurrentWeek] = useState(moment().startOf("week"));
@@ -44,6 +46,10 @@ const Calendar = ({
 
   const memberAppointments = data?.data?.items.filter((appt: Appointment) => {
     return appt.staffId === selectedMemberId;
+  });
+
+  const userAppointments = memberAppointments?.filter((appt: Appointment) => {
+    return appt.userId === user?.id;
   });
 
   const resetSelections = () => {
@@ -122,6 +128,40 @@ const Calendar = ({
       );
     });
 
+  const checkUserAppointment = (time: string) =>
+    !!userAppointments.find((appt: Appointment) => {
+      const startDateTime = getDateTime(appt.date, appt.start);
+      const endDateTime = startDateTime
+        .clone()
+        .add(appt.treatmentDuration, "minute");
+      const slotDateTime = getDateTime(
+        currentWeek.day(selectedDay).format("MM-DD-YYYY"),
+        time
+      );
+
+      return (
+        slotDateTime.isBetween(startDateTime, endDateTime) ||
+        startDateTime.isSame(slotDateTime)
+      );
+    });
+
+  const isDateBeforeToday = (day: string) => {
+    const calendarDate = currentWeek.day(day);
+    const today = moment().startOf("D");
+
+    return calendarDate.isBefore(today) && !calendarDate.isSame(today);
+  };
+
+  const isSlotBeforeNow = (time: string) => {
+    const slotStart = currentWeek
+      .day(selectedDay)
+      .hour(Number(time.split(":")[0]))
+      .minute(Number(time.split(":")[1]));
+    const now = moment();
+
+    return slotStart.isBefore(now);
+  };
+
   useEffect(() => {
     if (!checkIfFits(selectedSlot)) {
       setSelectedSlot("");
@@ -137,8 +177,8 @@ const Calendar = ({
   }
 
   return (
-    <Box>
-      <Box justifyContent="center" width="800px" display="flex" gap={2}>
+    <Box width="1024px" pr="8px">
+      <Box justifyContent="center" display="flex" gap={2}>
         <Tooltip title="Previous week">
           <Box>
             <IconButton
@@ -153,7 +193,7 @@ const Calendar = ({
 
         {WORKING_DAYS.map((day) => {
           const isDateSelected = selectedDay === day ? "contained" : "outlined";
-
+          const isDatePassed = isDateBeforeToday(day);
           return (
             <Controller
               key={day}
@@ -162,7 +202,7 @@ const Calendar = ({
               render={({ field }) => (
                 <Box>
                   <Button
-                    disabled={!selectedMemberId}
+                    disabled={!selectedMemberId || isDatePassed}
                     variant={isDateSelected}
                     onClick={() => handleDayChange(day)}
                   >
@@ -174,7 +214,7 @@ const Calendar = ({
                   </Button>
                 </Box>
               )}
-            ></Controller>
+            />
           );
         })}
         <Tooltip title="Next week">
@@ -183,46 +223,64 @@ const Calendar = ({
           </IconButton>
         </Tooltip>
       </Box>
-      {selectedDay !== "" &&
-        WORKING_HOURS.map((time) => {
-          const isBooked = isSlotBooked(time);
-          const ifFits = checkIfFits(time);
-          let bgcolor = "whitesmoke";
-          if (selectedSlot === time) {
-            bgcolor = "lightgreen";
-          }
-          if (isBooked) {
-            bgcolor = "red";
-          }
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 1,
+          width: "100%",
+          maxWidth: "1024px",
+          margin: "0 auto",
+          padding: 2,
+        }}
+      >
+        {selectedDay !== "" &&
+          WORKING_HOURS.map((time) => {
+            const isBooked = isSlotBooked(time);
+            const ifFits = checkIfFits(time);
+            const isBeforeNow = isSlotBeforeNow(time);
+            const isUserAppointment = checkUserAppointment(time);
 
-          return (
-            <Controller
-              name="start"
-              control={control}
-              key={time}
-              render={() => (
-                <Box
-                  display="flex"
-                  key={time}
-                  m={1}
-                  bgcolor={bgcolor}
-                  sx={{ borderRadius: "16px" }}
-                >
-                  <Button
-                    fullWidth
-                    disabled={isBooked || !ifFits}
-                    sx={{ fontSize: 24, borderRadius: "16px" }}
-                    onClick={() => {
-                      handleTimeSelect(time);
-                    }}
+            let bgcolor = "whitesmoke";
+            if (selectedSlot === time) {
+              bgcolor = "lightgreen";
+            }
+            if (isBooked) {
+              bgcolor = "#ff8a80";
+            }
+            if (isUserAppointment) {
+              bgcolor = "lightblue";
+            }
+
+            return (
+              <Controller
+                name="start"
+                control={control}
+                key={time}
+                render={() => (
+                  <Box
+                    display="flex"
+                    key={time}
+                    m={1}
+                    bgcolor={bgcolor}
+                    sx={{ borderRadius: "16px", alignItems: "center" }}
                   >
-                    <Typography>{time}</Typography>
-                  </Button>
-                </Box>
-              )}
-            ></Controller>
-          );
-        })}
+                    <Button
+                      fullWidth
+                      disabled={isBooked || !ifFits || isBeforeNow}
+                      sx={{ fontSize: 24, borderRadius: "16px" }}
+                      onClick={() => {
+                        handleTimeSelect(time);
+                      }}
+                    >
+                      <Typography>{time}</Typography>
+                    </Button>
+                  </Box>
+                )}
+              ></Controller>
+            );
+          })}
+      </Box>
     </Box>
   );
 };

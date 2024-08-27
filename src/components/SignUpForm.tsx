@@ -23,7 +23,12 @@ export const SignUpForm = () => {
   const [error, setError] = useState("");
 
   const router = useRouter();
-  const defaultValues = { userId: "", username: "", password: "" };
+  const defaultValues = {
+    userId: "",
+    username: "",
+    password: "",
+    hashedPassword: "",
+  };
   const {
     register,
     handleSubmit,

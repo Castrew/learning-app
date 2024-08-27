@@ -2,7 +2,7 @@ import NavBar from "@/modules/NavBar";
 import { Box, CssBaseline } from "@mui/material";
 import { validateRequest } from "../../lib/auth";
 import Providers from "@/app/providers";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default async function RootLayout({
