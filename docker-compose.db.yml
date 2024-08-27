@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:8.0.33
+    restart: always
+    environment:
+      MYSQL_DATABASE: "learning_app"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - common-network # Use the common network
+
+volumes:
+  my-db:
+
+networks:
+  common-network:
+    name: common-network
