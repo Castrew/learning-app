@@ -66,7 +66,7 @@ const TreatmentsList = ({ treatments }: TreatmentsListProps) => {
                     }
                     label={
                       <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-                        {treatment.title} dsadsa dsaada das d
+                        {treatment.title}
                       </Typography>
                     }
                   />

@@ -7,6 +7,12 @@ import React, { useMemo } from "react";
 import "react-quill/dist/quill.snow.css";
 import { Box, useTheme } from "@mui/material";
 
+type RichTextInputProps = {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  error: boolean;
+};
 const QuillWrapper = dynamic(
   async () => {
     const { default: RQ } = await import("react-quill");
@@ -17,7 +23,12 @@ const QuillWrapper = dynamic(
   }
 ) as typeof ReactQuill;
 
-export const RichTextInput = ({ value, onChange, placeholder, error }) => {
+export const RichTextInput: React.FC<RichTextInputProps> = ({
+  value,
+  onChange,
+  placeholder,
+  error,
+}) => {
   const theme = useTheme();
 
   const modules = useMemo(
@@ -52,18 +63,20 @@ export const RichTextInput = ({ value, onChange, placeholder, error }) => {
   return (
     <Box
       borderColor="error"
-      sx={
-        error && {
-          ".ql-toolbar.ql-snow": {
-            border: "1px solid ",
-            borderColor: theme.palette.error.main,
-          },
-          ".ql-container.ql-snow": {
-            border: "1px solid ",
-            borderColor: theme.palette.error.main,
-          },
-        }
-      }
+      sx={{
+        ...(error
+          ? {
+              ".ql-toolbar.ql-snow": {
+                border: "1px solid ",
+                borderColor: theme.palette.error.main,
+              },
+              ".ql-container.ql-snow": {
+                border: "1px solid ",
+                borderColor: theme.palette.error.main,
+              },
+            }
+          : {}),
+      }}
     >
       <QuillWrapper
         value={value}

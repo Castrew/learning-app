@@ -5,6 +5,7 @@ import { MemberProps } from "@/modules/Booking";
 import Image from "next/image";
 import CloseIcon from "@mui/icons-material/Close";
 import marsi from "../../public/marsi.png";
+import dimoff from "../../public/dimoff.png";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface StaffListProps {
@@ -23,7 +24,7 @@ const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
       minWidth="200px"
       mb="8px"
     >
-      {staffMembers?.map((member) => (
+      {staffMembers?.map((member, index) => (
         <Controller
           name="staffId"
           key={member.id}
@@ -47,10 +48,10 @@ const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
                 onClick={() => {
                   handleMemberChange(member);
                 }}
-                src={marsi}
+                src={index === 0 ? marsi : dimoff}
                 width={250}
                 height={300}
-                alt="marsi"
+                alt={index === 0 ? "marsi" : "dimoff"}
               />
               <Typography
                 sx={{

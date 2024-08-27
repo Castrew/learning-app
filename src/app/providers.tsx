@@ -43,7 +43,7 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children, user }) {
+export default function Providers({ children, user }: any) {
   const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>
