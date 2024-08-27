@@ -2,7 +2,7 @@ import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
 import { WORKING_DAYS, WORKING_HOURS } from "@/app/schedule";
-import { Control, Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import { useGetAllAppointments } from "@/app/core/react-query/appointments/hooks/useGetAllAppointments";
@@ -23,18 +23,11 @@ interface Appointment {
 }
 
 interface CalendarProps {
-  control: Control<any>;
-  handleCalendarChange: (date: string, time: string) => void;
   selectedMemberId: string;
   totalDuration: () => number;
 }
 
-const Calendar = ({
-  control,
-  handleCalendarChange,
-  selectedMemberId,
-  totalDuration,
-}: CalendarProps) => {
+const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
   const user = useContext(AuthContext);
 
   const [selectedSlot, setSelectedSlot] = useState("");
@@ -43,6 +36,8 @@ const Calendar = ({
 
   const treatmentsDuration = totalDuration();
   const { data, isLoading } = useGetAllAppointments();
+
+  const { setValue, control } = useFormContext();
 
   const memberAppointments = data?.data?.items.filter((appt: Appointment) => {
     return appt.staffId === selectedMemberId;
@@ -55,32 +50,24 @@ const Calendar = ({
   const resetSelections = () => {
     setSelectedSlot("");
     setSelectedDay("");
-    handleCalendarChange("", "");
+    setSelectedSlot("");
   };
 
   const changeWeek = (weeksToAdd: number) => {
     const newWeek = currentWeek.clone().add(weeksToAdd, "week").startOf("week");
     setCurrentWeek(newWeek);
     resetSelections();
+    setValue("date", "");
+    setValue("start", "");
   };
 
   const handleDayChange = (day: string) => {
     setSelectedDay(day);
     setSelectedSlot("");
-    handleCalendarChange(currentWeek.day(day).format("MM-DD-YYYY"), "");
-  };
-
-  const handleTimeSelect = (time: string) => {
-    setSelectedSlot(time);
-    handleCalendarChange(
-      currentWeek.day(selectedDay).format("MM-DD-YYYY"),
-      time
-    );
   };
 
   useEffect(() => {
-    !!selectedMemberId === false ? resetSelections() : null;
-    setSelectedSlot("");
+    resetSelections();
   }, [selectedMemberId]);
 
   const getDateTime = (date: string, start: string) =>
@@ -148,7 +135,6 @@ const Calendar = ({
   const isDateBeforeToday = (day: string) => {
     const calendarDate = currentWeek.day(day);
     const today = moment().startOf("D");
-
     return calendarDate.isBefore(today) && !calendarDate.isSame(today);
   };
 
@@ -165,10 +151,7 @@ const Calendar = ({
   useEffect(() => {
     if (!checkIfFits(selectedSlot)) {
       setSelectedSlot("");
-      handleCalendarChange(
-        currentWeek.day(selectedDay).format("MM-DD-YYYY"),
-        ""
-      );
+      setValue("start", "");
     }
   }, [treatmentsDuration]);
 
@@ -192,7 +175,7 @@ const Calendar = ({
         </Tooltip>
 
         {WORKING_DAYS.map((day) => {
-          const isDateSelected = selectedDay === day ? "contained" : "outlined";
+          const isDaySelected = selectedDay === day ? "contained" : "outlined";
           const isDatePassed = isDateBeforeToday(day);
           return (
             <Controller
@@ -203,8 +186,14 @@ const Calendar = ({
                 <Box>
                   <Button
                     disabled={!selectedMemberId || isDatePassed}
-                    variant={isDateSelected}
-                    onClick={() => handleDayChange(day)}
+                    variant={isDaySelected}
+                    onClick={() => {
+                      handleDayChange(day),
+                        field.onChange(
+                          currentWeek.day(day).format("MM-DD-YYYY")
+                        );
+                      setValue("start", "");
+                    }}
                   >
                     <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
                       {day}
@@ -257,7 +246,7 @@ const Calendar = ({
                 name="start"
                 control={control}
                 key={time}
-                render={() => (
+                render={({ field }) => (
                   <Box
                     display="flex"
                     key={time}
@@ -270,7 +259,8 @@ const Calendar = ({
                       disabled={isBooked || !ifFits || isBeforeNow}
                       sx={{ fontSize: 24, borderRadius: "16px" }}
                       onClick={() => {
-                        handleTimeSelect(time);
+                        field.onChange(time);
+                        setSelectedSlot(time);
                       }}
                     >
                       <Typography>{time}</Typography>

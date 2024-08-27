@@ -8,15 +8,15 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { Controller, Control } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Treatment } from "@/app/core/react-query/treatments/types";
 
 interface TreatmentsListProps {
   treatments: Treatment[];
-  control: Control<any>;
 }
 
-const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
+const TreatmentsList = ({ treatments }: TreatmentsListProps) => {
+  const { control } = useFormContext();
   const midIndex = Math.ceil(treatments.length / 2);
   const firstColumn = treatments.slice(0, midIndex);
   const secondColumn = treatments.slice(midIndex);

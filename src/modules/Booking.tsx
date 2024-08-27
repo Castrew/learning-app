@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import { useGetAllStaff } from "@/app/core/react-query/staff/hooks/useGetAllStaff";
 import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/useGetAllTreatmets";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import StaffList from "@/components/StaffList";
 import TreatmentsList from "@/components/TreatmentList";
 import Calendar from "@/components/Calentar";
@@ -62,31 +62,19 @@ const Booking = () => {
     start: "",
   };
 
-  const {
-    handleSubmit,
-    reset,
-    setValue,
-    control,
-    watch,
-    getValues,
-    formState: { dirtyFields },
-  } = useForm<FormValues>({
+  const formContext = useForm<FormValues>({
     defaultValues,
   });
 
   const handleMemberChange = (member: MemberProps) => {
-    reset();
+    formContext.reset();
     setMemberTreatments(member.treatments);
     setMemberName(member.name);
-    setValue("staffId", member.id);
+    formContext.setValue("staffId", member.id);
   };
 
-  const handleCalendarChange = (date: string, time: string) => {
-    setValue("date", date);
-    setValue("start", time);
-  };
-
-  const appt = watch();
+  const appt = formContext.watch();
+  console.log(appt);
 
   const totalDuration = () => {
     const duration = filteredTreatments
@@ -100,10 +88,10 @@ const Booking = () => {
 
   const selectedTreatments = allTreatments?.data.items.filter(
     (treatment: Treatment) =>
-      appt.treatmentIds?.map((id: any) => id).includes(treatment.id)
+      appt.treatmentIds?.map((id: string) => id).includes(treatment.id)
   );
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = formContext.handleSubmit((data) => {
     createAppointment.mutate(data, {
       onSuccess: () => {
         toasts.Success("Your appointment has been set!");
@@ -133,119 +121,119 @@ const Booking = () => {
         width: "100%",
       }}
     >
-      <form onSubmit={onSubmit}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <StaffList
-            staffMembers={staffMembers}
-            handleMemberChange={handleMemberChange}
-          />
-          <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
-
-          {memberTreatments.length !== 0 && (
-            <TreatmentsList treatments={filteredTreatments} control={control} />
-          )}
-          {appt.staffId && (
-            <Calendar
-              totalDuration={totalDuration}
-              control={control}
-              handleCalendarChange={handleCalendarChange}
-              selectedMemberId={appt.staffId}
-            />
-          )}
-          <Button
+      <FormProvider {...formContext}>
+        <form onSubmit={onSubmit}>
+          <Box
             sx={{
-              height: "50px",
-              px: 4,
-              mr: 2,
-              borderRadius: "20px",
-              bgcolor: "#f06292",
-              color: "white",
-              "&:hover": {
-                bgcolor: "primary.dark",
-              },
-            }}
-            disabled={!(appt.treatmentIds.length !== 0 && appt.start !== "")}
-            onClick={() => {
-              setOpen(true);
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            Set Appointment
-          </Button>
-          <Modal open={open}>
-            <Box
+            <StaffList
+              staffMembers={staffMembers}
+              handleMemberChange={handleMemberChange}
+            />
+            <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+
+            {memberTreatments.length !== 0 && (
+              <TreatmentsList treatments={filteredTreatments} />
+            )}
+            {appt.staffId && (
+              <Calendar
+                totalDuration={totalDuration}
+                selectedMemberId={appt.staffId}
+              />
+            )}
+            <Button
               sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 500,
-                bgcolor: "background.paper",
-                border: "1px solid #000",
-                borderRadius: 10,
-                boxShadow: 24,
-                p: 2,
+                height: "50px",
+                px: 4,
+                mr: 2,
+                borderRadius: "20px",
+                bgcolor: "#f06292",
+                color: "white",
+                "&:hover": {
+                  bgcolor: "primary.dark",
+                },
+              }}
+              disabled={!(appt.treatmentIds.length !== 0 && appt.start !== "")}
+              onClick={() => {
+                setOpen(true);
               }}
             >
-              <DialogTitle
-                variant="h5"
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                sx={{ pr: 1, fontSize: 20, fontWeight: "bold" }}
+              Set Appointment
+            </Button>
+            <Modal open={open}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 500,
+                  bgcolor: "background.paper",
+                  border: "1px solid #000",
+                  borderRadius: 10,
+                  boxShadow: 24,
+                  p: 2,
+                }}
               >
-                Confirmation
-                <IconButton
-                  aria-label="close-modal"
-                  onClick={() => setOpen(!open)}
+                <DialogTitle
+                  variant="h5"
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ pr: 1, fontSize: 20, fontWeight: "bold" }}
                 >
-                  <ClearIcon />
-                </IconButton>
-              </DialogTitle>
-              <DialogContent>
-                <Typography>{`Set appointment with ${memberName}, for ${appt.date} at ${appt.start}?`}</Typography>
-                <Typography mt={1} mb={1}>
-                  Selected treatments:
-                </Typography>
-                {selectedTreatments?.map((treatment: Treatment) => {
-                  return (
-                    <Box
-                      key={treatment.id}
-                      display="flex"
-                      flexDirection="row"
-                      alignItems="center"
-                    >
-                      <CircleIcon fontSize="small" />
-                      <Typography pt="2px" ml="4px">
-                        {treatment.title}
-                      </Typography>
-                    </Box>
-                  );
-                })}
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  sx={{ borderRadius: "20px" }}
-                  onClick={() => setOpen(!open)}
-                >
-                  Close modal
-                </Button>
-                <Button
-                  sx={{ borderRadius: "20px" }}
-                  variant="contained"
-                  onClick={onSubmit}
-                >
-                  Set appointment
-                </Button>
-              </DialogActions>
-            </Box>
-          </Modal>
-        </Box>
-      </form>
+                  Confirmation
+                  <IconButton
+                    aria-label="close-modal"
+                    onClick={() => setOpen(!open)}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                  <Typography>{`Set appointment with ${memberName}, for ${appt.date} at ${appt.start}?`}</Typography>
+                  <Typography mt={1} mb={1}>
+                    Selected treatments:
+                  </Typography>
+                  {selectedTreatments?.map((treatment: Treatment) => {
+                    return (
+                      <Box
+                        key={treatment.id}
+                        display="flex"
+                        flexDirection="row"
+                        alignItems="center"
+                      >
+                        <CircleIcon fontSize="small" />
+                        <Typography pt="2px" ml="4px">
+                          {treatment.title}
+                        </Typography>
+                      </Box>
+                    );
+                  })}
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    sx={{ borderRadius: "20px" }}
+                    onClick={() => setOpen(!open)}
+                  >
+                    Close modal
+                  </Button>
+                  <Button
+                    sx={{ borderRadius: "20px" }}
+                    variant="contained"
+                    onClick={onSubmit}
+                  >
+                    Set appointment
+                  </Button>
+                </DialogActions>
+              </Box>
+            </Modal>
+          </Box>
+        </form>
+      </FormProvider>
     </Box>
   );
 };
