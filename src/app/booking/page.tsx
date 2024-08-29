@@ -1,5 +1,14 @@
-const Booking = () => {
-  return <div>This is the booking page</div>;
+"use client";
+
+import Booking from "@/modules/Booking";
+import { Box } from "@mui/material";
+
+const BookingPage = () => {
+  return (
+    <Box>
+      <Booking />
+    </Box>
+  );
 };
 
-export default Booking;
+export default BookingPage;

@@ -11,7 +11,7 @@ const NavBar = () => {
   const pathname = usePathname();
   const user = useContext(AuthContext);
 
-  const isAdmin = user?.id === "16aafx78kvkvgt2";
+  const isAdmin = user?.id === "yvli5wewb2blxy5";
   const isAccessAllowed = isAdmin && pathname.includes("/admin");
 
   return (

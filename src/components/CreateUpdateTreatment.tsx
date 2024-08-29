@@ -26,7 +26,7 @@ const CreateUpdateTreatment: React.FC = (isAdmin) => {
     description: treatment?.description || "",
   };
 
-  const { register, handleSubmit, reset, control } = useForm({
+  const { register, handleSubmit, reset, control } = useForm<Treatment>({
     defaultValues,
   });
 

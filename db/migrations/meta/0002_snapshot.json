@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "9654ce3c-7b17-4662-b79f-4e37a98b2ff0",
-  "prevId": "0723b234-aa4a-4e33-9987-6f167a7a8586",
+  "id": "643dc059-9e78-4f35-9dc1-e3a40f2249dc",
+  "prevId": "b41221ed-f87c-4e5c-9a0c-d5bc3360a855",
   "tables": {
     "appointment": {
       "name": "appointment",
@@ -14,20 +14,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "start": {
-          "name": "start",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "end": {
-          "name": "end",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "user_id": {
           "name": "user_id",
           "type": "varchar(255)",
@@ -35,8 +21,36 @@
           "notNull": true,
           "autoincrement": false
         },
-        "treatment_id": {
-          "name": "treatment_id",
+        "treatment_ids": {
+          "name": "treatment_ids",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "staff_id": {
+          "name": "staff_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "start": {
+          "name": "start",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "group_id": {
+          "name": "group_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
@@ -58,12 +72,25 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "appointment_treatment_id_treatment_id_fk": {
-          "name": "appointment_treatment_id_treatment_id_fk",
+        "appointment_treatment_ids_treatment_id_fk": {
+          "name": "appointment_treatment_ids_treatment_id_fk",
           "tableFrom": "appointment",
           "tableTo": "treatment",
           "columnsFrom": [
-            "treatment_id"
+            "treatment_ids"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "appointment_staff_id_staff_id_fk": {
+          "name": "appointment_staff_id_staff_id_fk",
+          "tableFrom": "appointment",
+          "tableTo": "staff",
+          "columnsFrom": [
+            "staff_id"
           ],
           "columnsTo": [
             "id"
@@ -119,7 +146,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -128,6 +155,94 @@
           "name": "session_id",
           "columns": [
             "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "staff": {
+      "name": "staff",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "staff_id": {
+          "name": "staff_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "treatment_staff": {
+      "name": "treatment_staff",
+      "columns": {
+        "treatment_id": {
+          "name": "treatment_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "staff_id": {
+          "name": "staff_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "treatment_staff_treatment_id_treatment_id_fk": {
+          "name": "treatment_staff_treatment_id_treatment_id_fk",
+          "tableFrom": "treatment_staff",
+          "tableTo": "treatment",
+          "columnsFrom": [
+            "treatment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "treatment_staff_staff_id_staff_id_fk": {
+          "name": "treatment_staff_staff_id_staff_id_fk",
+          "tableFrom": "treatment_staff",
+          "tableTo": "staff",
+          "columnsFrom": [
+            "staff_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "treatment_staff_treatment_id_staff_id_pk": {
+          "name": "treatment_staff_treatment_id_staff_id_pk",
+          "columns": [
+            "treatment_id",
+            "staff_id"
           ]
         }
       },
@@ -147,21 +262,28 @@
           "name": "title",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "duration": {
           "name": "duration",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "price": {
           "name": "price",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -189,13 +311,6 @@
         },
         "username": {
           "name": "username",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,

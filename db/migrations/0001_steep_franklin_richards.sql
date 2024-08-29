@@ -1,0 +1,1 @@
+ALTER TABLE `appointment` ADD `group_id` varchar(255) NOT NULL;

@@ -1,7 +1,9 @@
 import NavBar from "@/modules/NavBar";
-import { Box } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import { validateRequest } from "../../lib/auth";
 import Providers from "@/app/providers";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default async function RootLayout({
   children,
@@ -12,13 +14,17 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "pink", overflow: "hidden" }}>
-        {" "}
-        <Providers user={user}>
-          {user && <NavBar />}
-          {children}
-          {/* <div style={{ height: "75px", backgroundColor: "white" }}>Footer</div> */}{" "}
-        </Providers>
+      <body>
+        <Box bgcolor="pink" overflow="hidden" height="100vh" p={1}>
+          <CssBaseline />
+          <Providers user={user}>
+            {user && <NavBar />}
+            <Box height="calc(100vh - 96px)" overflow="auto">
+              {children}
+            </Box>
+          </Providers>
+          <ToastContainer />
+        </Box>
       </body>
     </html>
   );

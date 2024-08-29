@@ -1,12 +1,12 @@
 "use client";
 
 import { Box } from "@mui/material";
-import { TreatmentsList } from "@/components/TreatmentsList";
+import { TreatmentCard } from "@/components/TreatmentCard";
 
 const Treatments = () => {
   return (
     <Box sx={{ mt: 2 }}>
-      <TreatmentsList />
+      <TreatmentCard />
     </Box>
   );
 };

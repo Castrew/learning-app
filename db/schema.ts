@@ -1,17 +1,6 @@
 import { relations } from "drizzle-orm";
-import {
-  bigint,
-  double,
-  index,
-  int,
-  mysqlEnum,
-  mysqlTable,
-  primaryKey,
-  serial,
-  timestamp,
-  varchar,
-  datetime,
-} from "drizzle-orm/mysql-core";
+import { varchar, mysqlTable, datetime } from "drizzle-orm/mysql-core";
+import { primaryKey } from "drizzle-orm/mysql-core";
 
 // User Table
 export const userTable = mysqlTable("user", {
@@ -20,40 +9,65 @@ export const userTable = mysqlTable("user", {
   hashedPassword: varchar("hashed_password", { length: 255 }).notNull(),
 });
 
-// User Relations
-export const usersRelations = relations(userTable, ({ many }) => ({
-  appointments: many(appointmentTable),
-}));
+export const treatmentStaffTable = mysqlTable(
+  "treatment_staff",
+  {
+    treatmentId: varchar("treatment_id", { length: 255 })
+      .notNull()
+      .references(() => treatmentTable.id, { onDelete: "cascade" }),
+    staffId: varchar("staff_id", { length: 255 })
+      .notNull()
+      .references(() => staffTable.id, { onDelete: "cascade" }),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.treatmentId, table.staffId] }),
+    };
+  }
+);
 
 // Treatment Table
 export const treatmentTable = mysqlTable("treatment", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  title: varchar("title", { length: 255 }),
+  title: varchar("title", { length: 255 }).notNull(),
   description: varchar("description", { length: 255 }).notNull(),
-
-  duration: varchar("duration", { length: 255 }),
-  price: varchar("price", { length: 255 }),
+  duration: varchar("duration", { length: 255 }).notNull(),
+  price: varchar("price", { length: 255 }).notNull(),
 });
 
-// Treatment Relations
 export const treatmentRelations = relations(treatmentTable, ({ many }) => ({
+  staff: many(staffTable),
+  appointments: many(appointmentTable),
+}));
+
+// Staff Table
+export const staffTable = mysqlTable("staff", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+});
+
+export const staffRelations = relations(staffTable, ({ many }) => ({
+  treatments: many(treatmentTable),
   appointments: many(appointmentTable),
 }));
 
 // Appointment Table
 export const appointmentTable = mysqlTable("appointment", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  start: timestamp("start", { mode: "string" }),
-  end: timestamp("end", { mode: "string" }),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
   treatmentId: varchar("treatment_id", { length: 255 })
     .notNull()
     .references(() => treatmentTable.id, { onDelete: "cascade" }),
+  staffId: varchar("staff_id", { length: 255 })
+    .notNull()
+    .references(() => staffTable.id, { onDelete: "cascade" }),
+  date: varchar("date", { length: 255 }).notNull(),
+  start: varchar("start", { length: 255 }).notNull(),
+  groupId: varchar("group_id", { length: 255 }).notNull(),
 });
 
-// Appointment Relations
 export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
   user: one(userTable, {
     fields: [appointmentTable.userId],
@@ -63,9 +77,12 @@ export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
     fields: [appointmentTable.treatmentId],
     references: [treatmentTable.id],
   }),
+  staff: one(staffTable, {
+    fields: [appointmentTable.staffId],
+    references: [staffTable.id],
+  }),
 }));
 
-// Session Table
 export const sessionTable = mysqlTable("session", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   userId: varchar("user_id", { length: 255 })
