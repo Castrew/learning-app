@@ -9,12 +9,13 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - my-db:/var/lib/mysql
+      - my-db1:/var/lib/mysql
     networks:
       - common-network # Use the common network
 
 volumes:
-  my-db:
+  my-db1:
+# Change volumes names if db doesnt start
 
 networks:
   common-network:

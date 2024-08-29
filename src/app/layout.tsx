@@ -19,7 +19,9 @@ export default async function RootLayout({
           <CssBaseline />
           <Providers user={user}>
             {user && <NavBar />}
-            <Box height="calc(100vh - 96px)">{children}</Box>
+            <Box height="calc(100vh - 96px)" overflow="auto">
+              {children}
+            </Box>
           </Providers>
           <ToastContainer />
         </Box>
