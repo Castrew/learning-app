@@ -6,21 +6,21 @@ export interface RequestTypes {
   };
 
   getOneStaff: {
-    name: string;
+    staffId: string;
   };
 
   deleteStaff: {
-    name: string;
+    staffId: string;
   };
 
   updateStaff: {
+    staffId: string;
     name: string;
-    treatmentId: string | string[];
+    treatmentIds: string | string[];
   };
 
   createStaff: {
-    id: string;
     name: string;
-    treatmentId: string | string[];
+    treatmentIds: string | string[];
   };
 }

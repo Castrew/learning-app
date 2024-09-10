@@ -8,15 +8,15 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { Controller, useFormContext } from "react-hook-form";
+import { Control, Controller, useFormContext } from "react-hook-form";
 import { Treatment } from "@/app/core/react-query/treatments/types";
 
 interface TreatmentsListProps {
   treatments: Treatment[];
+  control?: Control<any>;
 }
 
-const TreatmentsList = ({ treatments }: TreatmentsListProps) => {
-  const { control } = useFormContext();
+const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
   const midIndex = Math.ceil(treatments.length / 2);
   const firstColumn = treatments.slice(0, midIndex);
   const secondColumn = treatments.slice(midIndex);
@@ -36,7 +36,7 @@ const TreatmentsList = ({ treatments }: TreatmentsListProps) => {
       >
         <Box sx={{ width: 200, padding: "8px" }}>
           <FormGroup>
-            {firstColumn.map((treatment: any) => (
+            {firstColumn.map((treatment: Treatment) => (
               <Controller
                 key={treatment.id}
                 name="treatmentIds"
@@ -80,7 +80,7 @@ const TreatmentsList = ({ treatments }: TreatmentsListProps) => {
 
         <Box sx={{ width: 200, padding: "8px" }}>
           <FormGroup>
-            {secondColumn.map((treatment: any) => (
+            {secondColumn.map((treatment: Treatment) => (
               <Controller
                 key={treatment.id}
                 name="treatmentIds"

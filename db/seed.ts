@@ -81,8 +81,6 @@ async function seedDatabase() {
       expiresAt: new Date("2024-09-02T16:00:00Z"),
     },
   ]);
-
-  console.log("Database seeded successfully!");
 }
 
 // Run the seed function

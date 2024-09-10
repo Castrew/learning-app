@@ -1,14 +1,19 @@
 import { NextRequest } from "next/server";
-import { staffTable, treatmentStaffTable } from "../../../../../db/schema";
+import {
+  staffTable,
+  treatmentStaffTable,
+  treatmentTable,
+} from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
 import { responses } from "../../responses";
 
-export const GET = async (request: NextRequest) => {
-  const { id } = await request.json(); // Assume ID is passed in the request
-
+export const GET = async (
+  request: NextRequest,
+  { params }: { params: { staffId: string } }
+) => {
+  const id = params.staffId;
   try {
-    // Fetch the staff member
     const staff = await db
       .select()
       .from(staffTable)
@@ -17,12 +22,15 @@ export const GET = async (request: NextRequest) => {
     if (staff.length === 0) {
       return responses.notFoundError();
     }
-
-    // Fetch the assigned treatments
-    const treatments = await db
+    const allTreatments = await db.select().from(treatmentTable);
+    const assignments = await db
       .select()
       .from(treatmentStaffTable)
       .where(eq(treatmentStaffTable.staffId, id));
+
+    const treatments = allTreatments.filter((treatment) =>
+      assignments.find((assignment) => treatment.id === assignment.treatmentId)
+    );
 
     return responses.successResponseOneObject({
       ...staff[0],
@@ -33,8 +41,11 @@ export const GET = async (request: NextRequest) => {
   }
 };
 
-export const DELETE = async (request: NextRequest) => {
-  const { id } = await request.json();
+export const DELETE = async (
+  request: NextRequest,
+  { params }: { params: { staffId: string } }
+) => {
+  const id = params.staffId;
 
   try {
     const staff = await db
@@ -56,8 +67,16 @@ export const DELETE = async (request: NextRequest) => {
   }
 };
 
-export const PUT = async (request: NextRequest) => {
-  const { id, name, treatmentIds } = await request.json();
+export const PUT = async (
+  request: NextRequest,
+  { params }: { params: { staffId: string } }
+) => {
+  const id = params.staffId;
+  const { name, treatmentIds } = await request.json();
+
+  if (!name || !Array.isArray(treatmentIds)) {
+    return responses.notFoundError();
+  }
 
   try {
     await db.transaction(async (tx) => {
@@ -67,7 +86,7 @@ export const PUT = async (request: NextRequest) => {
         .delete(treatmentStaffTable)
         .where(eq(treatmentStaffTable.staffId, id));
 
-      if (Array.isArray(treatmentIds)) {
+      if (treatmentIds.length > 0) {
         for (const treatmentId of treatmentIds) {
           await tx
             .insert(treatmentStaffTable)
@@ -80,6 +99,11 @@ export const PUT = async (request: NextRequest) => {
       .select()
       .from(staffTable)
       .where(eq(staffTable.id, id));
+
+    if (updatedStaff.length === 0) {
+      return responses.notFoundError();
+    }
+
     const assignedTreatments = await db
       .select()
       .from(treatmentStaffTable)

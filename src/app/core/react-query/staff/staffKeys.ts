@@ -15,11 +15,12 @@ export const staffKeys = createQueryKeys("staff", {
       },
     };
   },
-  oneStaff: ({ name }) => {
+  oneStaff: ({ staffId }) => {
     return {
-      queryKey: [name],
+      queryKey: [staffId],
+
       queryFn: async () => {
-        const { data } = await APIAxiosInstance.get(`/staff/${name}`);
+        const { data } = await APIAxiosInstance.get(`/staff/${staffId}`);
         return data;
       },
     };
@@ -29,15 +30,15 @@ export const staffKeys = createQueryKeys("staff", {
 export const staffMutationsKeys = createMutationKeys("staff", {
   deleteStaff: {
     mutationKey: null,
-    mutationFn: async (payload: RequestTypes["deleteStaff"]) => {
-      const { data } = await APIAxiosInstance.delete(`/staff/${payload.name}`);
+    mutationFn: async ({ staffId }: RequestTypes["deleteStaff"]) => {
+      const { data } = await APIAxiosInstance.delete(`/staff/${staffId}`);
       return data;
     },
   },
   updateStaff: {
     mutationKey: null,
-    mutationFn: async ({ name, ...rest }: RequestTypes["updateStaff"]) => {
-      const { data } = await APIAxiosInstance.put(`/staff/${name}`, rest);
+    mutationFn: async ({ staffId, ...rest }: RequestTypes["updateStaff"]) => {
+      const { data } = await APIAxiosInstance.put(`/staff/${staffId}`, rest);
 
       return data;
     },

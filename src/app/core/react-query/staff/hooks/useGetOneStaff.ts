@@ -3,7 +3,8 @@ import { RequestTypes } from "../requestTypes";
 import { staffKeys } from "../staffKeys";
 
 export const useGetOneStaff = (payload: RequestTypes["getOneStaff"]) => {
-  console.log(payload, "payload");
-
-  return useQuery({ ...staffKeys.oneStaff(payload) });
+  return useQuery({
+    ...staffKeys.oneStaff(payload),
+    enabled: payload.staffId !== "undefined",
+  });
 };
