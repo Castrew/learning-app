@@ -7,7 +7,8 @@ import {
 } from "@tanstack/react-query";
 import { AuthContext } from "@/providers/AuthProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ModalContainer } from "react-modal-global";
+import { theme } from "@/theme";
+import { ThemeProvider } from "@mui/material";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -46,9 +47,11 @@ function getQueryClient() {
 export default function Providers({ children, user }: any) {
   const queryClient = getQueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

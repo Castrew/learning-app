@@ -13,14 +13,19 @@ export const GET = async () => {
   try {
     const allStaff = await db.select().from(staffTable);
     const allAssignments = await db.select().from(treatmentStaffTable);
+    const allTreatments = await db.select().from(treatmentTable);
 
     const staffWithTreatments = allStaff.map((staff) => {
-      const treatments = allAssignments.filter(
-        (assignment) => assignment.staffId === staff.id
-      );
+      const treatments = allAssignments
+        .filter((assignment) => assignment.staffId === staff.id)
+        .map(({ treatmentId }) =>
+          allTreatments.find((treatment) => {
+            return treatment.id === treatmentId;
+          })
+        );
+
       return { ...staff, treatments };
     });
-
     return responses.successResponseList(staffWithTreatments);
   } catch (error) {
     return responses.serverError(error);

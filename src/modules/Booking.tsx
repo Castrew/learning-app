@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useGetAllStaff } from "@/app/core/react-query/staff/hooks/useGetAllStaff";
-import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/useGetAllTreatmets";
 import { useForm, FormProvider } from "react-hook-form";
 import StaffList from "@/components/StaffList";
 import TreatmentsList from "@/components/TreatmentList";
@@ -40,8 +39,6 @@ export interface FormValues {
 const Booking = () => {
   const createAppointment = useCreateAppointment();
   const { data: allStaff, isLoading: isLoadingAllStaff } = useGetAllStaff();
-  const { data: allTreatments, isLoading: isLoadingAllTreatments } =
-    useGetAllTreatments();
 
   const [open, setOpen] = useState(false);
   const [memberName, setMemberName] = useState("");
@@ -49,12 +46,6 @@ const Booking = () => {
 
   const staffMembers = allStaff?.data?.items;
 
-  const filteredTreatments = allTreatments?.data.items.filter(
-    (treatment: Treatment) =>
-      memberTreatments
-        ?.map((item: any) => item.treatmentId)
-        .includes(treatment.id)
-  );
   const defaultValues = {
     staffId: "",
     treatmentIds: [],
@@ -74,10 +65,9 @@ const Booking = () => {
   };
 
   const appt = formContext.watch();
-  console.log(appt);
 
   const totalDuration = () => {
-    const duration = filteredTreatments
+    const duration = memberTreatments
       ?.filter((treatment: Treatment) =>
         appt.treatmentIds.includes(treatment.id)
       )
@@ -86,9 +76,8 @@ const Booking = () => {
     return duration;
   };
 
-  const selectedTreatments = allTreatments?.data.items.filter(
-    (treatment: Treatment) =>
-      appt.treatmentIds?.map((id: string) => id).includes(treatment.id)
+  const selectedTreatments = memberTreatments.filter((treatment: Treatment) =>
+    appt.treatmentIds?.map((id: string) => id).includes(treatment.id)
   );
 
   const onSubmit = formContext.handleSubmit((data) => {
@@ -104,7 +93,7 @@ const Booking = () => {
     });
   });
 
-  if (isLoadingAllStaff || isLoadingAllTreatments) {
+  if (isLoadingAllStaff) {
     return "Loading...";
   }
 
@@ -136,7 +125,10 @@ const Booking = () => {
             <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
 
             {memberTreatments.length !== 0 && (
-              <TreatmentsList treatments={filteredTreatments} />
+              <TreatmentsList
+                treatments={memberTreatments}
+                control={formContext.control}
+              />
             )}
             {appt.staffId && (
               <Calendar

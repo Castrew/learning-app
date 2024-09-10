@@ -1,10 +1,7 @@
+import { Treatment } from "../treatments/types";
+
 export type Staff = {
-  id?: string;
-  name?: string;
-  treatment?: {
-    treatmentId: string;
-    price: string;
-    duration: string;
-    title: string;
-  };
+  id: string;
+  name: string;
+  treatments: Treatment[];
 };

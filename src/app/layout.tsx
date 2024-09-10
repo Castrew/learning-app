@@ -1,5 +1,5 @@
 import NavBar from "@/modules/NavBar";
-import { Box, CssBaseline } from "@mui/material";
+import { Box, CssBaseline, useTheme } from "@mui/material";
 import { validateRequest } from "../../lib/auth";
 import Providers from "@/app/providers";
 import { ToastContainer } from "react-toastify";
@@ -15,7 +15,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Box bgcolor="pink" overflow="hidden" height="100vh" p={1}>
+        <Box bgcolor="#FADADD" overflow="hidden" height="100vh" p={1}>
           <CssBaseline />
           <Providers user={user}>
             {user && <NavBar />}

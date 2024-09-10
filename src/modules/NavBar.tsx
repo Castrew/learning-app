@@ -54,6 +54,19 @@ const NavBar = () => {
         >
           Treatments
         </Button>
+        <Button
+          variant="contained"
+          color="error"
+          size="large"
+          sx={{ mr: 2, borderRadius: "20px" }}
+          onClick={() =>
+            isAccessAllowed
+              ? router.push("/admin/staff")
+              : router.push("/staff")
+          }
+        >
+          Staff
+        </Button>
         <Box sx={{ flexGrow: 1 }} />
         {isAdmin && (
           <Button

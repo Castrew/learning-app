@@ -10,7 +10,7 @@ import { useCreateTreatment } from "@/app/core/react-query/treatments/hooks/useC
 import { useGetOneTreatment } from "@/app/core/react-query/treatments/hooks/useGetOneTreatment";
 import { RichTextInput } from "./RichText";
 
-const CreateUpdateTreatment: React.FC = (isAdmin) => {
+const CreateUpdateTreatment: React.FC = () => {
   const params = useParams();
   const updateTreatment = useUpdateTreatment();
   const createTreatment = useCreateTreatment();
@@ -59,15 +59,13 @@ const CreateUpdateTreatment: React.FC = (isAdmin) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          // minHeight="90vh" // This ensures the form is centered vertically
-          // bgcolor="background.default" // Adjust the background color if needed
         >
           <Box
             gap="10px"
             display="flex"
             flexDirection="column"
             maxWidth="800px"
-            width="100%" // This makes the Box responsive
+            width="100%"
             mx="auto"
             p="20px"
             bgcolor="background.paper"
