@@ -1,11 +1,9 @@
-"use client";
-
-import { HomePage } from "@/modules/HomePage";
+import { TreatmentCard } from "@/components/TreatmentCard";
 
 const AdminTreatmentsPage = () => {
   return (
     <>
-      <HomePage />
+      <TreatmentCard />
     </>
   );
 };
