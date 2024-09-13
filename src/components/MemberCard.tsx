@@ -32,6 +32,7 @@ import { toasts } from "./Toast";
 
 const MemberCard = () => {
   const [open, setOpen] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<Staff | null>(null);
 
   const { data, isLoading } = useGetAllStaff();
   const deleteMember = useDeleteStaff();
@@ -93,7 +94,12 @@ const MemberCard = () => {
             />
             {isActionAllowed && (
               <IconButton
-                onClick={() => setOpen(!open)}
+                onClick={() => {
+                  {
+                    setOpen(!open);
+                    setMemberToDelete(member);
+                  }
+                }}
                 sx={{ position: "absolute", top: 0, right: 0 }}
               >
                 <DeleteIcon color="error" />
@@ -132,6 +138,7 @@ const MemberCard = () => {
                 <DialogContent>
                   <Typography>
                     Are you sure that you want to remove this member?
+                    {member.name}
                   </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -144,7 +151,11 @@ const MemberCard = () => {
                   <Button
                     sx={{ borderRadius: "20px" }}
                     variant="contained"
-                    onClick={() => handleDeleteMember(member.id)}
+                    onClick={() =>
+                      handleDeleteMember(
+                        memberToDelete ? memberToDelete.id : ""
+                      )
+                    }
                   >
                     Remove
                   </Button>
