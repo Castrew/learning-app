@@ -15,6 +15,20 @@ export const appointmentsKeys = createQueryKeys("appointments", {
       },
     };
   },
+  paginatedAppointments: ({
+    page,
+    pageSize,
+  }: RequestTypes["paginatedAppointments"]) => {
+    return {
+      queryKey: [page],
+      queryFn: async () => {
+        const { data } = await APIAxiosInstance.get(
+          `/appointments?page=${page}&pageSize=${pageSize}`
+        );
+        return data.data.items;
+      },
+    };
+  },
   // oneAppointment: ({ id }) => {
   //   return {
   //     queryKey: [id],

@@ -5,7 +5,7 @@ import {
   treatmentTable,
 } from "../../../../db/schema";
 import { eq, ne, gt, gte, inArray } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
+import { v7 as uuidv7 } from "uuid";
 import { db } from "../../../../db/db";
 import { responses } from "../responses";
 
@@ -34,7 +34,7 @@ export const GET = async () => {
 
 export const POST = async (request: NextRequest) => {
   const { name, treatmentIds } = await request.json();
-  const id = uuidv4();
+  const id = uuidv7();
 
   try {
     await db.transaction(async (tx) => {

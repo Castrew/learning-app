@@ -39,7 +39,7 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
 
   const { setValue, control } = useFormContext();
 
-  const memberAppointments = data?.data?.items.filter((appt: Appointment) => {
+  const memberAppointments = data?.data?.items?.filter((appt: Appointment) => {
     return appt.staffId === selectedMemberId;
   });
 
@@ -99,7 +99,7 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
   };
 
   const isSlotBooked = (time: string) =>
-    !!memberAppointments.find((appt: Appointment) => {
+    !!memberAppointments?.find((appt: Appointment) => {
       const startDateTime = getDateTime(appt.date, appt.start);
       const endDateTime = startDateTime
         .clone()
@@ -116,7 +116,7 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
     });
 
   const checkUserAppointment = (time: string) =>
-    !!userAppointments.find((appt: Appointment) => {
+    !!userAppointments?.find((appt: Appointment) => {
       const startDateTime = getDateTime(appt.date, appt.start);
       const endDateTime = startDateTime
         .clone()

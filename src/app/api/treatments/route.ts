@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { treatmentTable } from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
+import { v7 as uuidv7 } from "uuid";
 import { db } from "../../../../db/db";
 import { responses } from "../responses";
 
@@ -16,7 +16,7 @@ export const GET = async (request: NextRequest) => {
 
 export const POST = async (request: NextRequest) => {
   const { title, duration, price, description } = await request.json();
-  const id = uuidv4();
+  const id = uuidv7();
 
   try {
     const createTreatment = await db

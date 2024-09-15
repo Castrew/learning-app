@@ -31,4 +31,8 @@ export interface RequestTypes {
     date: string;
     start: string;
   };
+  paginatedAppointments: {
+    page: string;
+    pageSize: string;
+  };
 }
