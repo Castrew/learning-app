@@ -39,11 +39,8 @@ export const AppointmentCard = () => {
     >
       {combinedAppointmentsByGroup.map((appt: GroupedAppointment) => {
         return (
-          <Box m={1}>
-            <Card
-              sx={{ width: "300px", minHeight: "200px" }}
-              key={appt.appointmentId}
-            >
+          <Box key={appt.appointmentId} m={1}>
+            <Card sx={{ width: "300px", minHeight: "200px" }}>
               <CardContent>
                 <Typography>Set by:{appt.username}</Typography>
                 <Typography>With:{appt.staffName}</Typography>
