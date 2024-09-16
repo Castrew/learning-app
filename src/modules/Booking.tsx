@@ -38,13 +38,11 @@ export interface FormValues {
 
 const Booking = () => {
   const createAppointment = useCreateAppointment();
-  const { data: allStaff, isLoading: isLoadingAllStaff } = useGetAllStaff();
+  const { data: staffMembers, isLoading: isLoadingAllStaff } = useGetAllStaff();
 
   const [open, setOpen] = useState(false);
   const [memberName, setMemberName] = useState("");
   const [memberTreatments, setMemberTreatments] = useState<Treatment[]>([]);
-
-  const staffMembers = allStaff?.data?.items;
 
   const defaultValues = {
     staffId: "",

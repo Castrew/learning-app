@@ -74,7 +74,7 @@ const CreateUpdateMember = () => {
       createMember.mutate(data, {
         onSuccess: () => {
           toasts.Success("Member created successfully");
-          router.push("/admin/staff");
+          reset();
         },
         onError: (error) => toasts.Error(error),
       });
@@ -111,8 +111,21 @@ const CreateUpdateMember = () => {
           <Controller
             control={control}
             name="name"
-            render={({ field }) => (
-              <TextField {...field} placeholder="Name" fullWidth />
+            rules={{
+              required: "Member name is required",
+              minLength: {
+                value: 2,
+                message: "Password must be at least 2 characters long",
+              },
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <TextField
+                {...field}
+                placeholder="Name"
+                fullWidth
+                error={!!error}
+                helperText={error ? error.message : ""}
+              />
             )}
           />
           <TreatmentsList treatments={treatments} control={control} />

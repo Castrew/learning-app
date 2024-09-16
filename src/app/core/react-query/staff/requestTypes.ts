@@ -20,6 +20,7 @@ export interface RequestTypes {
   };
 
   createStaff: {
+    id?: string;
     name: string;
     treatmentIds: string | string[];
   };

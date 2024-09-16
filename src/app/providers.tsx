@@ -44,7 +44,7 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children, user }: any) {
+export default function Providers({ children, user }) {
   const queryClient = getQueryClient();
   return (
     <ThemeProvider theme={theme}>

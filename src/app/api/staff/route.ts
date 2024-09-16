@@ -5,7 +5,6 @@ import {
   treatmentTable,
 } from "../../../../db/schema";
 import { eq, ne, gt, gte, inArray } from "drizzle-orm";
-import { v7 as uuidv7 } from "uuid";
 import { db } from "../../../../db/db";
 import { responses } from "../responses";
 
@@ -26,15 +25,15 @@ export const GET = async () => {
 
       return { ...staff, treatments };
     });
-    return responses.successResponseList(staffWithTreatments);
+    return Response.json(staffWithTreatments);
   } catch (error) {
     return responses.serverError(error);
   }
 };
 
 export const POST = async (request: NextRequest) => {
-  const { name, treatmentIds } = await request.json();
-  const id = uuidv7();
+  const { id, name, treatmentIds } = await request.json();
+  console.log(id);
 
   try {
     await db.transaction(async (tx) => {
@@ -58,7 +57,7 @@ export const POST = async (request: NextRequest) => {
       .from(treatmentStaffTable)
       .where(eq(treatmentStaffTable.staffId, id));
 
-    return responses.successResponseOneObject({
+    return Response.json({
       ...newStaff[0],
       treatments: assignedTreatments,
     });
