@@ -34,11 +34,11 @@ const MemberCard = () => {
   const [open, setOpen] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<Staff | null>(null);
 
-  const { data, isLoading } = useGetAllStaff();
+  const { data: staff, isLoading } = useGetAllStaff();
   const deleteMember = useDeleteStaff();
   const router = useRouter();
   const pathname = usePathname();
-  const staff = data?.data?.items;
+
   const user = useContext(AuthContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -46,6 +46,7 @@ const MemberCard = () => {
     user?.id === "yvli5wewb2blxy5" && pathname.includes("/admin/staff");
   const showTreatments =
     pathname.includes("/admin/staff") || pathname.includes("/staff");
+  console.log(staff);
 
   const handleDeleteMember = (data: string) => {
     deleteMember.mutate(
@@ -138,7 +139,6 @@ const MemberCard = () => {
                 <DialogContent>
                   <Typography>
                     Are you sure that you want to remove this member?
-                    {member.name}
                   </Typography>
                 </DialogContent>
                 <DialogActions>

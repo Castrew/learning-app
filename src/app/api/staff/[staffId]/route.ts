@@ -32,7 +32,7 @@ export const GET = async (
       assignments.find((assignment) => treatment.id === assignment.treatmentId)
     );
 
-    return responses.successResponseOneObject({
+    return Response.json({
       ...staff[0],
       treatments,
     });
@@ -61,7 +61,7 @@ export const DELETE = async (
       await tx.delete(staffTable).where(eq(staffTable.id, id));
     });
 
-    return responses.successResponseOneObject(staff);
+    return Response.json(staff);
   } catch (error) {
     return responses.serverError(error);
   }
@@ -109,7 +109,7 @@ export const PUT = async (
       .from(treatmentStaffTable)
       .where(eq(treatmentStaffTable.staffId, id));
 
-    return responses.successResponseOneObject({
+    return Response.json({
       ...updatedStaff[0],
       treatments: assignedTreatments,
     });

@@ -4,6 +4,7 @@ import {
 } from "@lukemorales/query-key-factory";
 import { RequestTypes } from "./requestTypes";
 import { APIAxiosInstance } from "@/app/axios/api-axios-instance";
+import { Staff } from "./types";
 
 export const staffKeys = createQueryKeys("staff", {
   allStaff: () => {
