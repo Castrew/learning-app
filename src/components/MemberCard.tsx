@@ -206,15 +206,6 @@ const MemberCard = () => {
           </Card>
         );
       })}
-
-      {isActionAllowed && (
-        <Button
-          sx={{ m: 2, alignSelf: isMobile ? "center" : "end" }}
-          onClick={() => router.push("/admin/staff/create")}
-        >
-          Add member
-        </Button>
-      )}
     </Box>
   );
 };
