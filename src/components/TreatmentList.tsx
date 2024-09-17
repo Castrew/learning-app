@@ -10,10 +10,11 @@ import {
 } from "@mui/material";
 import { Control, Controller, useFormContext } from "react-hook-form";
 import { Treatment } from "@/app/core/react-query/treatments/types";
+import { FormValues } from "@/modules/Booking";
 
 interface TreatmentsListProps {
   treatments: Treatment[];
-  control?: Control;
+  control?: Control<FormValues>;
 }
 
 const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
