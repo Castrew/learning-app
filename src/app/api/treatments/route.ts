@@ -5,10 +5,10 @@ import { v7 as uuidv7 } from "uuid";
 import { db } from "../../../../db/db";
 import { responses } from "../responses";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async (_: NextRequest) => {
   try {
     const allTreatments = await db.select().from(treatmentTable);
-    return responses.successResponseList(allTreatments);
+    return Response.json(allTreatments);
   } catch (error) {
     return responses.serverError(error);
   }
@@ -30,7 +30,7 @@ export const POST = async (request: NextRequest) => {
       .from(treatmentTable)
       .where(eq(treatmentTable.id, createdTreatmentId));
 
-    return responses.successResponseOneObject(newTreatment[0]);
+    return Response.json(newTreatment[0]);
   } catch (error) {
     return responses.serverError(error);
   }

@@ -1,7 +1,44 @@
 export type Appointment = {
-  id?: string;
+  appointmentId: string;
+  userId: string;
+  username: string;
+  treatmentId: string;
+  treatmentTitle: string;
+  treatmentDescription: string;
+  treatmentDuration: string;
   staffId: string;
-  treatmentIds: string[];
+  staffName: string;
+  date: string;
+  start: string;
+  groupId: string;
+};
+
+export type GroupedTreatment = {
+  treatmentId: string;
+  treatmentTitle: string;
+  treatmentDescription: string;
+  treatmentDuration: string;
   date: string;
   start: string;
 };
+export type Pagination = {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+};
+
+export type GroupedAppointment = {
+  appointmentId: string;
+  userId: string;
+  username: string;
+  staffId: string;
+  staffName: string;
+  groupId: string;
+  treatments: GroupedTreatment[];
+};
+
+export interface CombinedAppointmentsResponse {
+  combinedAppointmentsByGroup: GroupedAppointment[];
+  pagination: Pagination;
+}

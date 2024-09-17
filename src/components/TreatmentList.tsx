@@ -8,7 +8,7 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { Control, Controller, useFormContext } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import { Treatment } from "@/app/core/react-query/treatments/types";
 
 interface TreatmentsListProps {

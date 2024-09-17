@@ -3,6 +3,7 @@ import { RequestTypes } from "../requestTypes";
 import { staffMutationsKeys } from "../staffKeys";
 import { Staff } from "../types";
 import { v7 as uuidv7 } from "uuid";
+import { Appointment } from "../../appointments/types";
 
 interface ContextType {
   previousStaffData?: Staff[];
@@ -25,17 +26,15 @@ export const useCreateStaff = () => {
         "allStaff",
         "staff",
       ]);
-      queryClient.setQueryData(["staff", "allStaff", "staff"], (old: any) => [
-        ...old,
-        createdMember,
-      ]);
+      queryClient.setQueryData(
+        ["staff", "allStaff", "staff"],
+        (old: Appointment[]) => [...old, createdMember]
+      );
 
       return { previousStaffData };
     },
     onError: (err, newTodo, context) => {
       if (context?.previousStaffData) {
-        console.log("greshka");
-
         queryClient.setQueryData(
           ["staff", "allStaff", "staff"],
           context.previousStaffData
@@ -43,8 +42,6 @@ export const useCreateStaff = () => {
       }
     },
     onSettled: (_, variables) => {
-      console.log("w krajna smetka");
-
       queryClient.invalidateQueries({
         queryKey: ["staff", "allStaff", "staff"],
       });

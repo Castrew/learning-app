@@ -39,7 +39,7 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
 
   const { setValue, control } = useFormContext();
 
-  const memberAppointments = data?.data?.items?.filter((appt: Appointment) => {
+  const memberAppointments = data?.filter((appt: Appointment) => {
     return appt.staffId === selectedMemberId;
   });
 

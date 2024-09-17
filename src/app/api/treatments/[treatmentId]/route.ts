@@ -4,10 +4,7 @@ import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
 import { responses } from "../../responses";
 
-export const GET = async (
-  request: NextRequest,
-  { params }: { params: { treatmentId: string } }
-) => {
+export const GET = async (_: NextRequest, { params }) => {
   const treatmentId = params.treatmentId;
 
   try {
@@ -16,16 +13,13 @@ export const GET = async (
       .from(treatmentTable)
       .where(eq(treatmentTable.id, treatmentId));
 
-    return responses.successResponseOneObject(oneTreatment);
+    return Response.json(oneTreatment[0]);
   } catch (error) {
     return responses.serverError(error);
   }
 };
 
-export const DELETE = async (
-  _: NextRequest,
-  { params }: { params: { treatmentId: string } }
-) => {
+export const DELETE = async (_: NextRequest, { params }) => {
   const treatmentId = params.treatmentId;
   try {
     const existingTreatment = await db
@@ -39,13 +33,13 @@ export const DELETE = async (
 
     await db.delete(treatmentTable).where(eq(treatmentTable.id, treatmentId));
 
-    return responses.successResponseOneObject(existingTreatment[0]);
+    return Response.json(existingTreatment[0]);
   } catch (error) {
     return responses.serverError(error);
   }
 };
 
-export const PUT = async (request: NextRequest, { params }: any) => {
+export const PUT = async (request: NextRequest, { params }) => {
   const { title, duration, price, description } = await request.json();
   const treatmentId = params.treatmentId;
 

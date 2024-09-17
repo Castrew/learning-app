@@ -15,8 +15,8 @@ const CreateUpdateTreatment: React.FC = () => {
   const updateTreatment = useUpdateTreatment();
   const createTreatment = useCreateTreatment();
   const treatmentId = String(params.treatmentId);
-  const { data, isLoading } = useGetOneTreatment({ treatmentId });
-  const treatment = data?.data[0];
+  const { data: treatment, isLoading } = useGetOneTreatment({ treatmentId });
+
   const router = useRouter();
 
   const defaultValues = {

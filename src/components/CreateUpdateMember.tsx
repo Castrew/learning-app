@@ -9,9 +9,7 @@ import { useCreateStaff } from "@/app/core/react-query/staff/hooks/useCreateStaf
 import { useUpdateStaff } from "@/app/core/react-query/staff/hooks/useUpdateStaff";
 import { useGetOneStaff } from "@/app/core/react-query/staff/hooks/useGetOneStaff";
 import { useRouter } from "next/navigation";
-import { Staff } from "@/app/core/react-query/staff/types";
 import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/useGetAllTreatmets";
-import { Treatment } from "@/app/core/react-query/treatments/types";
 import TreatmentsList from "./TreatmentList";
 import { toasts } from "./Toast";
 
@@ -27,14 +25,11 @@ const CreateUpdateMember = () => {
   const updateMember = useUpdateStaff();
 
   const staffId = String(params?.staffId);
-  const { data: oneMember, isLoading: isOneMemeberLoading } = useGetOneStaff({
+  const { data: member, isLoading: isOneMemeberLoading } = useGetOneStaff({
     staffId,
   });
-  const { data: allTreatments, isLoading: isLoadingAllTreatments } =
+  const { data: treatments, isLoading: isLoadingAllTreatments } =
     useGetAllTreatments();
-
-  const treatments = allTreatments?.data?.items || [];
-  const member: Staff = oneMember?.data;
 
   const memberTreatments = member?.treatments.map((treatment) => {
     return treatment.id;

@@ -150,7 +150,7 @@ export const signOut = async () => {
       sessionCookie.value,
       sessionCookie.attributes
     );
-  } catch (error: any) {
+  } catch (error) {
     return { error: error?.message, status: 500 };
   }
 };

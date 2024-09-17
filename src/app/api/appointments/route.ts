@@ -10,40 +10,7 @@ import { db } from "../../../../db/db";
 import { v7 as uuidv7 } from "uuid";
 import { responses } from "../responses";
 import moment from "moment";
-
-export interface ApptProps {
-  appointmentId: string;
-  userId: string;
-  username: string;
-  treatmentId: string;
-  treatmentTitle: string;
-  treatmentDescription: string;
-  treatmentDuration: string;
-  staffId: string;
-  staffName: string;
-  date: string;
-  start: string;
-  groupId: string;
-}
-
-export type GroupedTreatment = {
-  treatmentId: string;
-  treatmentTitle: string;
-  treatmentDescription: string;
-  treatmentDuration: string;
-  date: string;
-  start: string;
-};
-
-export type GroupedAppointment = {
-  appointmentId: string;
-  userId: string;
-  username: string;
-  staffId: string;
-  staffName: string;
-  groupId: string;
-  treatments: GroupedTreatment[];
-};
+import { combineApptsByGroupId } from "../helper";
 
 const apptQuery = {
   appointmentId: appointmentTable.id,
@@ -109,7 +76,7 @@ export const GET = async (request: NextRequest) => {
         .from(appointmentTable);
       const totalCount = totalCountResult[0].count;
 
-      return responses.successResponseList({
+      return Response.json({
         combinedAppointmentsByGroup,
         pagination: {
           page,
@@ -132,42 +99,11 @@ export const GET = async (request: NextRequest) => {
       if (allAppointments.length === 0) {
         return responses.notFoundError();
       }
-      return responses.successResponseList(allAppointments);
+      return Response.json(allAppointments);
     }
   } catch (error) {
     return responses.serverError(error);
   }
-};
-
-const combineApptsByGroupId = (appointments: ApptProps[]) => {
-  const groupedAppointments: { [key: string]: GroupedAppointment } = {};
-
-  appointments.forEach((app) => {
-    const groupId = app.groupId;
-
-    if (!groupedAppointments[groupId]) {
-      groupedAppointments[groupId] = {
-        appointmentId: app.appointmentId,
-        userId: app.userId,
-        username: app.username,
-        staffId: app.staffId,
-        staffName: app.staffName,
-        groupId: app.groupId,
-        treatments: [],
-      };
-    }
-
-    groupedAppointments[groupId].treatments.push({
-      treatmentId: app.treatmentId,
-      treatmentTitle: app.treatmentTitle,
-      treatmentDescription: app.treatmentDescription,
-      treatmentDuration: app.treatmentDuration,
-      date: app.date,
-      start: app.start,
-    });
-  });
-
-  return Object.values(groupedAppointments);
 };
 
 export const POST = async (request: NextRequest) => {
@@ -183,26 +119,24 @@ export const POST = async (request: NextRequest) => {
 
   try {
     const treatments = await db.select().from(treatmentTable);
-    await db.transaction(async (tx) => {
-      for (const treatmentId of treatmentIds) {
-        const id = uuidv7();
-        await tx.insert(appointmentTable).values({
-          id,
-          userId,
-          treatmentId,
-          staffId,
-          date,
-          start: newStart.format("HH:mm"),
-          groupId, // Assign group ID to each appointment
-        });
-        const treatmentInfo = treatments.find(
-          (treatment) => treatment.id === treatmentId
-        );
-        if (treatmentInfo) {
-          newStart.add(treatmentInfo.duration, "minute");
-        }
+    for (const treatmentId of treatmentIds) {
+      const id = uuidv7();
+      await db.insert(appointmentTable).values({
+        id,
+        userId,
+        treatmentId,
+        staffId,
+        date,
+        start: newStart.format("HH:mm"),
+        groupId, // Assign group ID to each appointment
+      });
+      const treatmentInfo = treatments.find(
+        (treatment) => treatment.id === treatmentId
+      );
+      if (treatmentInfo) {
+        newStart.add(treatmentInfo.duration, "minute");
       }
-    });
+    }
 
     // Fetch and return the newly created appointments
     const createdAppointments = await db

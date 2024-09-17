@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createQueryString } from "@/app/helper/createURLqueryString";
-import { GroupedAppointment } from "@/app/api/appointments/route";
+import { GroupedAppointment } from "@/app/core/react-query/appointments/types";
 
 export const AppointmentCard = () => {
   const searchParams = useSearchParams();
@@ -37,7 +37,7 @@ export const AppointmentCard = () => {
       flexDirection="row"
       alignItems="center"
     >
-      {combinedAppointmentsByGroup.map((appt: GroupedAppointment) => {
+      {combinedAppointmentsByGroup.map((appt) => {
         return (
           <Box key={appt.appointmentId} m={1}>
             <Card sx={{ width: "300px", minHeight: "200px" }}>
