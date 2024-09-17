@@ -27,14 +27,11 @@ const CreateUpdateMember = () => {
   const updateMember = useUpdateStaff();
 
   const staffId = String(params?.staffId);
-  const { data: oneMember, isLoading: isOneMemeberLoading } = useGetOneStaff({
+  const { data: member, isLoading: isOneMemeberLoading } = useGetOneStaff({
     staffId,
   });
-  const { data: allTreatments, isLoading: isLoadingAllTreatments } =
+  const { data: treatments, isLoading: isLoadingAllTreatments } =
     useGetAllTreatments();
-
-  const treatments = allTreatments?.data?.items || [];
-  const member: Staff = oneMember?.data;
 
   const memberTreatments = member?.treatments.map((treatment) => {
     return treatment.id;

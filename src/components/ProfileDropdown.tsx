@@ -16,7 +16,7 @@ const ProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
 
-  const handleClick = (event: any) => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 

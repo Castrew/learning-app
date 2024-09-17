@@ -8,7 +8,7 @@ import { eq, ne, gt, gte, inArray } from "drizzle-orm";
 import { db } from "../../../../db/db";
 import { responses } from "../responses";
 
-export const GET = async () => {
+export const GET = async (_: NextRequest) => {
   try {
     const allStaff = await db.select().from(staffTable);
     const allAssignments = await db.select().from(treatmentStaffTable);
@@ -33,7 +33,6 @@ export const GET = async () => {
 
 export const POST = async (request: NextRequest) => {
   const { id, name, treatmentIds } = await request.json();
-  console.log(id);
 
   try {
     await db.transaction(async (tx) => {

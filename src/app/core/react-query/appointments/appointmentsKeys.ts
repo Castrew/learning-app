@@ -11,6 +11,7 @@ export const appointmentsKeys = createQueryKeys("appointments", {
       queryKey: ["appointments"],
       queryFn: async () => {
         const { data } = await APIAxiosInstance.get("/appointments");
+
         return data;
       },
     };
@@ -25,7 +26,7 @@ export const appointmentsKeys = createQueryKeys("appointments", {
         const { data } = await APIAxiosInstance.get(
           `/appointments?page=${page}&pageSize=${pageSize}`
         );
-        return data.data.items;
+        return data;
       },
     };
   },

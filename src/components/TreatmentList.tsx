@@ -13,7 +13,7 @@ import { Treatment } from "@/app/core/react-query/treatments/types";
 
 interface TreatmentsListProps {
   treatments: Treatment[];
-  control?: Control<any>;
+  control?: Control;
 }
 
 const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {

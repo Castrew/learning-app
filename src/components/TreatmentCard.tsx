@@ -26,9 +26,8 @@ type treatmentProps = {
 export const TreatmentCard = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { data, isLoading } = useGetAllTreatments();
+  const { data: treatments, isLoading } = useGetAllTreatments();
   const deleteTreatment = useDeleteTreatment();
-  const treatments = data?.data?.items;
   const user = useContext(AuthContext);
   const isActionAllowed =
     user?.id === "yvli5wewb2blxy5" && pathname.includes("/admin");

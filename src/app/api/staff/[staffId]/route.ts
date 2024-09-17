@@ -9,7 +9,7 @@ import { db } from "../../../../../db/db";
 import { responses } from "../../responses";
 
 export const GET = async (
-  request: NextRequest,
+  _: NextRequest,
   { params }: { params: { staffId: string } }
 ) => {
   const id = params.staffId;
@@ -42,7 +42,7 @@ export const GET = async (
 };
 
 export const DELETE = async (
-  request: NextRequest,
+  _: NextRequest,
   { params }: { params: { staffId: string } }
 ) => {
   const id = params.staffId;
