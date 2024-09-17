@@ -17,7 +17,10 @@ interface TreatmentsListProps {
   control?: Control<FormValues>;
 }
 
-const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
+const TreatmentsList: React.FC<TreatmentsListProps> = ({
+  treatments,
+  control,
+}) => {
   const midIndex = Math.ceil(treatments.length / 2);
   const firstColumn = treatments.slice(0, midIndex);
   const secondColumn = treatments.slice(midIndex);
