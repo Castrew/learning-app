@@ -79,6 +79,8 @@ const Booking = () => {
   );
 
   const onSubmit = formContext.handleSubmit((data) => {
+    console.log(data);
+
     createAppointment.mutate(data, {
       onSuccess: () => {
         toasts.Success("Your appointment has been set!");
@@ -135,6 +137,7 @@ const Booking = () => {
               />
             )}
             <Button
+              id="appointment-confirmation-modal"
               sx={{
                 height: "50px",
                 px: 4,
@@ -212,6 +215,7 @@ const Booking = () => {
                     Close modal
                   </Button>
                   <Button
+                    id="submit-appointment-button"
                     sx={{ borderRadius: "20px" }}
                     variant="contained"
                     onClick={onSubmit}

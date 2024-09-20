@@ -45,6 +45,7 @@ const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
               key={member.id}
             >
               <Image
+                id={`member-${index}`}
                 onClick={() => {
                   handleMemberChange(member);
                 }}

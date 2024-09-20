@@ -37,6 +37,7 @@ export const HomePage = () => {
           }}
         >
           <Typography
+            id="company-name"
             sx={{
               fontFamily: "cursive",
               fontSize: isMobile ? "48px" : "64px",
@@ -72,6 +73,7 @@ export const HomePage = () => {
         </Box>
       </Box>
       <Typography
+        id="first-paragraph"
         sx={{
           pt: 5,
           maxWidth: "600px",
