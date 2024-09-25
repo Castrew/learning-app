@@ -36,7 +36,7 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
       >
         <Box sx={{ width: 200, padding: "8px" }}>
           <FormGroup>
-            {firstColumn.map((treatment: Treatment) => (
+            {firstColumn.map((treatment: Treatment, index) => (
               <Controller
                 key={treatment.id}
                 name="treatmentIds"
@@ -45,6 +45,7 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
                   <FormControlLabel
                     control={
                       <Checkbox
+                        id={`treatment-${index}`}
                         checked={field.value.includes(treatment.id)}
                         sx={{
                           "&.Mui-checked": {

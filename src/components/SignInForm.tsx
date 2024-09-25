@@ -57,6 +57,7 @@ export const SignInForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box display="flex" flexDirection="column">
             <TextField
+              id="sign-in-username-input"
               sx={{ mb: 2 }}
               label="Username"
               fullWidth
@@ -83,6 +84,7 @@ export const SignInForm = () => {
               }}
               render={({ field, fieldState: { error } }) => (
                 <TextField
+                  id="sign-in-password-input"
                   {...field}
                   label="Password"
                   type="password"
@@ -96,6 +98,7 @@ export const SignInForm = () => {
             <Typography color="error">{error}</Typography>
             <Box display="flex" justifyContent="space-between" mt={2}>
               <Button
+                id="sign-up-page-button"
                 variant="outlined"
                 color="primary"
                 size="large"
@@ -104,6 +107,7 @@ export const SignInForm = () => {
                 Register
               </Button>
               <Button
+                id="submit-sign-in-button"
                 variant="contained"
                 color="primary"
                 size="large"

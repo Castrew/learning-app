@@ -66,6 +66,7 @@ export const SignUpForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField
+              id="sign-up-username-input"
               label="Username"
               fullWidth
               variant="outlined"
@@ -91,6 +92,7 @@ export const SignUpForm = () => {
               }}
               render={({ field, fieldState: { error } }) => (
                 <TextField
+                  id="sign-up-password-input"
                   {...field}
                   label="Password"
                   type="password"
@@ -111,6 +113,7 @@ export const SignUpForm = () => {
               }}
               render={({ field, fieldState: { error } }) => (
                 <TextField
+                  id="sign-up-confirmPassword-input"
                   {...field}
                   label="Confirm Password"
                   type="password"
@@ -132,6 +135,7 @@ export const SignUpForm = () => {
                 Sign In
               </Button>
               <Button
+                id="submit-register-button"
                 type="submit"
                 variant="contained"
                 color="primary"
