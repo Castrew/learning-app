@@ -185,6 +185,7 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
               render={({ field }) => (
                 <Box>
                   <Button
+                    id={day}
                     disabled={!selectedMemberId || isDatePassed}
                     variant={isDaySelected}
                     onClick={() => {
@@ -207,7 +208,11 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
           );
         })}
         <Tooltip title="Next week">
-          <IconButton sx={{ width: "50px" }} onClick={() => changeWeek(1)}>
+          <IconButton
+            id="next-week-button"
+            sx={{ width: "50px" }}
+            onClick={() => changeWeek(1)}
+          >
             <ArrowCircleRightOutlinedIcon fontSize="large" />
           </IconButton>
         </Tooltip>
@@ -255,6 +260,7 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
                     sx={{ borderRadius: "16px", alignItems: "center" }}
                   >
                     <Button
+                      id="time-button"
                       fullWidth
                       disabled={isBooked || !ifFits || isBeforeNow}
                       sx={{ fontSize: 24, borderRadius: "16px" }}

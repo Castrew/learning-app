@@ -29,6 +29,7 @@ const NavBar = () => {
           Home
         </Button>
         <Button
+          id="navbar-appointment-button"
           variant="contained"
           size="large"
           color="error"

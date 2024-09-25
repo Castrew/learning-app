@@ -12,6 +12,7 @@ export const toasts = {
       progress: undefined,
       theme: "colored",
       transition: Bounce,
+      toastId: "success-toast",
     });
   },
   Error: (message: string) => {
