@@ -11,8 +11,6 @@ This is a learning project for building a simple web app to schedule appointment
 - Installation
 - Docker Setup
 - Running Locally
-- Contributing
-- Contact
 
 ## Features
 
