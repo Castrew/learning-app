@@ -85,6 +85,22 @@ export const GET = async (request: NextRequest) => {
           totalPages: Math.ceil(uniqueGroupIds.length / pageSize),
         },
       });
+    } else if (searchParams.get("userId") !== null) {
+      const userId = searchParams.get("userId");
+      const userAppts = await db
+        .select(apptQuery)
+        .from(appointmentTable)
+        .innerJoin(userTable, eq(appointmentTable.userId, userTable.id))
+        .innerJoin(
+          treatmentTable,
+          eq(appointmentTable.treatmentId, treatmentTable.id)
+        )
+        .innerJoin(staffTable, eq(appointmentTable.staffId, staffTable.id))
+        .where(eq(appointmentTable.userId, userId));
+
+      const combinedUserAppointments = combineApptsByGroupId(userAppts);
+
+      return Response.json(combinedUserAppointments);
     } else {
       const allAppointments = await db
         .select(apptQuery)

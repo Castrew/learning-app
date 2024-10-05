@@ -11,7 +11,6 @@ export const appointmentsKeys = createQueryKeys("appointments", {
       queryKey: ["appointments"],
       queryFn: async () => {
         const { data } = await APIAxiosInstance.get("/appointments");
-
         return data;
       },
     };
@@ -25,6 +24,17 @@ export const appointmentsKeys = createQueryKeys("appointments", {
       queryFn: async () => {
         const { data } = await APIAxiosInstance.get(
           `/appointments?page=${page}&pageSize=${pageSize}`
+        );
+        return data;
+      },
+    };
+  },
+  userAppointments: ({ userId }: RequestTypes["getUserAppointments"]) => {
+    return {
+      queryKey: [userId],
+      queryFn: async () => {
+        const { data } = await APIAxiosInstance.get(
+          `/appointments?userId=${userId}`
         );
         return data;
       },
@@ -45,21 +55,26 @@ export const appointmentsMutationsKeys = createMutationKeys("appointments", {
   deleteUser: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["deleteAppointment"]) => {
-      const { data } = await APIAxiosInstance.delete(`/users/${payload.id}`);
+      const { data } = await APIAxiosInstance.delete(
+        `/appointments/${payload.id}`
+      );
       return data;
     },
   },
-  // updateUser: {
-  //   mutationKey: null,
-  //   mutationFn: async ({
-  //     userId,
-  //     ...rest
-  //   }: RequestTypes["updateAppointment"]) => {
-  //     const { data } = await APIAxiosInstance.put(`/users/${userId}`, rest);
+  updateAppointment: {
+    mutationKey: null,
+    mutationFn: async ({
+      apptId,
+      ...rest
+    }: RequestTypes["updateAppointment"]) => {
+      const { data } = await APIAxiosInstance.put(
+        `/appointments/${apptId}`,
+        rest
+      );
 
-  //     return data;
-  //   },
-  // },
+      return data;
+    },
+  },
   createAppointment: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["createAppointment"]) => {
