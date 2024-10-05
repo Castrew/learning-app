@@ -1,24 +1,24 @@
 "use client";
 
-import { Box, Card, IconButton, Link, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  IconButton,
+  Link,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/providers/AuthProvider";
 import { useGetUserAppointments } from "../core/react-query/appointments/hooks/useGetUserAppointments";
-import {
-  GroupedAppointment,
-  GroupedTreatment,
-} from "../core/react-query/appointments/types";
+import { GroupedAppointment } from "../core/react-query/appointments/types";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Switch from "@mui/material/Switch";
 import { useRouter } from "next/navigation";
 import { useUpdateAppointment } from "../core/react-query/appointments/hooks/useUpdateAppointment";
 import { toasts } from "@/components/Toast";
-
-// type DataProps = {
-//   groupId: string;
-//   treatmentId: string;
-//   apptId: string;
-// };
+import { useDeleteAppointmentGroup } from "../core/react-query/appointments/hooks/useDeleteAppointmentGroup";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const MyAppointmentsPage = () => {
   const user = useContext(AuthContext);
@@ -28,14 +28,21 @@ const MyAppointmentsPage = () => {
   const { data: userAppts, isLoading } = useGetUserAppointments({
     userId: user.id,
   });
+  const deleteAppointmentGroup = useDeleteAppointmentGroup();
 
-  const test = (apptId, groupId, treatmentId) => {
+  const handleUpdateAppointment = (apptId, groupId, treatmentId) => {
     updateAppointment.mutate(
       { apptId, groupId, treatmentId },
       {
         onSuccess: () => toasts.Success("You removed this succesfully"),
       }
     );
+  };
+
+  const handleDeleteGroupAppt = (data: { apptId: string }) => {
+    deleteAppointmentGroup.mutate(data, {
+      onSuccess: () => toasts.Success("Group appointment removed successfuly"),
+    });
   };
 
   if (isLoading) {
@@ -56,7 +63,13 @@ const MyAppointmentsPage = () => {
       <Box display="flex" flexWrap="wrap" mt={2} gap={1}>
         {userAppts?.map((appt: GroupedAppointment) => {
           return (
-            <Card sx={{ p: 2, width: "calc((100vw - 36px)/ 3) " }}>
+            <Card
+              sx={{
+                p: 2,
+                width: "calc((100vw - 36px)/ 3) ",
+                position: "relative",
+              }}
+            >
               <Typography>Set with: {appt.staffName}</Typography>
               <Typography>Date: {appt.treatments[0].date}</Typography>
               <Typography fontWeight="bold">Treatments</Typography>
@@ -64,17 +77,19 @@ const MyAppointmentsPage = () => {
                 return (
                   <Box display="flex" flexDirection="row">
                     {edit && (
-                      <IconButton
-                        onClick={() =>
-                          test(
-                            treatment.appointmentId,
-                            appt.groupId,
-                            treatment.treatmentId
-                          )
-                        }
-                      >
-                        <RemoveCircleOutlineIcon color="error" />
-                      </IconButton>
+                      <Tooltip title="Remove Treatment">
+                        <IconButton
+                          onClick={() =>
+                            handleUpdateAppointment(
+                              treatment.appointmentId,
+                              appt.groupId,
+                              treatment.treatmentId
+                            )
+                          }
+                        >
+                          <RemoveCircleOutlineIcon color="error" />
+                        </IconButton>
+                      </Tooltip>
                     )}
                     <Typography ml={1}>
                       {treatment.treatmentTitle} at {treatment.start}
@@ -82,6 +97,20 @@ const MyAppointmentsPage = () => {
                   </Box>
                 );
               })}
+              {edit && (
+                <Tooltip title="Delete Appointment Group">
+                  <IconButton
+                    sx={{ position: "absolute", top: 0, right: 0 }}
+                    onClick={() =>
+                      handleDeleteGroupAppt({
+                        apptId: appt.treatments[0].appointmentId,
+                      })
+                    }
+                  >
+                    <DeleteIcon color="error" />
+                  </IconButton>
+                </Tooltip>
+              )}
             </Card>
           );
         })}

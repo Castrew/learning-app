@@ -52,12 +52,12 @@ export const appointmentsKeys = createQueryKeys("appointments", {
 });
 
 export const appointmentsMutationsKeys = createMutationKeys("appointments", {
-  deleteUser: {
+  deleteAppointment: {
     mutationKey: null,
-    mutationFn: async (payload: RequestTypes["deleteAppointment"]) => {
-      const { data } = await APIAxiosInstance.delete(
-        `/appointments/${payload.id}`
-      );
+    mutationFn: async ({ apptId }: RequestTypes["deleteAppointmentGroup"]) => {
+      console.log(apptId);
+
+      const { data } = await APIAxiosInstance.delete(`/appointments/${apptId}`);
       return data;
     },
   },

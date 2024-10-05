@@ -34,21 +34,20 @@ export const GET = async (request: NextRequest) => {
   }
 };
 
-export const DELETE = async (request: NextRequest) => {
-  const { groupId } = await request.json();
+export const DELETE = async (request: NextRequest, { params }) => {
+  const apptId = params.appointmentId;
 
   try {
-    const appointment = await db
+    const findGroup = await db
       .select()
       .from(appointmentTable)
-      .where(eq(appointmentTable.groupId, groupId));
-    await db.transaction(async (tx) => {
-      await tx
-        .delete(appointmentTable)
-        .where(eq(appointmentTable.groupId, groupId));
-    });
+      .where(eq(appointmentTable.id, apptId));
 
-    return responses.successResponseOneObject(appointment);
+    await db
+      .delete(appointmentTable)
+      .where(eq(appointmentTable.groupId, findGroup[0].groupId));
+
+    return Response.json(findGroup);
   } catch (error) {
     return responses.serverError(error);
   }

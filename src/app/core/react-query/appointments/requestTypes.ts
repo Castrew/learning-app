@@ -32,4 +32,7 @@ export interface RequestTypes {
     page: string;
     pageSize: string;
   };
+  deleteAppointmentGroup: {
+    apptId: string;
+  };
 }
