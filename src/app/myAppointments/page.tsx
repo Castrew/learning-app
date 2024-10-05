@@ -26,7 +26,7 @@ const MyAppointmentsPage = () => {
   const updateAppointment = useUpdateAppointment();
   const router = useRouter();
   const { data: userAppts, isLoading } = useGetUserAppointments({
-    userId: user.id,
+    userId: user?.id,
   });
   const deleteAppointmentGroup = useDeleteAppointmentGroup();
 
@@ -45,7 +45,7 @@ const MyAppointmentsPage = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return "Loading...";
   }
 
