@@ -11,18 +11,12 @@ import {
 } from "@mui/material";
 import { signOut } from "../../actions/auth.actions";
 import { useRouter } from "next/navigation";
+import LogoutIcon from "@mui/icons-material/Logout";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const ProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Box>
@@ -31,7 +25,9 @@ const ProfileDropdown = () => {
         aria-label="profile"
         aria-controls="profile-menu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={(event) => {
+          setAnchorEl(event.currentTarget);
+        }}
       >
         <Avatar alt="Profile" />
       </IconButton>
@@ -40,15 +36,30 @@ const ProfileDropdown = () => {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={() => {
+          setAnchorEl(null);
+        }}
       >
         <MenuItem
           onClick={() => {
+            setAnchorEl(null);
+            router.push("/myAppointments");
+          }}
+        >
+          <CalendarMonthIcon />
+          <Typography ml={1}>My appointments</Typography>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
             signOut();
             router.push("/sign-in");
           }}
         >
-          <Typography color="error">Sign out</Typography>
+          <LogoutIcon color="error" />
+          <Typography ml={1} color="error">
+            Sign out
+          </Typography>
         </MenuItem>
       </Menu>
     </Box>

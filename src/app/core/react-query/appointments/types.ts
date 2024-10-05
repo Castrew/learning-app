@@ -14,6 +14,7 @@ export type Appointment = {
 };
 
 export type GroupedTreatment = {
+  appointmentId: string;
   treatmentId: string;
   treatmentTitle: string;
   treatmentDescription: string;
@@ -29,7 +30,6 @@ export type Pagination = {
 };
 
 export type GroupedAppointment = {
-  appointmentId: string;
   userId: string;
   username: string;
   staffId: string;

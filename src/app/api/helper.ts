@@ -1,3 +1,4 @@
+import moment from "moment";
 import {
   Appointment,
   GroupedAppointment,
@@ -11,7 +12,6 @@ export const combineApptsByGroupId = (appointments: Appointment[]) => {
 
     if (!groupedAppointments[groupId]) {
       groupedAppointments[groupId] = {
-        appointmentId: app.appointmentId,
         userId: app.userId,
         username: app.username,
         staffId: app.staffId,
@@ -22,6 +22,7 @@ export const combineApptsByGroupId = (appointments: Appointment[]) => {
     }
 
     groupedAppointments[groupId].treatments.push({
+      appointmentId: app.appointmentId,
       treatmentId: app.treatmentId,
       treatmentTitle: app.treatmentTitle,
       treatmentDescription: app.treatmentDescription,
@@ -32,4 +33,20 @@ export const combineApptsByGroupId = (appointments: Appointment[]) => {
   });
 
   return Object.values(groupedAppointments);
+};
+
+export const findEarliestAppointment = (appointments) => {
+  return appointments.reduce((earliest, current) => {
+    const earliestDateTime = moment(
+      `${earliest.date} ${earliest.start}`,
+      "MM-DD-YYYY HH:mm"
+    );
+    const currentDateTime = moment(
+      `${current.date} ${current.start}`,
+      "MM-DD-YYYY HH:mm"
+    );
+
+    // If the current appointment is earlier, update the earliest appointment
+    return currentDateTime.isBefore(earliestDateTime) ? current : earliest;
+  });
 };

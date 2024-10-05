@@ -1,6 +1,6 @@
 import { Selector } from "testcafe";
 
-fixture`register`;
+fixture`Sign In`;
 
 test.page`http://localhost:3000`("test1", async (t) => {
   await t.typeText(Selector("#sign-in-username-input"), "sexfactor");

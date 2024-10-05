@@ -3,10 +3,14 @@ import {
   userTable,
   appointmentTable,
   treatmentTable,
+  staffTable,
 } from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
 import { responses } from "../../responses";
+import moment from "moment";
+import { findEarliestAppointment } from "../../helper";
+import { v7 as uuidv7 } from "uuid";
 
 const queryAppointment = {};
 
@@ -30,61 +34,75 @@ export const GET = async (request: NextRequest) => {
   }
 };
 
-export const DELETE = async (request: NextRequest) => {
-  const { groupId } = await request.json();
+export const DELETE = async (request: NextRequest, { params }) => {
+  const apptId = params.appointmentId;
 
   try {
-    const appointment = await db
+    const findGroup = await db
       .select()
       .from(appointmentTable)
-      .where(eq(appointmentTable.groupId, groupId));
-    await db.transaction(async (tx) => {
-      await tx
-        .delete(appointmentTable)
-        .where(eq(appointmentTable.groupId, groupId));
-    });
+      .where(eq(appointmentTable.id, apptId));
 
-    return responses.successResponseOneObject(appointment);
+    await db
+      .delete(appointmentTable)
+      .where(eq(appointmentTable.groupId, findGroup[0].groupId));
+
+    return Response.json(findGroup);
   } catch (error) {
     return responses.serverError(error);
   }
 };
 
 export const PUT = async (request: NextRequest) => {
-  const { groupId, appointments } = await request.json();
+  const { groupId, treatmentId } = await request.json();
 
   try {
-    // Start a transaction to ensure all updates are performed together
-    await db.transaction(async (tx) => {
-      // First, delete existing appointments in the group to avoid duplications
-      await tx
-        .delete(appointmentTable)
-        .where(eq(appointmentTable.groupId, groupId));
-
-      // Then, reinsert the updated appointments with the same groupId
-      for (const appointment of appointments) {
-        const { id, userId, treatmentId, staffId, date, start, duration } =
-          appointment;
-
-        await tx.insert(appointmentTable).values({
-          id: id,
-          userId,
-          treatmentId,
-          staffId,
-          date,
-          start,
-          groupId, // Ensure the group ID remains consistent
-        });
-      }
-    });
-
-    // Fetch and return the updated appointments
-    const updatedAppointments = await db
+    const oldGroupAppt = await db
       .select()
       .from(appointmentTable)
       .where(eq(appointmentTable.groupId, groupId));
 
-    return responses.successResponseList(updatedAppointments);
+    const treatmentIds = oldGroupAppt
+      .filter((appt) => appt.treatmentId !== treatmentId)
+      .map((appt) => appt.treatmentId);
+
+    const earliestAppointment = findEarliestAppointment(oldGroupAppt);
+
+    const treatments = await db.select().from(treatmentTable);
+
+    await db
+      .delete(appointmentTable)
+      .where(eq(appointmentTable.groupId, groupId));
+
+    let newStart = moment()
+      .hour(Number(earliestAppointment.start.split(":")[0]))
+      .minute(Number(earliestAppointment.start.split(":")[1]));
+
+    for (const treatmentId of treatmentIds) {
+      const id = uuidv7();
+      await db.insert(appointmentTable).values({
+        id,
+        userId: earliestAppointment.userId,
+        treatmentId,
+        staffId: earliestAppointment.staffId,
+        date: earliestAppointment.date,
+        start: newStart.format("HH:mm"),
+        groupId,
+      });
+      const treatmentInfo = treatments.find(
+        (treatment) => treatment.id === treatmentId
+      );
+      if (treatmentInfo) {
+        newStart.add(treatmentInfo.duration, "minute");
+      }
+    }
+
+    const updatedAppt = await db
+      .select()
+      .from(appointmentTable)
+      .where(eq(appointmentTable.groupId, groupId));
+
+    return Response.json(updatedAppt[0]);
   } catch (error) {
     return responses.serverError(error);
   }

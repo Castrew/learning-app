@@ -11,7 +11,6 @@ export const appointmentsKeys = createQueryKeys("appointments", {
       queryKey: ["appointments"],
       queryFn: async () => {
         const { data } = await APIAxiosInstance.get("/appointments");
-
         return data;
       },
     };
@@ -30,6 +29,17 @@ export const appointmentsKeys = createQueryKeys("appointments", {
       },
     };
   },
+  userAppointments: ({ userId }: RequestTypes["getUserAppointments"]) => {
+    return {
+      queryKey: [userId],
+      queryFn: async () => {
+        const { data } = await APIAxiosInstance.get(
+          `/appointments?userId=${userId}`
+        );
+        return data;
+      },
+    };
+  },
   // oneAppointment: ({ id }) => {
   //   return {
   //     queryKey: [id],
@@ -42,24 +52,29 @@ export const appointmentsKeys = createQueryKeys("appointments", {
 });
 
 export const appointmentsMutationsKeys = createMutationKeys("appointments", {
-  deleteUser: {
+  deleteAppointment: {
     mutationKey: null,
-    mutationFn: async (payload: RequestTypes["deleteAppointment"]) => {
-      const { data } = await APIAxiosInstance.delete(`/users/${payload.id}`);
+    mutationFn: async ({ apptId }: RequestTypes["deleteAppointmentGroup"]) => {
+      console.log(apptId);
+
+      const { data } = await APIAxiosInstance.delete(`/appointments/${apptId}`);
       return data;
     },
   },
-  // updateUser: {
-  //   mutationKey: null,
-  //   mutationFn: async ({
-  //     userId,
-  //     ...rest
-  //   }: RequestTypes["updateAppointment"]) => {
-  //     const { data } = await APIAxiosInstance.put(`/users/${userId}`, rest);
+  updateAppointment: {
+    mutationKey: null,
+    mutationFn: async ({
+      apptId,
+      ...rest
+    }: RequestTypes["updateAppointment"]) => {
+      const { data } = await APIAxiosInstance.put(
+        `/appointments/${apptId}`,
+        rest
+      );
 
-  //     return data;
-  //   },
-  // },
+      return data;
+    },
+  },
   createAppointment: {
     mutationKey: null,
     mutationFn: async (payload: RequestTypes["createAppointment"]) => {

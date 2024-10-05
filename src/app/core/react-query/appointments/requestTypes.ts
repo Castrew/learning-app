@@ -8,8 +8,8 @@ export interface RequestTypes {
     selectedDuration?: string;
   };
 
-  getOneAppointment: {
-    id: string;
+  getUserAppointments: {
+    userId: string;
   };
 
   deleteAppointment: {
@@ -17,12 +17,9 @@ export interface RequestTypes {
   };
 
   updateAppointment: {
-    id: string;
-    selectedMember?: string;
-    selectedTreatmentsIds?: string[];
-    selectedDate?: string;
-    selectedTime?: string;
-    selectedDuration?: string;
+    apptId: string;
+    groupId: string;
+    treatmentId: string;
   };
 
   createAppointment: {
@@ -34,5 +31,8 @@ export interface RequestTypes {
   paginatedAppointments: {
     page: string;
     pageSize: string;
+  };
+  deleteAppointmentGroup: {
+    apptId: string;
   };
 }

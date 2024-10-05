@@ -37,9 +37,9 @@ export const AppointmentCard = () => {
       flexDirection="row"
       alignItems="center"
     >
-      {combinedAppointmentsByGroup.map((appt) => {
+      {combinedAppointmentsByGroup.map((appt, index) => {
         return (
-          <Box key={appt.appointmentId} m={1}>
+          <Box key={appt.treatments[index].appointmentId} m={1}>
             <Card sx={{ width: "300px", minHeight: "200px" }}>
               <CardContent>
                 <Typography>Set by:{appt.username}</Typography>
