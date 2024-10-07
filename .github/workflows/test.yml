@@ -1,0 +1,60 @@
+name: ('Run Tests with MySQL')
+
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7     
+
+        ports:
+          - 3306:3306        
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+        env:
+          MYSQL_ROOT_PASSWORD: password    
+          MYSQL_DATABASE: learning_app       
+          MYSQL_USER: root
+
+    env:
+      DATABASE_URL: mysql://test_user:password@localhost:3306/test_db
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h localhost -u test_user --password=password; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
+
+      - name: Generate DB
+        run: npm run db:generate  
+
+      - name: Run migrations
+        run: npm run db:migrate  
+
+    
+      - name: Run tests
+        run: npm signUpTest
