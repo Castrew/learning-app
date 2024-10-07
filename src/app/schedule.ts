@@ -26,3 +26,5 @@ export const WORKING_DAYS = [
   "Thursday",
   "Friday",
 ];
+
+export const DURATION_TIME = ["30", "60", "90", "120", "150", "180"];
