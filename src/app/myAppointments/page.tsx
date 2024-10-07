@@ -57,11 +57,15 @@ const MyAppointmentsPage = () => {
         </Typography>
         <Box display="flex">
           <Typography mt={1}>Edit mode</Typography>
-          <Switch checked={edit} onChange={() => setEdit(!edit)} />
+          <Switch
+            id="appointment-edit-switch"
+            checked={edit}
+            onChange={() => setEdit(!edit)}
+          />
         </Box>
       </Box>
       <Box display="flex" flexWrap="wrap" mt={2} gap={1}>
-        {userAppts?.map((appt: GroupedAppointment) => {
+        {userAppts?.map((appt: GroupedAppointment, index) => {
           return (
             <Card
               sx={{
@@ -73,12 +77,13 @@ const MyAppointmentsPage = () => {
               <Typography>Set with: {appt.staffName}</Typography>
               <Typography>Date: {appt.treatments[0].date}</Typography>
               <Typography fontWeight="bold">Treatments</Typography>
-              {appt.treatments.map((treatment) => {
+              {appt.treatments.map((treatment, index) => {
                 return (
                   <Box display="flex" flexDirection="row">
                     {edit && (
                       <Tooltip title="Remove Treatment">
                         <IconButton
+                          id={`delete-treatment-${index}`}
                           onClick={() =>
                             handleUpdateAppointment(
                               treatment.appointmentId,
@@ -100,6 +105,7 @@ const MyAppointmentsPage = () => {
               {edit && (
                 <Tooltip title="Delete Appointment Group">
                   <IconButton
+                    id={`delete-appointment-${index}`}
                     sx={{ position: "absolute", top: 0, right: 0 }}
                     onClick={() =>
                       handleDeleteGroupAppt({

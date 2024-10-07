@@ -21,6 +21,7 @@ const ProfileDropdown = () => {
   return (
     <Box>
       <IconButton
+        id="profile-dropdown"
         edge="end"
         aria-label="profile"
         aria-controls="profile-menu"
@@ -32,7 +33,7 @@ const ProfileDropdown = () => {
         <Avatar alt="Profile" />
       </IconButton>
       <Menu
-        id="profile-menu"
+        id="profile-dropdown-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
@@ -41,6 +42,7 @@ const ProfileDropdown = () => {
         }}
       >
         <MenuItem
+          id="profile-dropdown-option"
           onClick={() => {
             setAnchorEl(null);
             router.push("/myAppointments");
@@ -50,6 +52,7 @@ const ProfileDropdown = () => {
           <Typography ml={1}>My appointments</Typography>
         </MenuItem>
         <MenuItem
+          id="profile-dropdown-option"
           onClick={() => {
             setAnchorEl(null);
             signOut();

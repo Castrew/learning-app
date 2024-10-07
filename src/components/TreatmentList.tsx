@@ -45,7 +45,7 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        id={`treatment-${index}`}
+                        id={`treatment-col1-${index}`}
                         checked={field.value.includes(treatment.id)}
                         sx={{
                           "&.Mui-checked": {
@@ -81,7 +81,7 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
 
         <Box sx={{ width: 200, padding: "8px" }}>
           <FormGroup>
-            {secondColumn.map((treatment: Treatment) => (
+            {secondColumn.map((treatment: Treatment, index) => (
               <Controller
                 key={treatment.id}
                 name="treatmentIds"
@@ -90,6 +90,7 @@ const TreatmentsList = ({ treatments, control }: TreatmentsListProps) => {
                   <FormControlLabel
                     control={
                       <Checkbox
+                        id={`treatment-col2-${index}`}
                         checked={field.value.includes(treatment.id)}
                         sx={{
                           "&.Mui-checked": {
