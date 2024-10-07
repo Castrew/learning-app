@@ -21,7 +21,7 @@ export const AppointmentCard = () => {
   });
 
   if (isLoading) {
-    return;
+    return "Loading...";
   }
 
   const { pagination, combinedAppointmentsByGroup } = data;
@@ -39,7 +39,7 @@ export const AppointmentCard = () => {
     >
       {combinedAppointmentsByGroup.map((appt, index) => {
         return (
-          <Box key={appt.treatments[index].appointmentId} m={1}>
+          <Box key={appt.groupId} m={1}>
             <Card sx={{ width: "300px", minHeight: "200px" }}>
               <CardContent>
                 <Typography>Set by:{appt.username}</Typography>

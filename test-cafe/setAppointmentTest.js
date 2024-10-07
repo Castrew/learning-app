@@ -3,7 +3,10 @@ import { Selector } from "testcafe";
 fixture`Set appt`;
 
 test.page`http://localhost:3000`("test1", async (t) => {
-  await t.typeText(Selector("#sign-in-username-input"), "sexfactor");
+  const dropdown = Selector("#profile-dropdown");
+  const signOutOption = Selector("li").withText("Sign out");
+
+  await t.typeText(Selector("#sign-in-username-input"), "welcome");
   await t.typeText(Selector("#sign-in-password-input"), "mzm9tpj6ECK_avp*txg");
   await t.click(Selector("#submit-sign-in-button")).wait(2000);
 
@@ -13,7 +16,9 @@ test.page`http://localhost:3000`("test1", async (t) => {
 
   await t.wait(1000);
 
-  await t.click(Selector("#treatment-0"));
+  await t.click(Selector("#treatment-col1-0"));
+  await t.click(Selector("#treatment-col1-1"));
+  await t.click(Selector("#treatment-col2-0"));
   await t.click(Selector("#next-week-button"));
   await t.click(Selector("#Monday"));
 
@@ -33,5 +38,11 @@ test.page`http://localhost:3000`("test1", async (t) => {
 
   console.log("brao na momćeto");
 
-  await t.debug();
+  await t
+    .click(dropdown)
+    .expect(signOutOption.exists)
+    .ok("My appointments option is visible");
+
+  await t.click(signOutOption);
+  await t.wait(2000);
 });
