@@ -12,7 +12,8 @@
     "drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./db/seed.ts",
     "signUpTest": "testcafe chrome:--disable-search-engine-choice-screen test-cafe/signUpTest.js ",
     "signInTest": "testcafe chrome:headless --disable-search-engine-choice-screen test-cafe/signInTest.js ",
-    "userAppointmentFlowTest": "testcafe chrome:--disable-search-engine-choice-screen test-cafe/setAppointmentTest.js test-cafe/editDeleteAppointmentTest.js "
+    "userAppointmentFlowTest": "testcafe chrome:--disable-search-engine-choice-screen test-cafe/setAppointmentTest.js test-cafe/editDeleteAppointmentTest.js ",
+    "deleteAppointmentFlowTest": "testcafe chrome:--disable-search-engine-choice-screen test-cafe/editDeleteAppointmentTest.js "
   },
   "dependencies": {
     "@emotion/react": "11.11.4",

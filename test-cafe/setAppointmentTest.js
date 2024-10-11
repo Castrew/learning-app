@@ -6,7 +6,9 @@ test.page`http://localhost:3000`("test1", async (t) => {
   const dropdown = Selector("#profile-dropdown");
   const signOutOption = Selector("li").withText("Sign out");
 
-  await t.typeText(Selector("#sign-in-username-input"), "welcome");
+  await t.wait(2000);
+
+  await t.typeText(Selector("#sign-in-username-input"), "welcome").wait(2000);
   await t.typeText(Selector("#sign-in-password-input"), "mzm9tpj6ECK_avp*txg");
   await t.click(Selector("#submit-sign-in-button")).wait(2000);
 
