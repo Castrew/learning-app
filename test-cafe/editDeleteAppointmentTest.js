@@ -10,7 +10,9 @@ test.page`http://localhost:3000`("test1", async (t) => {
   const deleteAppointment = Selector("#delete-appointment-0");
   const deleteTreatment = Selector("#delete-treatment-1");
 
-  await t.typeText(Selector("#sign-in-username-input"), "welcome");
+  await t.wait(2000);
+
+  await t.typeText(Selector("#sign-in-username-input"), "welcome").wait(2000);
   await t.typeText(Selector("#sign-in-password-input"), "mzm9tpj6ECK_avp*txg");
   await t.click(Selector("#submit-sign-in-button")).wait(2000);
   await t
@@ -29,6 +31,9 @@ test.page`http://localhost:3000`("test1", async (t) => {
     .expect(deleteAppointment.exists)
     .ok("Delete appointment button is visible");
   await t.click(deleteAppointment);
+
+  await t.debug();
+
   await t
     .click(dropdown)
     .expect(signOutOption.exists)
