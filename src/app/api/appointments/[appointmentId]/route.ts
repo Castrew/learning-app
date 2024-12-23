@@ -1,10 +1,5 @@
 import { NextRequest } from "next/server";
-import {
-  userTable,
-  appointmentTable,
-  treatmentTable,
-  staffTable,
-} from "../../../../../db/schema";
+import { appointmentTable, treatmentTable } from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
 import { responses } from "../../responses";

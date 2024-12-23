@@ -12,16 +12,16 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useGetAllStaff } from "@/app/core/react-query/staff/hooks/useGetAllStaff";
+import { useGetAllStaff } from "src/app/core/react-query/staff/hooks/useGetAllStaff";
 import { useForm, FormProvider } from "react-hook-form";
-import StaffList from "@/components/StaffList";
-import TreatmentsList from "@/components/TreatmentList";
-import Calendar from "@/components/Calentar";
-import { Treatment } from "@/app/core/react-query/treatments/types";
-import { useCreateAppointment } from "@/app/core/react-query/appointments/hooks/useCreateAppointment";
+import StaffList from "src/components/StaffList";
+import TreatmentsList from "src/components/TreatmentList";
+import Calendar from "src/components/Calentar";
+import { Treatment } from "src/app/core/react-query/treatments/types";
+import { useCreateAppointment } from "src/app/core/react-query/appointments/hooks/useCreateAppointment";
 import ClearIcon from "@mui/icons-material/Clear";
 import CircleIcon from "@mui/icons-material/Circle";
-import { toasts } from "@/components/Toast";
+import { toasts } from "src/components/Toast";
 
 export interface MemberProps {
   id: string;

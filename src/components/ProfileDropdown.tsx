@@ -8,15 +8,35 @@ import {
   Avatar,
   Typography,
   Box,
+  Button,
 } from "@mui/material";
-import { signOut } from "../../actions/auth.actions";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const ProfileDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const pathName = usePathname();
+
+  if (!session && status !== "loading") {
+    return (
+      <Button
+        variant="contained"
+        onClick={() =>
+          signIn("google", {
+            callbackUrl: pathName,
+          })
+        }
+        sx={{ mr: 2 }}
+      >
+        Log in
+      </Button>
+    );
+  }
 
   return (
     <Box>
@@ -56,7 +76,7 @@ const ProfileDropdown = () => {
           onClick={() => {
             setAnchorEl(null);
             signOut();
-            router.push("/sign-in");
+            // router.push("/sign-in");
           }}
         >
           <LogoutIcon color="error" />

@@ -15,7 +15,7 @@ import { combineApptsByGroupId } from "../helper";
 const apptQuery = {
   appointmentId: appointmentTable.id,
   userId: appointmentTable.userId,
-  username: userTable.username,
+  username: userTable.name,
   treatmentId: appointmentTable.treatmentId,
   treatmentTitle: treatmentTable.title,
   treatmentDescription: treatmentTable.description,

@@ -5,9 +5,9 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { AuthContext } from "@/providers/AuthProvider";
+import { AuthContext } from "src/providers/AuthProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { theme } from "@/theme";
+import { theme } from "src/theme";
 import { ThemeProvider } from "@mui/material";
 
 function makeQueryClient() {
@@ -44,12 +44,13 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children, user }) {
+export default function Providers({ children }) {
   const queryClient = getQueryClient();
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
+        {children}
+        {/* <AuthContext.Provider value={user}>{children}</AuthContext.Provider> */}
         <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>

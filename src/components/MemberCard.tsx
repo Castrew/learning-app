@@ -1,6 +1,6 @@
 "use client";
-import { useGetAllStaff } from "@/app/core/react-query/staff/hooks/useGetAllStaff";
-import { Staff } from "@/app/core/react-query/staff/types";
+import { useGetAllStaff } from "src/app/core/react-query/staff/hooks/useGetAllStaff";
+import { Staff } from "src/app/core/react-query/staff/types";
 import {
   Box,
   Button,
@@ -24,9 +24,9 @@ import dimoff from "../../public/dimoff.png";
 import Image from "next/image";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useDeleteStaff } from "@/app/core/react-query/staff/hooks/useDeleteStaff";
+import { useDeleteStaff } from "src/app/core/react-query/staff/hooks/useDeleteStaff";
 import { usePathname, useRouter } from "next/navigation";
-import { AuthContext } from "@/providers/AuthProvider";
+import { AuthContext } from "src/providers/AuthProvider";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toasts } from "./Toast";
 

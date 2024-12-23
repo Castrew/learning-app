@@ -1,6 +1,6 @@
 "use client";
 
-import Booking from "@/modules/Booking";
+import Booking from "src/modules/Booking";
 import { Box } from "@mui/material";
 
 const BookingPage = () => {

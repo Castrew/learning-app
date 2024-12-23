@@ -1,4 +1,4 @@
-import MemberCard from "@/components/MemberCard";
+import MemberCard from "src/components/MemberCard";
 import { Box } from "@mui/material";
 
 const StaffPage = () => {

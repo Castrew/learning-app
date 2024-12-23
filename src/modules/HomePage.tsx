@@ -4,15 +4,9 @@ import React, { Suspense } from "react";
 import { Box, Link, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 import logo from "../../public/logo.png";
-import MemberCard from "@/components/MemberCard";
+import MemberCard from "src/components/MemberCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useRouter } from "next/navigation";
-type TestProps = {
-  nailon: number;
-  boq: number;
-  razreditel: number;
-  chasove: number;
-};
 
 export const HomePage = () => {
   const router = useRouter();

@@ -1,12 +1,12 @@
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
-import { WORKING_DAYS, WORKING_HOURS } from "@/app/schedule";
+import { WORKING_DAYS, WORKING_HOURS } from "src/app/schedule";
 import { Controller, useFormContext } from "react-hook-form";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import { useGetAllAppointments } from "@/app/core/react-query/appointments/hooks/useGetAllAppointments";
-import { AuthContext } from "@/providers/AuthProvider";
+import { useGetAllAppointments } from "src/app/core/react-query/appointments/hooks/useGetAllAppointments";
+import { AuthContext } from "src/providers/AuthProvider";
 
 interface Appointment {
   appointmentId: string;

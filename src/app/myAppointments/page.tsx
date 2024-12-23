@@ -9,14 +9,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useContext, useState } from "react";
-import { AuthContext } from "@/providers/AuthProvider";
+import { AuthContext } from "src/providers/AuthProvider";
 import { useGetUserAppointments } from "../core/react-query/appointments/hooks/useGetUserAppointments";
 import { GroupedAppointment } from "../core/react-query/appointments/types";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Switch from "@mui/material/Switch";
 import { useRouter } from "next/navigation";
 import { useUpdateAppointment } from "../core/react-query/appointments/hooks/useUpdateAppointment";
-import { toasts } from "@/components/Toast";
+import { toasts } from "src/components/Toast";
 import { useDeleteAppointmentGroup } from "../core/react-query/appointments/hooks/useDeleteAppointmentGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
 

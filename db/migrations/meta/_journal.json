@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1723636010801,
-      "tag": "0000_worthless_peter_quill",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1723640709296,
-      "tag": "0001_steep_franklin_richards",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1723642084859,
-      "tag": "0002_nervous_ozymandias",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1723649795116,
-      "tag": "0003_misty_rachel_grey",
+      "when": 1734569894610,
+      "tag": "0000_lame_domino",
       "breakpoints": true
     }
   ]
