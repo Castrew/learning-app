@@ -1,5 +1,4 @@
-import { HomePage } from "@/modules/HomePage";
-
+import { HomePage } from "src/modules/HomePage";
 const AdminHomePage = () => {
   return (
     <>

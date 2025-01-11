@@ -5,7 +5,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { AuthContext } from "src/providers/AuthProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { theme } from "src/theme";
 import { ThemeProvider } from "@mui/material";
@@ -50,7 +49,6 @@ export default function Providers({ children }) {
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         {children}
-        {/* <AuthContext.Provider value={user}>{children}</AuthContext.Provider> */}
         <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>

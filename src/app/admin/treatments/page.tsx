@@ -1,4 +1,4 @@
-import { TreatmentCard } from "@/components/TreatmentCard";
+import { TreatmentCard } from "src/components/TreatmentCard";
 
 const AdminTreatmentsPage = () => {
   return (

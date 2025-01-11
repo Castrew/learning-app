@@ -7,8 +7,10 @@ import logo from "../../public/logo.png";
 import MemberCard from "src/components/MemberCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export const HomePage = () => {
+  const session = useSession();
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

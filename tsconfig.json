@@ -5,14 +5,8 @@
     "lib": ["dom", "dom.iterable", "esnext", "es2020"],
     "baseUrl": ".",
     "paths": {
-      "components/": ["./components/*"],
-      "project/": ["./project/*"],
-      "@core/*": ["./core/*"],
-      "@common/*": ["./webapp/components/common/*"],
-      "@fundamentals": ["./webapp/components/common/fundamentals/"],
-      "@elements": ["./webapp/components/elements"],
-      "@elements/*": ["./webapp/components/elements/*"],
-      "@modules/*": ["./webapp/components/modules/*"]
+      "@components/*": ["./src/components/*"],
+      "@modules/*": ["./src/modules/*"]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -34,19 +28,12 @@
     ],
     "strictNullChecks": false
   },
-  "exclude": ["node_modules", "mobile", "package.json"],
+  "exclude": ["node_modules", "package.json"],
   "include": [
-    "webapp/*",
+    "src/*",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "types/global.d.ts",
-    "components/extras/CookiePolicy.js",
-    "components/base/forms/Tabs.js",
-    "components/extras/PanelSearch.js",
-    "core/providers/WithSetValue.js",
-    "core/providers/_hocTemplate.js",
-    ".next/types/**/*.ts"
   ],
   "types": ["react/next", "react-dom/next", "webrtc"]
 }

@@ -11,10 +11,10 @@ import {
 // Seed function to populate the database
 async function seedDatabase() {
   // 1. Insert users
-  await db.insert(userTable).values([
-    { id: "user1", username: "john_doe", hashedPassword: "hashed_pw1" },
-    { id: "user2", username: "jane_smith", hashedPassword: "hashed_pw2" },
-  ]);
+  // await db.insert(userTable).values([
+  //   { id: "user1", username: "john_doe", hashedPassword: "hashed_pw1" },
+  //   { id: "user2", username: "jane_smith", hashedPassword: "hashed_pw2" },
+  // ]);
 
   // 2. Insert treatments
   await db.insert(treatmentTable).values([
@@ -69,20 +69,20 @@ async function seedDatabase() {
   ]);
 
   // 6. Insert sessions
-  await db.insert(sessionTable).values([
-    {
-      id: "session1",
-      userId: "user1",
-      expiresAt: new Date("2024-09-01T15:00:00Z"),
-    },
-    {
-      id: "session2",
-      userId: "user2",
-      expiresAt: new Date("2024-09-02T16:00:00Z"),
-    },
-  ]);
+  //   await db.insert(sessionTable).values([
+  //     {
+  //       id: "session1",
+  //       userId: "user1",
+  //       expiresAt: new Date("2024-09-01T15:00:00Z"),
+  //     },
+  //     {
+  //       id: "session2",
+  //       userId: "user2",
+  //       expiresAt: new Date("2024-09-02T16:00:00Z"),
+  //     },
+  //   ]);
+  // }
 }
-
 // Run the seed function
 seedDatabase()
   .then(() => process.exit(0))

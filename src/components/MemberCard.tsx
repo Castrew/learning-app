@@ -26,9 +26,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDeleteStaff } from "src/app/core/react-query/staff/hooks/useDeleteStaff";
 import { usePathname, useRouter } from "next/navigation";
-import { AuthContext } from "src/providers/AuthProvider";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toasts } from "./Toast";
+import { useSession } from "next-auth/react";
 
 const MemberCard = () => {
   const [open, setOpen] = useState(false);
@@ -38,12 +38,12 @@ const MemberCard = () => {
   const deleteMember = useDeleteStaff();
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session } = useSession();
 
-  const user = useContext(AuthContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isActionAllowed =
-    user?.id === "yvli5wewb2blxy5" && pathname.includes("/admin/staff");
+    session?.user.id === "yvli5wewb2blxy5" && pathname.includes("/admin/staff");
   const showTreatments =
     pathname.includes("/admin/staff") || pathname.includes("/staff");
 

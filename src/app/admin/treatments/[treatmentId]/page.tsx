@@ -1,7 +1,7 @@
 "use client";
 
 import { Box } from "@mui/material";
-import CreateUpdateTreatment from "@/components/CreateUpdateTreatment";
+import CreateUpdateTreatment from "src/components/CreateUpdateTreatment";
 
 const AdminUpdateTreatmentPage = () => {
   return (
