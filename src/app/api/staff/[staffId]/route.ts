@@ -6,7 +6,7 @@ import {
 } from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
-import { responses } from "../../responses";
+import { responses } from "../../../../helper/responses";
 
 export const GET = async (
   _: NextRequest,
