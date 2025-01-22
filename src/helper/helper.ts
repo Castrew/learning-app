@@ -2,7 +2,7 @@ import moment from "moment";
 import {
   Appointment,
   GroupedAppointment,
-} from "../../core/react-query/appointments/types";
+} from "../core/react-query/appointments/types";
 
 export const combineApptsByGroupId = (appointments: Appointment[]) => {
   const groupedAppointments: { [key: string]: GroupedAppointment } = {};
