@@ -2,9 +2,9 @@ import { NextRequest } from "next/server";
 import { appointmentTable, treatmentTable } from "../../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { db } from "../../../../../db/db";
-import { responses } from "../../responses";
+import { responses } from "../../../../helper/responses";
 import moment from "moment";
-import { findEarliestAppointment } from "../../helper";
+import { findEarliestAppointment } from "../../../../helper/helper";
 import { v7 as uuidv7 } from "uuid";
 
 const queryAppointment = {};

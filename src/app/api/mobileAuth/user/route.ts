@@ -7,7 +7,7 @@ import {
 import { eq } from "drizzle-orm";
 import { db } from "../../../../../db/db";
 import { v7 as uuidv7 } from "uuid";
-import { responses } from "../../responses";
+import { responses } from "../../../../helper/responses";
 import moment from "moment";
 
 export const POST = async (request: NextRequest) => {
