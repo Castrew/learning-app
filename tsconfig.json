@@ -25,7 +25,7 @@
     "noEmit": false,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "jsx": "preserve",
     "isolatedModules": true,
