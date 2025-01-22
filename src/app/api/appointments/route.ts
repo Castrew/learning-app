@@ -138,7 +138,7 @@ export const POST = async (request: NextRequest) => {
       const id = uuidv7();
       await db.insert(appointmentTable).values({
         id,
-        userId: "0194899d-c044-7004-87ad-f1b08feb424b",
+        userId,
         treatmentId,
         staffId,
         date,
