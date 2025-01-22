@@ -1,6 +1,10 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  isServer,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { theme } from "src/theme";
 import { ThemeProvider } from "@mui/material";
@@ -26,9 +30,6 @@ function makeQueryClient() {
 let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
-  const isServer = typeof window === undefined;
-  console.log(typeof window);
-
   if (isServer) {
     // Server: always make a new query client
     return makeQueryClient();
