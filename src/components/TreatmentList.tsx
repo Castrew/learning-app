@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
-import { Treatment } from "src/app/core/react-query/treatments/types";
+import { Treatment } from "src/core/react-query/treatments/types";
 
 interface TreatmentsListProps {
   treatments: Treatment[];

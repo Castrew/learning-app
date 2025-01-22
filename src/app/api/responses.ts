@@ -30,6 +30,16 @@ export const responses = {
       { status: 500 }
     );
   },
+  recordExist: () => {
+    return Response.json(
+      {
+        apiVersion: "1.0",
+        message: "Record already exist",
+        code: "409",
+      },
+      { status: 409 }
+    );
+  },
   notFoundError: () => {
     return Response.json(
       {

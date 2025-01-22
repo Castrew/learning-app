@@ -3,7 +3,7 @@ import {
   createQueryKeys,
 } from "@lukemorales/query-key-factory";
 import { RequestTypes } from "./requestTypes";
-import { APIAxiosInstance } from "src/app/axios/api-axios-instance";
+import { APIAxiosInstance } from "src/axios/api-axios-instance";
 import { Staff } from "./types";
 
 export const staffKeys = createQueryKeys("staff", {

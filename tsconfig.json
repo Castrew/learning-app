@@ -2,11 +2,20 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "target": "es2020",
-    "lib": ["dom", "dom.iterable", "esnext", "es2020"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "es2020"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["./src/components/*"],
-      "@modules/*": ["./src/modules/*"]
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@modules/*": [
+        "./src/modules/*"
+      ]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -28,12 +37,20 @@
     ],
     "strictNullChecks": false
   },
-  "exclude": ["node_modules", "package.json"],
+  "exclude": [
+    "node_modules",
+    "package.json"
+  ],
   "include": [
     "src/*",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
-  "types": ["react/next", "react-dom/next", "webrtc"]
+  "types": [
+    "react/next",
+    "react-dom/next",
+    "webrtc"
+  ]
 }

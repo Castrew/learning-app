@@ -1,7 +1,7 @@
 "use client";
 
-import { useDeleteTreatment } from "src/app/core/react-query/treatments/hooks/useDeleteTreatment";
-import { useGetAllTreatments } from "src/app/core/react-query/treatments/hooks/useGetAllTreatmets";
+import { useDeleteTreatment } from "src/core/react-query/treatments/hooks/useDeleteTreatment";
+import { useGetAllTreatments } from "src/core/react-query/treatments/hooks/useGetAllTreatmets";
 import {
   Box,
   Button,
@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
-import { useContext } from "react";
 import parse from "html-react-parser";
 
 type treatmentProps = {
@@ -27,7 +26,6 @@ export const TreatmentCard = () => {
   const router = useRouter();
   const { data: treatments, isLoading } = useGetAllTreatments();
   const deleteTreatment = useDeleteTreatment();
-  // const user = useContext(AuthContext);
   const isActionAllowed = true && pathname.includes("/admin");
 
   if (isLoading) {

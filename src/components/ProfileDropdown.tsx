@@ -50,7 +50,7 @@ const ProfileDropdown = () => {
           setAnchorEl(event.currentTarget);
         }}
       >
-        <Avatar alt="Profile" />
+        <Avatar src={user?.image} sx={{ width: 48, height: 48 }} />
       </IconButton>
       <Menu
         id="profile-dropdown-menu"

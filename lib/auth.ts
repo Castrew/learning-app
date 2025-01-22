@@ -17,9 +17,9 @@ declare module "next-auth" {
 
 export const authConfig = {
   debug: false,
-  pages: {
-    signIn: "/", // Redirect users to "/login" when signing in
-  },
+  // pages: {
+  //   signIn: "/", // Redirect users to "/login" when signing in
+  // },
   // added secret key
   adapter: DrizzleAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,

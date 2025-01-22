@@ -1,4 +1,4 @@
-import { useGetPaginatedAppointments } from "src/app/core/react-query/appointments/hooks/useGetPaginatedAppointments";
+import { useGetPaginatedAppointments } from "src/core/react-query/appointments/hooks/useGetPaginatedAppointments";
 import {
   Box,
   Button,
@@ -8,8 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createQueryString } from "src/app/helper/createURLqueryString";
-import { GroupedAppointment } from "src/app/core/react-query/appointments/types";
+import { createQueryString } from "src/helper/createURLqueryString";
 
 export const AppointmentCard = () => {
   const searchParams = useSearchParams();

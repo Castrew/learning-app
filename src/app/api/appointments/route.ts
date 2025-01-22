@@ -123,10 +123,9 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-  const { treatmentIds, staffId, date, start } = await request.json();
-  const userId = request.cookies
-    .get("auth_session")
-    ?.value.split("?userId=")[1] as string;
+  const { treatmentIds, staffId, date, start, userId } = await request.json();
+
+  console.log(userId);
 
   const groupId = uuidv7();
   let newStart = moment()
