@@ -8,9 +8,9 @@ import {
 import { eq, ne, gt, gte, count, asc, inArray } from "drizzle-orm";
 import { db } from "../../../../db/db";
 import { v7 as uuidv7 } from "uuid";
-import { responses } from "../../../helper/responses";
+import { responses } from "src/helper/responses";
 import moment from "moment";
-import { combineApptsByGroupId } from "../../../helper/helper";
+import { combineApptsByGroupId } from "src/helper/helper";
 
 const apptQuery = {
   appointmentId: appointmentTable.id,

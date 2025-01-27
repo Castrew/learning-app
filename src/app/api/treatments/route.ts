@@ -3,7 +3,7 @@ import { treatmentTable } from "../../../../db/schema";
 import { eq, ne, gt, gte } from "drizzle-orm";
 import { v7 as uuidv7 } from "uuid";
 import { db } from "../../../../db/db";
-import { responses } from "../../../helper/responses";
+import { responses } from "src/helper/responses";
 
 export const GET = async (_: NextRequest) => {
   try {

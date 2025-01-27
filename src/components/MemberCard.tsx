@@ -74,7 +74,7 @@ const MemberCard = () => {
       justifyContent="center"
       alignItems="center"
     >
-      {staff.map((member: Staff, index: number) => {
+      {staff?.map((member: Staff, index: number) => {
         return (
           <Card
             key={member.id}

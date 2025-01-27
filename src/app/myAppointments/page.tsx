@@ -45,7 +45,7 @@ const MyAppointmentsPage = () => {
     });
   };
 
-  if (isLoading || session) {
+  if (isLoading || !session) {
     return "Loading...";
   }
 
