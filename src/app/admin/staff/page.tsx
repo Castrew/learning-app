@@ -1,8 +1,8 @@
 //here the member will be shown
 
 import { Box } from "@mui/material";
-import MemberCard from "@/components/MemberCard";
-import CreateUpdateMember from "@/components/CreateUpdateMember";
+import MemberCard from "src/components/MemberCard";
+import CreateUpdateMember from "src/components/CreateUpdateMember";
 
 const AdminMemberPage = () => {
   return (

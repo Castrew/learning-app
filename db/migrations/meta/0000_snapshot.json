@@ -1,9 +1,117 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "dbb040ef-0fe1-4d4e-abbc-b28e5af14bd8",
+  "id": "58f7f3cf-a857-4eed-99d1-d15aa0e1b0b6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "account": {
+      "name": "account",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider": {
+          "name": "provider",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "varchar(2048)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "account_userId_user_id_fk": {
+          "name": "account_userId_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "account_provider_providerAccountId_pk": {
+          "name": "account_provider_providerAccountId_pk",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "appointment": {
       "name": "appointment",
       "columns": {
@@ -21,8 +129,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "treatment_ids": {
-          "name": "treatment_ids",
+        "treatment_id": {
+          "name": "treatment_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
@@ -49,8 +157,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "duration": {
-          "name": "duration",
+        "group_id": {
+          "name": "group_id",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
@@ -72,12 +180,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "appointment_treatment_ids_treatment_id_fk": {
-          "name": "appointment_treatment_ids_treatment_id_fk",
+        "appointment_treatment_id_treatment_id_fk": {
+          "name": "appointment_treatment_id_treatment_id_fk",
           "tableFrom": "appointment",
           "tableTo": "treatment",
           "columnsFrom": [
-            "treatment_ids"
+            "treatment_id"
           ],
           "columnsTo": [
             "id"
@@ -112,23 +220,23 @@
     "session": {
       "name": "session",
       "columns": {
-        "id": {
-          "name": "id",
+        "sessionToken": {
+          "name": "sessionToken",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "user_id": {
-          "name": "user_id",
+        "userId": {
+          "name": "userId",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "datetime",
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -136,12 +244,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "session_user_id_user_id_fk": {
-          "name": "session_user_id_user_id_fk",
+        "session_userId_user_id_fk": {
+          "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
           "columnsFrom": [
-            "user_id"
+            "userId"
           ],
           "columnsTo": [
             "id"
@@ -151,10 +259,10 @@
         }
       },
       "compositePrimaryKeys": {
-        "session_id": {
-          "name": "session_id",
+        "session_sessionToken": {
+          "name": "session_sessionToken",
           "columns": [
-            "id"
+            "sessionToken"
           ]
         }
       },
@@ -309,18 +417,40 @@
           "notNull": true,
           "autoincrement": false
         },
-        "username": {
-          "name": "username",
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "hashed_password": {
-          "name": "hashed_password",
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "image": {
+          "name": "image",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         }
       },

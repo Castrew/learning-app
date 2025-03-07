@@ -1,6 +1,6 @@
 "use client";
-import { useGetAllStaff } from "@/app/core/react-query/staff/hooks/useGetAllStaff";
-import { Staff } from "@/app/core/react-query/staff/types";
+import { useGetAllStaff } from "src/core/react-query/staff/hooks/useGetAllStaff";
+import { Staff } from "src/core/react-query/staff/types";
 import {
   Box,
   Button,
@@ -24,11 +24,11 @@ import dimoff from "../../public/dimoff.png";
 import Image from "next/image";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useDeleteStaff } from "@/app/core/react-query/staff/hooks/useDeleteStaff";
+import { useDeleteStaff } from "src/core/react-query/staff/hooks/useDeleteStaff";
 import { usePathname, useRouter } from "next/navigation";
-import { AuthContext } from "@/providers/AuthProvider";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toasts } from "./Toast";
+import { useSession } from "next-auth/react";
 
 const MemberCard = () => {
   const [open, setOpen] = useState(false);
@@ -38,8 +38,8 @@ const MemberCard = () => {
   const deleteMember = useDeleteStaff();
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session } = useSession();
 
-  const user = useContext(AuthContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isActionAllowed = pathname.includes("/admin/staff");
@@ -73,7 +73,7 @@ const MemberCard = () => {
       justifyContent="center"
       alignItems="center"
     >
-      {staff.map((member: Staff, index: number) => {
+      {staff?.map((member: Staff, index: number) => {
         return (
           <Card
             key={member.id}

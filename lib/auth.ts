@@ -1,45 +1,64 @@
-import { Lucia } from "lucia";
-import adapter from "./adapter";
-import { cache } from "react";
-import { cookies } from "next/headers";
+import NextAuth from "next-auth";
+import type { NextAuthConfig, Session, User } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db } from "../db/db";
 
-export const lucia = new Lucia(adapter, {
-  sessionCookie: {
-    attributes: {
-      secure: true,
-      // secure: process.env.NODE_ENV === "production",
-      // maxAge: 60 * 60 * 24 * 7, // 1 week
-    },
-  },
-});
-
-export const validateRequest = cache(async () => {
-  try {
-    const cookieValue = cookies().get(lucia.sessionCookieName)?.value;
-
-    if (!cookieValue) {
-      return {
-        user: null,
-        session: null,
-      };
-    }
-
-    const sessionId = cookieValue.split("?userId")[0];
-
-    const { user, session } = await lucia.validateSession(sessionId);
-
-    return { user, session };
-  } catch (error) {
-    return {
-      user: null,
-      session: null,
+declare module "next-auth" {
+  interface Session {
+    user: {
+      image?: string;
+      id?: string;
+      name?: string;
+      email?: string;
     };
   }
-});
-
-// IMPORTANT!
-declare module "lucia" {
-  interface Register {
-    Lucia: typeof lucia;
-  }
 }
+
+export const authConfig = {
+  debug: false,
+  // pages: {
+  //   signIn: "/", // Redirect users to "/login" when signing in
+  // },
+  // added secret key
+  adapter: DrizzleAdapter(db),
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "database",
+  },
+  providers: [
+    GoogleProvider({
+      // Configure Google authentication provider with environment variables
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+      allowDangerousEmailAccountLinking: true,
+    }),
+  ],
+  callbacks: {
+    session(params) {
+      if ("user" in params) {
+        const session: Session = params.session;
+        const user: User = params?.user;
+
+        if (session.user !== undefined) {
+          session.user.id = user.id;
+        }
+        return session;
+      }
+    },
+  },
+} satisfies NextAuthConfig;
+
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(authConfig);

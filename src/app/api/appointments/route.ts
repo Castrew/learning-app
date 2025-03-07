@@ -8,14 +8,14 @@ import {
 import { eq, ne, gt, gte, count, asc, inArray } from "drizzle-orm";
 import { db } from "../../../../db/db";
 import { v7 as uuidv7 } from "uuid";
-import { responses } from "../responses";
+import { responses } from "src/helper/responses";
 import moment from "moment";
-import { combineApptsByGroupId } from "../helper";
+import { combineApptsByGroupId } from "src/helper/helper";
 
 const apptQuery = {
   appointmentId: appointmentTable.id,
   userId: appointmentTable.userId,
-  username: userTable.username,
+  username: userTable.name,
   treatmentId: appointmentTable.treatmentId,
   treatmentTitle: treatmentTable.title,
   treatmentDescription: treatmentTable.description,
@@ -127,10 +127,9 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-  const { treatmentIds, staffId, date, start } = await request.json();
-  const userId = request.cookies
-    .get("auth_session")
-    ?.value.split("?userId=")[1] as string;
+  const { treatmentIds, staffId, date, start, userId } = await request.json();
+
+  console.log(userId);
 
   const groupId = uuidv7();
   let newStart = moment()

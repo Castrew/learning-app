@@ -1,7 +1,7 @@
 "use client";
 
 import { Box } from "@mui/material";
-import { TreatmentCard } from "@/components/TreatmentCard";
+import { TreatmentCard } from "src/components/TreatmentCard";
 
 const Treatments = () => {
   return (
