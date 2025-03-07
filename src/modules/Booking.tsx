@@ -41,7 +41,7 @@ const Booking = () => {
   const { data: staffMembers, isLoading: isLoadingAllStaff } = useGetAllStaff();
 
   const [open, setOpen] = useState(false);
-  const [memberName, setMemberName] = useState("");
+  const [memberName, setMemberName] = useState<String>("");
   const [memberTreatments, setMemberTreatments] = useState<Treatment[]>([]);
 
   const defaultValues = {
@@ -125,10 +125,7 @@ const Booking = () => {
             <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
 
             {memberTreatments.length !== 0 && (
-              <TreatmentsList
-                treatments={memberTreatments}
-                control={formContext.control}
-              />
+              <TreatmentsList treatments={memberTreatments} />
             )}
             {appt.staffId && (
               <Calendar

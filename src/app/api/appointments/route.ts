@@ -76,6 +76,9 @@ export const GET = async (request: NextRequest) => {
         .from(appointmentTable);
       const totalCount = totalCountResult[0].count;
 
+      const nextPage =
+        page * pageSize < uniqueGroupIds.length ? page + 1 : undefined;
+
       return Response.json({
         combinedAppointmentsByGroup,
         pagination: {
@@ -83,6 +86,7 @@ export const GET = async (request: NextRequest) => {
           pageSize,
           total: totalCount,
           totalPages: Math.ceil(uniqueGroupIds.length / pageSize),
+          nextPage,
         },
       });
     } else if (searchParams.get("userId") !== null) {

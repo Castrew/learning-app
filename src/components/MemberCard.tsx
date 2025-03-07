@@ -42,8 +42,7 @@ const MemberCard = () => {
   const user = useContext(AuthContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isActionAllowed =
-    user?.id === "yvli5wewb2blxy5" && pathname.includes("/admin/staff");
+  const isActionAllowed = pathname.includes("/admin/staff");
   const showTreatments =
     pathname.includes("/admin/staff") || pathname.includes("/staff");
 

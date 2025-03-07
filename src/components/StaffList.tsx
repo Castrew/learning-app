@@ -24,7 +24,7 @@ const StaffList = ({ staffMembers, handleMemberChange }: StaffListProps) => {
       minWidth="200px"
       mb="8px"
     >
-      {staffMembers?.map((member, index) => (
+      {staffMembers?.map((member: MemberProps, index) => (
         <Controller
           name="staffId"
           key={member.id}

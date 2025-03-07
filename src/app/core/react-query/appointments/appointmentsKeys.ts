@@ -55,8 +55,6 @@ export const appointmentsMutationsKeys = createMutationKeys("appointments", {
   deleteAppointment: {
     mutationKey: null,
     mutationFn: async ({ apptId }: RequestTypes["deleteAppointmentGroup"]) => {
-      console.log(apptId);
-
       const { data } = await APIAxiosInstance.delete(`/appointments/${apptId}`);
       return data;
     },

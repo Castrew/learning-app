@@ -20,6 +20,13 @@ import { useGetOneTreatment } from "@/app/core/react-query/treatments/hooks/useG
 import { RichTextInput } from "./RichText";
 import { DURATION_TIME } from "@/app/schedule";
 
+export type TreatmentForm = {
+  title: string;
+  duration: string;
+  price: string;
+  description: string;
+};
+
 const CreateUpdateTreatment: React.FC = () => {
   const params = useParams();
   const updateTreatment = useUpdateTreatment();
@@ -36,25 +43,11 @@ const CreateUpdateTreatment: React.FC = () => {
     description: treatment?.description || "",
   };
 
-  const { register, handleSubmit, reset, control, watch } = useForm<Treatment>({
+  const { handleSubmit, control, watch } = useForm<TreatmentForm>({
     defaultValues,
   });
 
-  useEffect(() => {
-    reset({
-      title: treatment?.title,
-      duration: treatment?.duration,
-      price: treatment?.price,
-      description: treatment?.description,
-    });
-  }, [
-    treatment?.description,
-    treatment?.duration,
-    treatment?.price,
-    treatment?.title,
-  ]);
-
-  const onSubmit: SubmitHandler<Treatment> = (data) => {
+  const onSubmit: SubmitHandler<TreatmentForm> = (data) => {
     if (treatment?.id) {
       updateTreatment.mutate({ treatmentId: treatment?.id, ...data });
     } else {
@@ -87,12 +80,19 @@ const CreateUpdateTreatment: React.FC = () => {
             <Typography fontSize="2rem">
               {treatment ? "Update treatment" : "Create treatment"}
             </Typography>
-            <TextField
-              label="Title"
-              variant="outlined"
-              {...register("title")}
-              fullWidth
-              margin="normal"
+            <Controller
+              control={control}
+              name="title"
+              render={({ field }) => (
+                <TextField
+                  label="Title"
+                  variant="outlined"
+                  value={field.value}
+                  {...field}
+                  fullWidth
+                  margin="normal"
+                />
+              )}
             />
             <Controller
               control={control}
@@ -136,7 +136,7 @@ const CreateUpdateTreatment: React.FC = () => {
                       id="duration-dropdown"
                       value={field.value || ""}
                       onChange={field.onChange}
-                      label="Duration" // Required for floating label behavior
+                      label="Duration"
                     >
                       {DURATION_TIME.map((duration, index) => (
                         <MenuItem key={index} value={duration}>
@@ -147,13 +147,19 @@ const CreateUpdateTreatment: React.FC = () => {
                   )}
                 />
               </FormControl>
-              <TextField
-                sx={{ m: 1 }}
-                label="Price"
-                variant="outlined"
-                {...register("price")}
-                fullWidth
-                margin="normal"
+              <Controller
+                control={control}
+                name="price"
+                render={({ field }) => (
+                  <TextField
+                    sx={{ m: 1 }}
+                    label="Price"
+                    variant="outlined"
+                    {...field}
+                    fullWidth
+                    margin="normal"
+                  />
+                )}
               />
             </Box>
             <Box display="flex" justifyContent="space-between" mt={2}>

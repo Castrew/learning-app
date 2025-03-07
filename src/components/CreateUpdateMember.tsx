@@ -1,7 +1,12 @@
 "use client";
 
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  Controller,
+  FormProvider,
+} from "react-hook-form";
 import { useEffect } from "react";
 import { RichTextInput } from "./RichText";
 import { useParams } from "next/navigation";
@@ -35,23 +40,21 @@ const CreateUpdateMember = () => {
     return treatment.id;
   });
 
-  const { register, handleSubmit, reset, control, watch } = useForm<FormValues>(
-    {
-      defaultValues: {
-        name: "",
-        treatmentIds: [],
-      },
-    }
-  );
+  const formContext = useForm<FormValues>({
+    defaultValues: {
+      name: "",
+      treatmentIds: [],
+    },
+  });
 
   useEffect(() => {
     if (member) {
-      reset({
+      formContext.reset({
         name: member.name,
         treatmentIds: memberTreatments,
       });
     }
-  }, [member, reset]);
+  }, [member, formContext.reset]);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     if (staffId !== "undefined") {
@@ -69,7 +72,7 @@ const CreateUpdateMember = () => {
       createMember.mutate(data, {
         onSuccess: () => {
           toasts.Success("Member created successfully");
-          reset();
+          formContext.reset();
         },
         onError: (error) => toasts.Error(error),
       });
@@ -81,72 +84,72 @@ const CreateUpdateMember = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Box
-        sx={{ mt: 4 }}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+    <FormProvider {...formContext}>
+      <form onSubmit={formContext.handleSubmit(onSubmit)}>
         <Box
-          gap="10px"
+          sx={{ mt: 4 }}
           display="flex"
-          flexDirection="column"
-          maxWidth="1024px"
-          width="100%"
-          mx="auto"
-          p="20px"
-          bgcolor="background.paper"
-          boxShadow={3}
-          borderRadius={4}
+          justifyContent="center"
+          alignItems="center"
         >
-          <Typography fontSize="1.5rem" fontWeight="bold">
-            {staffId ? "Update Member" : "Create Member"}
-          </Typography>
-          <Controller
-            control={control}
-            name="name"
-            rules={{
-              required: "Member name is required",
-              minLength: {
-                value: 2,
-                message: "Password must be at least 2 characters long",
-              },
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <TextField
-                {...field}
-                placeholder="Name"
+          <Box
+            gap="10px"
+            display="flex"
+            flexDirection="column"
+            maxWidth="1024px"
+            width="100%"
+            mx="auto"
+            p="20px"
+            bgcolor="background.paper"
+            boxShadow={3}
+            borderRadius={4}
+          >
+            <Typography fontSize="1.5rem" fontWeight="bold">
+              {staffId !== "undefined" ? "Update Member" : "Create Member"}
+            </Typography>
+            <Controller
+              control={formContext.control}
+              name="name"
+              rules={{
+                required: "Member name is required",
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  {...field}
+                  placeholder="Name"
+                  fullWidth
+                  error={!!error}
+                  helperText={error ? error.message : ""}
+                />
+              )}
+            />
+            <TreatmentsList treatments={treatments} />
+            <Box display="flex" justifyContent="space-between" mt={2}>
+              <Button
+                sx={{ m: 1 }}
+                variant="contained"
+                color="error"
                 fullWidth
-                error={!!error}
-                helperText={error ? error.message : ""}
-              />
-            )}
-          />
-          <TreatmentsList treatments={treatments} control={control} />
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <Button
-              sx={{ m: 1 }}
-              variant="contained"
-              color="error"
-              fullWidth
-              onClick={() => router.back()}
-            >
-              Cancel
-            </Button>
-            <Button
-              sx={{ m: 1 }}
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-            >
-              {staffId ? "Update" : "Create"}
-            </Button>
+                onClick={() =>
+                  staffId === "undefined" ? formContext.reset() : router.back()
+                }
+              >
+                Cancel
+              </Button>
+              <Button
+                sx={{ m: 1 }}
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                {staffId !== "undefined" ? "Update" : "Create"}
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </form>
+      </form>
+    </FormProvider>
   );
 };
 

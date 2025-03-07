@@ -189,10 +189,8 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
                     disabled={!selectedMemberId || isDatePassed}
                     variant={isDaySelected}
                     onClick={() => {
-                      handleDayChange(day),
-                        field.onChange(
-                          currentWeek.day(day).format("MM-DD-YYYY")
-                        );
+                      handleDayChange(day);
+                      field.onChange(currentWeek.day(day).format("MM-DD-YYYY"));
                       setValue("start", "");
                     }}
                   >
