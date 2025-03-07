@@ -1,4 +1,4 @@
-import { useGetPaginatedAppointments } from "@/app/core/react-query/appointments/hooks/useGetPaginatedAppointments";
+import { useGetPaginatedAppointments } from "src/core/react-query/appointments/hooks/useGetPaginatedAppointments";
 import {
   Box,
   Button,
@@ -8,8 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createQueryString } from "@/app/helper/createURLqueryString";
-import { GroupedAppointment } from "@/app/core/react-query/appointments/types";
+import { createQueryString } from "src/helper/createURLqueryString";
 
 export const AppointmentCard = () => {
   const searchParams = useSearchParams();
@@ -24,7 +23,7 @@ export const AppointmentCard = () => {
     return "Loading...";
   }
 
-  const { pagination, combinedAppointmentsByGroup } = data;
+  const { pagination, combinedAppointmentsByGroup } = data || {};
 
   return (
     <Box
@@ -37,7 +36,7 @@ export const AppointmentCard = () => {
       flexDirection="row"
       alignItems="center"
     >
-      {combinedAppointmentsByGroup.map((appt, index) => {
+      {combinedAppointmentsByGroup?.map((appt, index) => {
         return (
           <Box key={appt.groupId} m={1}>
             <Card sx={{ width: "300px", minHeight: "200px" }}>
@@ -57,20 +56,24 @@ export const AppointmentCard = () => {
           </Box>
         );
       })}
-      <Pagination
-        sx={{ position: "absolute", bottom: 0 }}
-        page={Number(searchParams.get("page")) ?? pagination.totalPages}
-        count={pagination.totalPages}
-        onChange={(e, p) => {
-          const newQueryString = createQueryString(
-            searchParams,
-            "page",
-            String(p)
-          );
+      {combinedAppointmentsByGroup?.length > 0 ? (
+        <Pagination
+          sx={{ position: "absolute", bottom: 0 }}
+          page={Number(searchParams.get("page")) ?? pagination.totalPages}
+          count={pagination.totalPages}
+          onChange={(e, p) => {
+            const newQueryString = createQueryString(
+              searchParams,
+              "page",
+              String(p)
+            );
 
-          router.push(pathname + newQueryString);
-        }}
-      />
+            router.push(pathname + newQueryString);
+          }}
+        />
+      ) : (
+        <Typography>There are no existing appointmets!</Typography>
+      )}
     </Box>
   );
 };

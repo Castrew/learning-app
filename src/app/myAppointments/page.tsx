@@ -8,25 +8,25 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
-import { AuthContext } from "@/providers/AuthProvider";
-import { useGetUserAppointments } from "../core/react-query/appointments/hooks/useGetUserAppointments";
-import { GroupedAppointment } from "../core/react-query/appointments/types";
+import { useState } from "react";
+import { useGetUserAppointments } from "../../core/react-query/appointments/hooks/useGetUserAppointments";
+import { GroupedAppointment } from "../../core/react-query/appointments/types";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Switch from "@mui/material/Switch";
 import { useRouter } from "next/navigation";
-import { useUpdateAppointment } from "../core/react-query/appointments/hooks/useUpdateAppointment";
-import { toasts } from "@/components/Toast";
-import { useDeleteAppointmentGroup } from "../core/react-query/appointments/hooks/useDeleteAppointmentGroup";
+import { useUpdateAppointment } from "../../core/react-query/appointments/hooks/useUpdateAppointment";
+import { toasts } from "src/components/Toast";
+import { useDeleteAppointmentGroup } from "../../core/react-query/appointments/hooks/useDeleteAppointmentGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useSession } from "next-auth/react";
 
 const MyAppointmentsPage = () => {
-  const user = useContext(AuthContext);
+  const { data: session } = useSession();
   const [edit, setEdit] = useState(false);
   const updateAppointment = useUpdateAppointment();
   const router = useRouter();
   const { data: userAppts, isLoading } = useGetUserAppointments({
-    userId: user?.id,
+    userId: session?.user.id,
   });
   const deleteAppointmentGroup = useDeleteAppointmentGroup();
 
@@ -45,7 +45,7 @@ const MyAppointmentsPage = () => {
     });
   };
 
-  if (isLoading || !user) {
+  if (isLoading || !session) {
     return "Loading...";
   }
 

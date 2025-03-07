@@ -1,12 +1,12 @@
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
-import { useContext, useEffect, useState } from "react";
-import { WORKING_DAYS, WORKING_HOURS } from "@/app/schedule";
+import { useEffect, useState } from "react";
+import { WORKING_DAYS, WORKING_HOURS } from "src/app/schedule";
 import { Controller, useFormContext } from "react-hook-form";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
-import { useGetAllAppointments } from "@/app/core/react-query/appointments/hooks/useGetAllAppointments";
-import { AuthContext } from "@/providers/AuthProvider";
+import { useGetAllAppointments } from "src/core/react-query/appointments/hooks/useGetAllAppointments";
+import { useSession } from "next-auth/react";
 
 interface Appointment {
   appointmentId: string;
@@ -28,8 +28,6 @@ interface CalendarProps {
 }
 
 const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
-  const user = useContext(AuthContext);
-
   const [selectedSlot, setSelectedSlot] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [currentWeek, setCurrentWeek] = useState(moment().startOf("week"));
@@ -39,12 +37,14 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
 
   const { setValue, control } = useFormContext();
 
+  const { data: session } = useSession();
+
   const memberAppointments = data?.filter((appt: Appointment) => {
     return appt.staffId === selectedMemberId;
   });
 
   const userAppointments = memberAppointments?.filter((appt: Appointment) => {
-    return appt.userId === user?.id;
+    return appt.userId === session?.user.id;
   });
 
   const resetSelections = () => {

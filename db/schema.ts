@@ -1,13 +1,12 @@
 import { relations } from "drizzle-orm";
-import { varchar, mysqlTable, datetime } from "drizzle-orm/mysql-core";
-import { primaryKey } from "drizzle-orm/mysql-core";
-
-// User Table
-export const userTable = mysqlTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  username: varchar("username", { length: 255 }).notNull(),
-  hashedPassword: varchar("hashed_password", { length: 255 }).notNull(),
-});
+import {
+  int,
+  mysqlTable,
+  primaryKey,
+  serial,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const treatmentStaffTable = mysqlTable(
   "treatment_staff",
@@ -83,10 +82,48 @@ export const appointmentRelations = relations(appointmentTable, ({ one }) => ({
   }),
 }));
 
-export const sessionTable = mysqlTable("session", {
+export const userTable = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  userId: varchar("user_id", { length: 255 })
+  name: varchar("name", { length: 255 }),
+  description: varchar("description", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("emailVerified", {
+    mode: "date",
+    fsp: 3,
+  }).defaultNow(),
+  image: varchar("image", { length: 255 }),
+});
+
+export const accountTable = mysqlTable(
+  "account",
+  {
+    userId: varchar("userId", { length: 255 })
+      .notNull()
+      .references(() => userTable.id, { onDelete: "cascade" }),
+    type: varchar("type", { length: 255 }).notNull(),
+    provider: varchar("provider", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", {
+      length: 255,
+    }).notNull(),
+    refresh_token: varchar("refresh_token", { length: 255 }),
+    access_token: varchar("access_token", { length: 255 }),
+    expires_at: int("expires_at"),
+    token_type: varchar("token_type", { length: 255 }),
+    scope: varchar("scope", { length: 255 }),
+    id_token: varchar("id_token", { length: 2048 }),
+    session_state: varchar("session_state", { length: 255 }),
+  },
+  (account) => ({
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
+  })
+);
+
+export const sessionTable = mysqlTable("session", {
+  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 })
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
-  expiresAt: datetime("expires_at").notNull(),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
 });

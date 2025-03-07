@@ -2,17 +2,15 @@
 
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
-import ProfileDropdown from "@/components/ProfileDropdown";
+import ProfileDropdown from "src/components/ProfileDropdown";
 import { useContext } from "react";
-import { AuthContext } from "@/providers/AuthProvider";
 
 const NavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const user = useContext(AuthContext);
 
-  const isAdmin = user?.id === "yvli5wewb2blxy5";
-  const isAccessAllowed = isAdmin && pathname.includes("/admin");
+  const isAdmin = true;
+  const isAccessAllowed = true && pathname.includes("/admin");
 
   return (
     <AppBar position="static" color="info">

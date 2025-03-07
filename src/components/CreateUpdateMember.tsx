@@ -3,13 +3,12 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { RichTextInput } from "./RichText";
 import { useParams } from "next/navigation";
-import { useCreateStaff } from "@/app/core/react-query/staff/hooks/useCreateStaff";
-import { useUpdateStaff } from "@/app/core/react-query/staff/hooks/useUpdateStaff";
-import { useGetOneStaff } from "@/app/core/react-query/staff/hooks/useGetOneStaff";
+import { useCreateStaff } from "src/core/react-query/staff/hooks/useCreateStaff";
+import { useUpdateStaff } from "src/core/react-query/staff/hooks/useUpdateStaff";
+import { useGetOneStaff } from "src/core/react-query/staff/hooks/useGetOneStaff";
 import { useRouter } from "next/navigation";
-import { useGetAllTreatments } from "@/app/core/react-query/treatments/hooks/useGetAllTreatmets";
+import { useGetAllTreatments } from "src/core/react-query/treatments/hooks/useGetAllTreatmets";
 import TreatmentsList from "./TreatmentList";
 import { toasts } from "./Toast";
 

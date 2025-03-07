@@ -1,5 +1,5 @@
 // Here there member will be updated
-import CreateUpdateMember from "@/components/CreateUpdateMember";
+import CreateUpdateMember from "src/components/CreateUpdateMember";
 import { Box } from "@mui/material";
 
 const CreateMemberPage = () => {

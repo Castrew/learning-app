@@ -1,5 +1,7 @@
+import { ReadonlyURLSearchParams } from "next/navigation";
+
 export const createQueryString = (
-  searchParams: URLSearchParams,
+  searchParams: URLSearchParams | ReadonlyURLSearchParams,
   name: string,
   value: string
 ): string => {

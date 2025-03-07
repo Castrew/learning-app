@@ -4,17 +4,13 @@ import React, { Suspense } from "react";
 import { Box, Link, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 import logo from "../../public/logo.png";
-import MemberCard from "@/components/MemberCard";
+import MemberCard from "src/components/MemberCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useRouter } from "next/navigation";
-type TestProps = {
-  nailon: number;
-  boq: number;
-  razreditel: number;
-  chasove: number;
-};
+import { useSession } from "next-auth/react";
 
 export const HomePage = () => {
+  const session = useSession();
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

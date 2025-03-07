@@ -12,13 +12,13 @@ import {
 } from "@mui/material";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { useUpdateTreatment } from "@/app/core/react-query/treatments/hooks/useUpdateTreatment";
+import { useUpdateTreatment } from "src/core/react-query/treatments/hooks/useUpdateTreatment";
 import { useRouter, useParams } from "next/navigation";
-import { Treatment } from "@/app/core/react-query/treatments/types";
-import { useCreateTreatment } from "@/app/core/react-query/treatments/hooks/useCreateTreatment";
-import { useGetOneTreatment } from "@/app/core/react-query/treatments/hooks/useGetOneTreatment";
+import { Treatment } from "src/core/react-query/treatments/types";
+import { useCreateTreatment } from "src/core/react-query/treatments/hooks/useCreateTreatment";
+import { useGetOneTreatment } from "src/core/react-query/treatments/hooks/useGetOneTreatment";
 import { RichTextInput } from "./RichText";
-import { DURATION_TIME } from "@/app/schedule";
+import { DURATION_TIME } from "src/app/schedule";
 
 const CreateUpdateTreatment: React.FC = () => {
   const params = useParams();

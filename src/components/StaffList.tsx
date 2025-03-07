@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Typography, alpha } from "@mui/material";
-import { MemberProps } from "@/modules/Booking";
+import { MemberProps } from "src/modules/Booking";
 import Image from "next/image";
 import CloseIcon from "@mui/icons-material/Close";
 import marsi from "../../public/marsi.png";
