@@ -1,8 +1,8 @@
 "use client";
-import { TreatmentCard } from "@components/TreatmentList";
+import { TreatmentList } from "@components/TreatmentList";
 
 const Treatments = () => {
-  return <TreatmentCard />;
+  return <TreatmentList />;
 };
 
 export default Treatments;

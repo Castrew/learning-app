@@ -11,7 +11,7 @@ import React from "react";
 import { useCreateStaff } from "src/core/react-query/staff/hooks/useCreateStaff";
 import { useUpdateStaff } from "src/core/react-query/staff/hooks/useUpdateStaff";
 import { useRouter } from "next/navigation";
-import TreatmentsList from "./TreatmentFormList";
+import TreatmentFormList from "./TreatmentFormList";
 import { toasts } from "./Toast";
 import { Staff } from "src/core/react-query/staff/types";
 import { Treatment } from "src/core/react-query/treatments/types";
@@ -106,7 +106,7 @@ const CreateUpdateMember: React.FC<CreateUpdateMember> = ({
                 />
               )}
             />
-            <TreatmentsList treatments={treatments} />
+            <TreatmentFormList treatments={treatments} />
             <Box display="flex" justifyContent="space-between" mt={2}>
               {member?.id && (
                 <Button
