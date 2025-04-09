@@ -7,58 +7,46 @@ import {
   Controller,
   FormProvider,
 } from "react-hook-form";
-import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import React from "react";
 import { useCreateStaff } from "src/core/react-query/staff/hooks/useCreateStaff";
 import { useUpdateStaff } from "src/core/react-query/staff/hooks/useUpdateStaff";
-import { useGetOneStaff } from "src/core/react-query/staff/hooks/useGetOneStaff";
 import { useRouter } from "next/navigation";
-import { useGetAllTreatments } from "src/core/react-query/treatments/hooks/useGetAllTreatmets";
-import TreatmentsList from "./TreatmentList";
+import TreatmentFormList from "./TreatmentFormList";
 import { toasts } from "./Toast";
+import { Staff } from "src/core/react-query/staff/types";
+import { Treatment } from "src/core/react-query/treatments/types";
+
+type CreateUpdateMember = {
+  member?: Staff;
+  treatments?: Treatment[];
+  memberTreatmentsIds?: string[];
+};
 
 interface FormValues {
   name: string;
   treatmentIds: string[];
 }
 
-const CreateUpdateMember = () => {
-  const params = useParams();
+const CreateUpdateMember: React.FC<CreateUpdateMember> = ({
+  member,
+  treatments,
+  memberTreatmentsIds,
+}) => {
   const router = useRouter();
   const createMember = useCreateStaff();
   const updateMember = useUpdateStaff();
 
-  const staffId = String(params?.staffId);
-  const { data: member, isLoading: isOneMemeberLoading } = useGetOneStaff({
-    staffId,
-  });
-  const { data: treatments, isLoading: isLoadingAllTreatments } =
-    useGetAllTreatments();
-
-  const memberTreatments = member?.treatments.map((treatment) => {
-    return treatment.id;
-  });
-
   const formContext = useForm<FormValues>({
     defaultValues: {
-      name: "",
-      treatmentIds: [],
+      name: member?.name || "",
+      treatmentIds: memberTreatmentsIds || [],
     },
   });
 
-  useEffect(() => {
-    if (member) {
-      formContext.reset({
-        name: member.name,
-        treatmentIds: memberTreatments,
-      });
-    }
-  }, [member, formContext.reset]);
-
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    if (staffId !== "undefined") {
+    if (member?.id) {
       updateMember.mutate(
-        { staffId, ...data },
+        { staffId: member.id, ...data },
         {
           onSuccess: () => {
             toasts.Success("Member updated successfully");
@@ -77,10 +65,6 @@ const CreateUpdateMember = () => {
       });
     }
   };
-
-  if (isLoadingAllTreatments || isOneMemeberLoading) {
-    return "Loading...";
-  }
 
   return (
     <FormProvider {...formContext}>
@@ -104,7 +88,7 @@ const CreateUpdateMember = () => {
             borderRadius={4}
           >
             <Typography fontSize="1.5rem" fontWeight="bold">
-              {staffId !== "undefined" ? "Update Member" : "Create Member"}
+              {member?.id ? "Update Member" : "Create Member"}
             </Typography>
             <Controller
               control={formContext.control}
@@ -122,19 +106,22 @@ const CreateUpdateMember = () => {
                 />
               )}
             />
-            <TreatmentsList treatments={treatments} />
+            <TreatmentFormList treatments={treatments} />
             <Box display="flex" justifyContent="space-between" mt={2}>
-              <Button
-                sx={{ m: 1 }}
-                variant="contained"
-                color="error"
-                fullWidth
-                onClick={() =>
-                  staffId === "undefined" ? formContext.reset() : router.back()
-                }
-              >
-                Cancel
-              </Button>
+              {member?.id && (
+                <Button
+                  sx={{ m: 1 }}
+                  variant="contained"
+                  color="error"
+                  fullWidth
+                  onClick={() => {
+                    formContext.reset();
+                    router.back();
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
               <Button
                 sx={{ m: 1 }}
                 type="submit"
@@ -142,7 +129,7 @@ const CreateUpdateMember = () => {
                 color="primary"
                 fullWidth
               >
-                {staffId !== "undefined" ? "Update" : "Create"}
+                {member?.id ? "Update" : "Create"}
               </Button>
             </Box>
           </Box>

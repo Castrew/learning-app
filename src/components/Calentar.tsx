@@ -33,7 +33,10 @@ const Calendar = ({ selectedMemberId, totalDuration }: CalendarProps) => {
   const [currentWeek, setCurrentWeek] = useState(moment().startOf("week"));
 
   const treatmentsDuration = totalDuration();
-  const { data, isLoading } = useGetAllAppointments();
+  const { data, isLoading } = useGetAllAppointments({
+    onSuccess: (data) => {},
+    onError(error) {},
+  });
 
   const { setValue, control } = useFormContext();
 

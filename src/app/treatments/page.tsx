@@ -1,14 +1,8 @@
 "use client";
-
-import { Box } from "@mui/material";
-import { TreatmentCard } from "src/components/TreatmentCard";
+import { TreatmentList } from "@components/TreatmentList";
 
 const Treatments = () => {
-  return (
-    <Box sx={{ mt: 2 }}>
-      <TreatmentCard />
-    </Box>
-  );
+  return <TreatmentList />;
 };
 
 export default Treatments;

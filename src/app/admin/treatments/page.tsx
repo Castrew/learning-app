@@ -1,11 +1,7 @@
-import { TreatmentCard } from "src/components/TreatmentCard";
+import { TreatmentList } from "@components/TreatmentList";
 
 const AdminTreatmentsPage = () => {
-  return (
-    <>
-      <TreatmentCard />
-    </>
-  );
+  return <TreatmentList />;
 };
 
 export default AdminTreatmentsPage;
