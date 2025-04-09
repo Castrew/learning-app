@@ -2,6 +2,7 @@ export interface RequestTypes {
   getAllTreatments: {
     treatmentId: string;
     title: string;
+    description?: string;
     duration: string;
     price: string;
   };
@@ -17,13 +18,14 @@ export interface RequestTypes {
   updateTreatment: {
     treatmentId: string;
     title?: string;
+    description?: string;
     duration?: string;
     price?: string;
   };
 
   createTreatment: {
-    // treatmentId: string;
     title?: string;
+    description?: string;
     duration?: string;
     price?: string;
   };

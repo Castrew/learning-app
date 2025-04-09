@@ -160,7 +160,6 @@ const MemberCard = () => {
                 </DialogActions>
               </Box>
             </Modal>
-
             {isActionAllowed && (
               <IconButton
                 onClick={() => router.push(`/admin/staff/${member.id}`)}

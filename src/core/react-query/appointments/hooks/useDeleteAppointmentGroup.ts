@@ -1,24 +1,19 @@
-import {
-  useMutation,
-  useQueryClient,
-  UseMutationOptions,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RequestTypes } from "../requestTypes";
 import {
   appointmentsKeys,
   appointmentsMutationsKeys,
 } from "../appointmentsKeys";
+import { Appointment } from "../types";
 
-export const useDeleteAppointmentGroup = (
-  options?: UseMutationOptions<
-    unknown,
-    string,
-    RequestTypes["deleteAppointmentGroup"]
-  >
-) => {
+export const useDeleteAppointmentGroup = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<
+    Appointment,
+    string,
+    RequestTypes["deleteAppointmentGroup"]
+  >({
     ...appointmentsMutationsKeys.deleteAppointment,
     onSuccess: (appointment) => {
       queryClient.invalidateQueries({
@@ -27,6 +22,5 @@ export const useDeleteAppointmentGroup = (
         }).queryKey,
       });
     },
-    ...options,
   });
 };

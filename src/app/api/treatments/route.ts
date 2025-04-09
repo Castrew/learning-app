@@ -19,16 +19,14 @@ export const POST = async (request: NextRequest) => {
   const id = uuidv7();
 
   try {
-    const createTreatment = await db
+    await db
       .insert(treatmentTable)
       .values({ id, title, duration, price, description });
-
-    const createdTreatmentId = String(createTreatment[0].insertId);
 
     const newTreatment = await db
       .select()
       .from(treatmentTable)
-      .where(eq(treatmentTable.id, createdTreatmentId));
+      .where(eq(treatmentTable.id, id));
 
     return Response.json(newTreatment[0]);
   } catch (error) {

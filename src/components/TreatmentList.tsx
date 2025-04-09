@@ -1,129 +1,112 @@
 "use client";
 
+import { useDeleteTreatment } from "src/core/react-query/treatments/hooks/useDeleteTreatment";
+import { useGetAllTreatments } from "src/core/react-query/treatments/hooks/useGetAllTreatmets";
 import {
   Box,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  FormGroup,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
   Typography,
 } from "@mui/material";
-import { Controller, useFormContext } from "react-hook-form";
-import { Treatment } from "src/core/react-query/treatments/types";
+import { usePathname, useRouter } from "next/navigation";
+import parse from "html-react-parser";
+import { toasts } from "./Toast";
 
-interface TreatmentsListProps {
-  treatments: Treatment[];
-}
+type treatmentProps = {
+  id: string;
+  title: string;
+  duration: string;
+  price: string;
+  description: string;
+};
 
-const TreatmentsList = ({ treatments }: TreatmentsListProps) => {
-  const { control } = useFormContext();
-  const midIndex = Math.ceil(treatments.length / 2);
-  const firstColumn = treatments.slice(0, midIndex);
-  const secondColumn = treatments.slice(midIndex);
+export const TreatmentList = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { data: treatments, isLoading } = useGetAllTreatments();
+  const deleteTreatment = useDeleteTreatment();
+  const isActionAllowed = true && pathname.includes("/admin");
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
   return (
-    <Box
-      sx={{
-        width: "1024px",
-        padding: "16px",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "center",
-        }}
-      >
-        <Box sx={{ width: 200, padding: "8px" }}>
-          <FormGroup>
-            {firstColumn.map((treatment: Treatment, index) => (
-              <Controller
-                key={treatment.id}
-                name="treatmentIds"
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        id={`treatment-col1-${index}`}
-                        checked={field.value.includes(treatment.id)}
-                        sx={{
-                          "&.Mui-checked": {
-                            color: "#f06292",
-                          },
-                          "&:hover": {
-                            bgcolor: "#f8bbd0",
-                          },
-                        }}
-                        onChange={() => {
-                          const newValue = field.value.includes(treatment.id)
-                            ? field.value.filter(
-                                (id: string) => id !== treatment.id
-                              )
-                            : [...field.value, treatment.id];
-                          field.onChange(newValue);
-                        }}
-                      />
+    <Box>
+      <Typography sx={{ fontSize: 24 }}>Treatmets List</Typography>
+      {isActionAllowed && (
+        <Button
+          variant="contained"
+          size="medium"
+          sx={{
+            borderRadius: "20px",
+            m: 2,
+            maxWidth: "200px",
+          }}
+          onClick={() => router.push("/admin/treatments/create")}
+        >
+          Create Treatment
+        </Button>
+      )}
+      <Box display="flex" flexWrap="wrap" gap={1}>
+        {treatments?.map((treatment: treatmentProps) => {
+          return (
+            <Card
+              key={treatment.id}
+              variant="outlined"
+              sx={{ width: "calc((100vw - 36px)/ 3) " }}
+            >
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Procedura: {treatment.title}
+                </Typography>
+                <Typography sx={{ mb: 1 }} color="text.secondary">
+                  Vremetraene: {treatment.duration}
+                </Typography>
+                <Typography sx={{ mb: 1 }} color="text.secondary">
+                  Cena: {treatment.price}
+                </Typography>
+                <Box sx={{ mb: 1 }} color="text.secondary">
+                  Description: {parse(treatment.description)}
+                </Box>
+              </CardContent>
+              {isActionAllowed && (
+                <CardActions>
+                  <Button
+                    variant="contained"
+                    size="medium"
+                    sx={{ borderRadius: "20px" }}
+                    onClick={() =>
+                      router.push(`/admin/treatments/${treatment.id}`)
                     }
-                    label={
-                      <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-                        {treatment.title}
-                      </Typography>
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    size="medium"
+                    color="error"
+                    variant="outlined"
+                    onClick={() =>
+                      deleteTreatment.mutate(
+                        {
+                          treatmentId: treatment.id,
+                        },
+                        {
+                          onSuccess: () =>
+                            toasts.Success("Treatment deleted successfuly"),
+                        }
+                      )
                     }
-                  />
-                )}
-              />
-            ))}
-          </FormGroup>
-        </Box>
-
-        <Divider orientation="vertical" flexItem />
-
-        <Box sx={{ width: 200, padding: "8px" }}>
-          <FormGroup>
-            {secondColumn.map((treatment: Treatment, index) => (
-              <Controller
-                key={treatment.id}
-                name="treatmentIds"
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        id={`treatment-col2-${index}`}
-                        checked={field.value.includes(treatment.id)}
-                        sx={{
-                          "&.Mui-checked": {
-                            color: "#f06292",
-                          },
-                          "&:hover": {
-                            bgcolor: "#f8bbd0",
-                          },
-                        }}
-                        onChange={() => {
-                          const newValue = field.value.includes(treatment.id)
-                            ? field.value.filter(
-                                (id: string) => id !== treatment.id
-                              )
-                            : [...field.value, treatment.id];
-                          field.onChange(newValue);
-                        }}
-                      />
-                    }
-                    label={
-                      <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-                        {treatment.title}
-                      </Typography>
-                    }
-                  />
-                )}
-              />
-            ))}
-          </FormGroup>
-        </Box>
+                  >
+                    Delete
+                  </Button>
+                </CardActions>
+              )}
+            </Card>
+          );
+        })}
       </Box>
     </Box>
   );
 };
-
-export default TreatmentsList;

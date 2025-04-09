@@ -11,11 +11,11 @@ import {
   Modal,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetAllStaff } from "src/core/react-query/staff/hooks/useGetAllStaff";
 import { useForm, FormProvider } from "react-hook-form";
 import StaffList from "src/components/StaffList";
-import TreatmentsList from "src/components/TreatmentList";
+import TreatmentFormList from "@components/TreatmentFormList";
 import Calendar from "src/components/Calentar";
 import { Treatment } from "src/core/react-query/treatments/types";
 import { useCreateAppointment } from "src/core/react-query/appointments/hooks/useCreateAppointment";
@@ -31,6 +31,7 @@ export interface MemberProps {
 }
 
 export interface FormValues {
+  userId: string;
   staffId: string;
   treatmentIds: string[];
   date: string;
@@ -48,7 +49,7 @@ const Booking = () => {
   const { data: session } = useSession();
 
   const defaultValues = {
-    userId: session?.user.id,
+    userId: "",
     staffId: "",
     treatmentIds: [],
     date: "",
@@ -83,8 +84,6 @@ const Booking = () => {
   );
 
   const onSubmit = formContext.handleSubmit((data) => {
-    console.log(data);
-
     createAppointment.mutate(data, {
       onSuccess: () => {
         toasts.Success("Your appointment has been set!");
@@ -96,6 +95,11 @@ const Booking = () => {
       },
     });
   });
+
+  useEffect(() => {
+    if (!session) return;
+    formContext.reset({ ...defaultValues, userId: session.user.id });
+  }, [session]);
 
   if (isLoadingAllStaff) {
     return "Loading...";
@@ -129,7 +133,7 @@ const Booking = () => {
             <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
 
             {memberTreatments.length !== 0 && (
-              <TreatmentsList treatments={memberTreatments} />
+              <TreatmentFormList treatments={memberTreatments} />
             )}
             {appt.staffId && (
               <Calendar
@@ -150,13 +154,21 @@ const Booking = () => {
                   bgcolor: "primary.dark",
                 },
               }}
-              disabled={!(appt.treatmentIds.length !== 0 && appt.start !== "")}
+              disabled={
+                !(appt.treatmentIds.length !== 0 && appt.start !== "") ||
+                !session
+              }
               onClick={() => {
                 setOpen(true);
               }}
             >
               Set Appointment
             </Button>
+            {!session && (
+              <Typography>
+                Note: Please sign in to set an appointment!
+              </Typography>
+            )}
             <Modal open={open}>
               <Box
                 sx={{

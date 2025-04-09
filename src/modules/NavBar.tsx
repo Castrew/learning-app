@@ -3,13 +3,13 @@
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
 import ProfileDropdown from "src/components/ProfileDropdown";
-import { useContext } from "react";
+import { useSession } from "next-auth/react";
 
 const NavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
-
-  const isAdmin = true;
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.email === "castrew132@gmail.com";
   const isAccessAllowed = true && pathname.includes("/admin");
 
   return (
@@ -79,7 +79,9 @@ const NavBar = () => {
                 : router.push("/admin")
             }
           >
-            {pathname.includes("/admin") ? "Back to Home" : "Admin Panel"}
+            {pathname.includes("/admin") && isAdmin
+              ? "Back to Home"
+              : "Admin Panel"}
           </Button>
         )}
         <ProfileDropdown />
