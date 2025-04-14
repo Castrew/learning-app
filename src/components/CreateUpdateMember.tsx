@@ -16,7 +16,7 @@ import { toasts } from "./Toast";
 import { Staff } from "src/core/react-query/staff/types";
 import { Treatment } from "src/core/react-query/treatments/types";
 
-type CreateUpdateMember = {
+type CreateUpdateMemberProps = {
   member?: Staff;
   treatments?: Treatment[];
   memberTreatmentsIds?: string[];
@@ -27,7 +27,7 @@ interface FormValues {
   treatmentIds: string[];
 }
 
-const CreateUpdateMember: React.FC<CreateUpdateMember> = ({
+const CreateUpdateMember: React.FC<CreateUpdateMemberProps> = ({
   member,
   treatments,
   memberTreatmentsIds,
