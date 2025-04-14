@@ -7,6 +7,7 @@ import {
 import { eq, ne, gt, gte, inArray } from "drizzle-orm";
 import { db } from "../../../../db/db";
 import { responses } from "src/helper/responses";
+import { v7 as uuidv7 } from "uuid";
 
 export const GET = async (_: NextRequest) => {
   try {
@@ -33,16 +34,17 @@ export const GET = async (_: NextRequest) => {
 
 export const POST = async (request: NextRequest) => {
   const { id, name, treatmentIds } = await request.json();
+  const newStaffId = id ? id : uuidv7();
 
   try {
     await db.transaction(async (tx) => {
-      await tx.insert(staffTable).values({ id, name });
+      await tx.insert(staffTable).values({ id: newStaffId, name });
 
       if (Array.isArray(treatmentIds)) {
         for (const treatmentId of treatmentIds) {
           await tx
             .insert(treatmentStaffTable)
-            .values({ staffId: id, treatmentId });
+            .values({ staffId: newStaffId, treatmentId });
         }
       }
     });
@@ -50,11 +52,11 @@ export const POST = async (request: NextRequest) => {
     const newStaff = await db
       .select()
       .from(staffTable)
-      .where(eq(staffTable.id, id));
+      .where(eq(staffTable.id, newStaffId));
     const assignedTreatments = await db
       .select()
       .from(treatmentStaffTable)
-      .where(eq(treatmentStaffTable.staffId, id));
+      .where(eq(treatmentStaffTable.staffId, newStaffId));
 
     return Response.json({
       ...newStaff[0],

@@ -1,12 +1,11 @@
 "use client";
 
 import CreateUpdateMember from "src/components/CreateUpdateMember";
-import { Box } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useGetOneStaff } from "src/core/react-query/staff/hooks/useGetOneStaff";
 import { useGetAllTreatments } from "src/core/react-query/treatments/hooks/useGetAllTreatmets";
 
-const CreateMemberPage = () => {
+const AdminUpdateMemberPage = () => {
   const params = useParams();
   const staffId = String(params?.staffId);
   const { data: member, isLoading: isOneMemeberLoading } = useGetOneStaff({
@@ -31,4 +30,4 @@ const CreateMemberPage = () => {
   );
 };
 
-export default CreateMemberPage;
+export default AdminUpdateMemberPage;
